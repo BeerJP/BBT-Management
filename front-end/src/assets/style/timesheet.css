@@ -1,0 +1,85 @@
+.ta-body {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.ta-box-content {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ta-header {
+    margin-top: 10px;
+    width: 95%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+    justify-content: center;
+}
+
+.ta-content {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ta-content-emp {
+    margin-top: 20px;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.ta-content-emp div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 25%;
+}
+
+.ta-img-bx {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.ta-img-bx img {
+    width: 20px;
+}
+
+p.ta-date {
+    font-size: 0.9rem;
+    margin: 0;
+    color: #424949;
+    width: 25%;
+}
+
+p.ta-time {
+    font-size: 0.9rem;
+    margin: 0;
+    color: #424949;
+    width: 25%;
+    text-align: center;
+}

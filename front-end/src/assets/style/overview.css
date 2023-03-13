@@ -1,0 +1,365 @@
+/* ----- Left Box ----- */
+
+.ov-header-left {
+    height: 150px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ov-body-left {
+    width: 95%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+}
+
+/* ----- Header Box ----- */
+
+.ov-emp-bx {
+    border-radius: 5px;
+    background: royalblue;
+    color: white;
+    align-items: center;
+}
+
+.ov-tim-bx {
+    border-radius: 5px;
+    background: deepskyblue;
+    color: white;
+    align-items: center;
+}
+
+.ov-lea-bx {
+    border-radius: 5px;
+    background: orange;
+    color: white;
+    align-items: center;
+}
+
+.ov-emp-txt {
+    font-size: 0.7rem;
+    margin: 0;
+}
+
+.ov-emp-num {
+    font-size: 2rem;
+    margin: 15px;
+}
+
+/* ----- Body Date Box ----- */
+
+.ov-header-combo {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+}
+
+.ov-header-combo div {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.ov-header-combo div:hover {
+    background: #ADE6F0;
+}
+
+.ov-header-combo div:active {
+    background: #5CCEE2 ;
+}
+
+.ov-header-combo img {
+    width: 20px;
+}
+
+.ov-select-txt {
+    font-size: 1rem;
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #424949;
+    border: 1px solid lightgray;
+}
+
+.ov-work-bx {
+    border-radius: 5px;
+    color: #424949;
+    align-items: center;
+}
+
+.ov-wend-bx {
+    border-radius: 5px;
+    color: #424949;
+    align-items: center;
+}
+
+.ov-holi-bx {
+    border-radius: 5px;
+    color: #424949;
+    align-items: center;
+}
+
+.ov-date-percen {
+    height: 3px;
+    width: 80%;
+    border-radius: 2px;
+    border: 1px solid lightgray;
+}
+
+.ov-date-txt {
+    font-size: 0.7rem;
+    margin: 0;
+}
+
+.ov-date-num {
+    font-size: 1.2rem;
+    margin: 15px;
+}
+
+.ov-article-left {
+    height: 150px;
+    margin-top: 20px;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.top-bx {
+    border-right: 1px solid lightgray;
+    background: linear-gradient(to Right, deepskyblue 2%, white 0%)
+}
+
+.bot-bx {
+    border-right: 1px solid lightgray;
+    background: linear-gradient(to Right, orange 2%, white 0%)
+}
+
+.ov-ta-txt {
+    font-size: 0.8rem;
+    margin-left: 20px;
+}
+
+.ov-ta-num {
+    font-size: 1.5rem;
+    margin-left: 20px;
+}
+
+.lb-stat-bx {
+    width: 300px;
+    height: 100%;
+    margin-top: -15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.lb-stat-bx label{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.lb-stat-bx p {
+    font-size: 0.8rem;
+    color: #424949;
+}
+
+.ov-ta-percen {
+    height: 3px;
+    width: 99%;
+    border-radius: 2px;
+    border: 1px solid lightgray;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/* .ov-lb-box {
+    width: 200px;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+} */
+
+.ov-lb-txt {
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.ov-lb-num {
+    font-size: 2rem;
+    margin: 15px;
+}
+
+.ov-stat {
+    width: 350px;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-left: 1px solid lightgray;
+}
+
+.ov-stat div.ov-lb-txt {
+    width: 330px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    font-size: 0.8rem;
+    color: #424949;
+}
+
+.ov-stat p {
+    text-align: center;
+    width: 50px;
+}
+
+.ov-percen {
+    width: 220px;
+    height: 25px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #424949;
+    border-radius: 5px;
+    border-left: 1px solid lightgrey;
+    border-right: 1px solid lightgrey;
+}
+/*------------------------------------------------*/
+.ad_month {
+    width: 350px;
+    height: 110px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 2rem;
+}
+/*------------------------------------------------*/
+
+
+.ov-content1 {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.ov-content2 {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+/* ----- Right Box ----- */
+
+.ov-header-2 {
+    width: 95%;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: white;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.ov-body-2 {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.ov-header-2 p.ov-lb-txt {
+    font-size: 0.9rem;
+    margin: 0;
+    color: #424949;
+    margin-left: 20px;
+}
+
+.ov-content-3 {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ov-header-3 {
+    margin-top: 10px;
+    width: 95%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid lightgray;
+}
+
+p.name {
+    font-size: 0.9rem;
+    margin: 0;
+    color: #424949;
+    width: 60%;
+    margin-left: 10px;
+}
+
+p.time {
+    font-size: 0.9rem;
+    margin: 0;
+    color: #424949;
+    width: 30%;
+}
+
+p.stat {
+    font-size: 0.9rem;
+    margin: 0;
+    color: #424949;
+    width: 10%;
+    text-align: center;
+}
+
+.ov-content-4 {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ov-content-emp {
+    margin-top: 20px;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}

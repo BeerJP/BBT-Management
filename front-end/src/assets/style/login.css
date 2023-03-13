@@ -1,0 +1,87 @@
+.login-container { 
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+    margin: auto; 
+}
+
+.loginBx { 
+    width: 400px; 
+    height: 450px; 
+    display: flex; 
+    flex-direction: row; 
+    border: 1px solid lightgray;
+    background: white;
+    border-radius: 10px; 
+    margin-top: -100px;
+}
+
+.loginBx .login-form { 
+    position: relative; 
+    width: 100%; 
+}
+
+.loginBx .login-titleBx { 
+    width: 100%; 
+    height: 150px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.loginBx .login-titleBx span { 
+    font-size: 40px; 
+    font-weight: 500; 
+    letter-spacing: 3px; 
+    color: #34C2DB; 
+    background-color: white; 
+    padding: 0 30px; 
+}
+
+.loginBx .login-title-styleBx { 
+    width: 25%; 
+    height: 30px; 
+    border-bottom: 2px solid #34C2DB; 
+    text-align: center; 
+    margin-bottom: 20px; 
+}
+
+.loginBx .login-inputBx { 
+    display: flex; 
+    position: relative; 
+    width: 100%; 
+    text-align: center; 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 35px;
+    margin-top: 20px; 
+}
+
+.loginBx .login-inputBx input { 
+    font-size: 15px; 
+    width: 70%; 
+    box-sizing: border-box; 
+    outline: none; 
+    border: 1px solid lightgray; 
+    border-radius: 6px; 
+    padding: 10px 10px; 
+    background: rgba(0, 0, 0, 0.1); 
+}
+
+.loginBx .login-inputBx input[type="submit"] { 
+    background: rgba(0, 0, 0, 0.1); 
+    box-shadow: none; 
+    width: 81%; 
+    letter-spacing: 1px; 
+    cursor: pointer; 
+}
+
+.loginBx .login-inputBx input[type="submit"]:hover { 
+    background: #5CCEE2; 
+    transition: 0.5s; 
+}
+
+.loginBx .login-inputBx img { 
+    width: 25px; 
+    padding-right: 20px; 
+}
