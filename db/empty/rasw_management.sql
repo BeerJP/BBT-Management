@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 13, 2023 at 03:17 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Mar 14, 2023 at 05:37 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `rsw_management`
+-- Database: `rasw_management`
 --
 
 -- --------------------------------------------------------
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `department` (
   `dept_id` int(1) NOT NULL,
   `dept_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -46,13 +46,13 @@ CREATE TABLE `employee` (
   `emp_gender` varchar(6) NOT NULL,
   `emp_birthdate` date NOT NULL,
   `emp_address` varchar(255) DEFAULT NULL,
-  `emp_status` tinyint(1) DEFAULT NULL,
+  `emp_status` tinyint(1) NOT NULL DEFAULT 1,
   `emp_startdate` date NOT NULL,
   `emp_enddate` date DEFAULT NULL,
-  `emp_mac1` varchar(17) NOT NULL,
-  `emp_mac2` varchar(17) NOT NULL,
+  `emp_mac1` varchar(17) DEFAULT NULL,
+  `emp_mac2` varchar(17) DEFAULT NULL,
   `dept_id` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -61,11 +61,9 @@ CREATE TABLE `employee` (
 --
 
 CREATE TABLE `holiday` (
-  `holi_month` int(2) NOT NULL,
   `holi_name` varchar(50) NOT NULL,
-  `holi_date` date NOT NULL,
   `work_id` varchar(8) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -78,9 +76,8 @@ CREATE TABLE `leave_day` (
   `leave_date` date NOT NULL,
   `leave_description` varchar(255) NOT NULL,
   `leave_appove` tinyint(1) NOT NULL DEFAULT 0,
-  `leave_status` tinyint(1) DEFAULT NULL,
   `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -93,7 +90,18 @@ CREATE TABLE `time_attendance` (
   `time_out` time DEFAULT NULL,
   `work_id` varchar(8) NOT NULL,
   `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `type`
+--
+
+CREATE TABLE `type` (
+  `type_id` int(1) NOT NULL,
+  `type_name` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -106,18 +114,7 @@ CREATE TABLE `user` (
   `user_password` varchar(12) NOT NULL,
   `type_id` int(1) NOT NULL,
   `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_type`
---
-
-CREATE TABLE `user_type` (
-  `type_id` int(1) NOT NULL,
-  `type_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -129,7 +126,7 @@ CREATE TABLE `workday` (
   `work_id` varchar(8) NOT NULL,
   `work_date` date NOT NULL,
   `work_status` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Indexes for dumped tables
@@ -146,8 +143,7 @@ ALTER TABLE `department`
 --
 ALTER TABLE `employee`
   ADD PRIMARY KEY (`emp_id`),
-  ADD KEY `dept_id` (`dept_id`),
-  ADD KEY `dept_id_2` (`dept_id`);
+  ADD KEY `dept_id` (`dept_id`);
 
 --
 -- Indexes for table `holiday`
@@ -169,17 +165,17 @@ ALTER TABLE `time_attendance`
   ADD KEY `emp_id` (`emp_id`);
 
 --
+-- Indexes for table `type`
+--
+ALTER TABLE `type`
+  ADD PRIMARY KEY (`type_id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD KEY `type_id` (`type_id`),
   ADD KEY `emp_id` (`emp_id`);
-
---
--- Indexes for table `user_type`
---
-ALTER TABLE `user_type`
-  ADD PRIMARY KEY (`type_id`);
 
 --
 -- Indexes for table `workday`
@@ -204,20 +200,10 @@ ALTER TABLE `employee`
   MODIFY `emp_id` int(4) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `user_type`
+-- AUTO_INCREMENT for table `type`
 --
-ALTER TABLE `user_type`
+ALTER TABLE `type`
   MODIFY `type_id` int(1) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `employee`
---
-ALTER TABLE `employee`
-  ADD CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`dept_id`) REFERENCES `department` (`dept_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
