@@ -25,11 +25,13 @@ app.use(cors());
 
 
 // -------------------- เข้าสู่ระบบ --------------------
+
 app.post('/login', function(request, response) {
-	var username = request.body.username;
-	var password = request.body.password;
+	const username = request.body.username;
+	const password = request.body.password;
 	if (username && password) {
-		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?',
+    [username, password], function(error, results, fields) {
 			if (results.length > 0) {
 				request.session.loggedin = true;
 				request.session.username = username;
@@ -46,6 +48,7 @@ app.post('/login', function(request, response) {
 });
 
 // -------------------- ตรวจสอบสถานะการเข้าสู่ระบบ --------------------
+
 app.get('/session', function(request, response) {
 	if (request.session.loggedin) {
 		response.send('Welcome back, ' + request.session.username + '!');
@@ -57,6 +60,7 @@ app.get('/session', function(request, response) {
 
 
 // -------------------- แสดงข้อมูล --------------------
+
 // แสดงข้อมูล Department
 app.get('/department', (request, response) => {
   conn.query("SELECT * FROM DEPARTMENT", (err, result) => {
@@ -116,44 +120,131 @@ app.get('/time', (request, response) => {
 
 // -------------------- เพิ่มข้อมูล --------------------
 
-// app.post("/create", (request, response) => {
-//   const name = req.body.name;
-//   const age = req.body.age;
-//   const country = req.body.country;
-//   const position = req.body.position;
-//   const wage = req.body.wage;
+// เพิ่มข้อมูล Employee & User
+app.post("/add_employee", (request, response) => {
+  const id = req.body.id;
+  const name = req.body.name;
+  const surname = req.body.surname;
+  const idcard = req.body.idcard;
+  const gender = req.body.gender;
+  const birthdate = req.body.birthdate;
+  const address = req.body.address;
+  const startdate = req.body.startdate;
+  const mac1 = req.body.mac1;
+  const mac2 = req.body.mac2;
+  const department = req.body.department;
 
-//   conn.query(
-//     "INSERT INTO employees (name, age, country, position, wage) VALUES (?,?,?,?,?)",
-//     [name, age, country, position, wage],
-//     (err, result) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         response.send("Values Inserted");
-//       }
-//     }
-//   );
-// });
+  const user = req.body.user;
+  const password = req.body.password;
+  const type = req.body.type;
+
+  conn.query(
+    `INSERT INTO EMPLOYEE (emp_id, emp_name, emp_surname, emp_idcard, emp_gender, emp_birthdate, emp_address, 
+        emp_startdate, emp_mac1, emp_mac2, dept_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [id, name, surname, idcard, gender, birthdate, address, startdate, mac1, mac2, department], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+
+  conn.query(
+    "INSERT INTO USER (user_name, user_password, type_id, emp_id) VALUES (?, ?, ?, ?)",
+    [user, password, type, id], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+// เพิ่มข้อมูล Workday
+app.post("/add_work", (request, response) => {
+  const id = req.body.id;
+  const date = req.body.date;
+
+  conn.query(
+    "INSERT INTO TIME_ATTENDANCE (work_id, work_date) VALUES (?, ?)",
+    [id, date], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+// เพิ่มข้อมูล Time Attendance
+app.post("/add_time", (request, response) => {
+  const time = req.body.time;
+  const date = req.body.date;
+  const employee = req.body.employee;
+
+  conn.query(
+    "INSERT INTO TIME_ATTENDANCE (time_in, work_id, emp_id) VALUES (?, ?, ?)",
+    [time, date, employee], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+// เพิ่มข้อมูล Leave Day
+app.post("/add_leave", (request, response) => {
+  const type = req.body.type;
+  const date = req.body.date;
+  const description = req.body.description;
+  const employee = req.body.employee;
+
+  conn.query(
+    "INSERT INTO LEAVE_DAY (leave_type, leave_date, leave_description, emp_id) VALUES (?, ?, ?, ?)",
+    [type, date, description, employee], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+// เพิ่มข้อมูล Holiday
+app.post("/add_holiday", (request, response) => {
+  const name = req.body.name;
+  const date = req.body.date;
+
+  conn.query(
+    "INSERT INTO HOLIDAY (holi_name, work_id) VALUES (?, ?)",
+    [name, date],
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
 
 
 // -------------------- แก้ไขข้อมูล --------------------
 
-// app.put("/update", (request, response) => {
-//   const id = req.body.id;
-//   const wage = req.body.wage;
-//   conn.query(
-//     "UPDATE employees SET wage = ? WHERE id = ?",
-//     [wage, id],
-//     (err, result) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         response.send(result);
-//       }
-//     }
-//   );
-// });
+// แก้ไขข้อมูล Employee
+app.put("/update_employee", (request, response) => {
+  const id = req.body.id;
+  const wage = req.body.wage;
+
+  conn.query(
+    "UPDATE employees SET wage = ? WHERE id = ?",
+    [wage, id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
+});
 
 
 app.listen(5000, () => {
