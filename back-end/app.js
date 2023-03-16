@@ -19,9 +19,13 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
+
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
 
 
 // -------------------- เข้าสู่ระบบ --------------------
@@ -30,15 +34,16 @@ app.post('/login', function(request, response) {
 	const username = request.body.username;
 	const password = request.body.password;
 	if (username && password) {
-		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?',
+		connection.query(`SELECT * FROM EMPLOYEE FULL OUTER JOIN USER ON EMPLOYEE.emp_id = USER.emp_id
+    WHERE username = ? AND password = ?`,
     [username, password], function(error, results, fields) {
 			if (results.length > 0) {
 				request.session.loggedin = true;
-				request.session.username = username;
+				request.session.username = results['emp_name'] + ' ' + results['emp_surname'];
 				response.redirect('/home');
 			} else {
 				response.send('Incorrect Username and/or Password!');
-			}			
+			}
 			response.end();
 		});
 	} else {
@@ -140,7 +145,7 @@ app.post("/add_employee", (request, response) => {
 
   conn.query(
     `INSERT INTO EMPLOYEE (emp_id, emp_name, emp_surname, emp_idcard, emp_gender, emp_birthdate, emp_address, 
-        emp_startdate, emp_mac1, emp_mac2, dept_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    emp_startdate, emp_mac1, emp_mac2, dept_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [id, name, surname, idcard, gender, birthdate, address, startdate, mac1, mac2, department], 
     (err, result) => {
       if (err) {
@@ -166,7 +171,7 @@ app.post("/add_work", (request, response) => {
   const date = req.body.date;
 
   conn.query(
-    "INSERT INTO TIME_ATTENDANCE (work_id, work_date) VALUES (?, ?)",
+    "INSERT INTO WORKDAY (work_id, work_date) VALUES (?, ?)",
     [id, date], 
     (err, result) => {
       if (err) {
@@ -225,19 +230,10 @@ app.post("/add_holiday", (request, response) => {
       }
     }
   );
-});
-
-
-// -------------------- แก้ไขข้อมูล --------------------
-
-// แก้ไขข้อมูล Employee
-app.put("/update_employee", (request, response) => {
-  const id = req.body.id;
-  const wage = req.body.wage;
 
   conn.query(
-    "UPDATE employees SET wage = ? WHERE id = ?",
-    [wage, id],
+    "UPDATE WORKDAY SET work_status = ? WHERE work_id = ?", 
+    [0, date], 
     (err, result) => {
       if (err) {
         console.log(err);
@@ -247,6 +243,74 @@ app.put("/update_employee", (request, response) => {
 });
 
 
+// -------------------- แก้ไขข้อมูล --------------------
+
+// แก้ไขข้อมูล Employee
+app.put("/update_employee", (request, response) => {
+  const id = req.body.id;
+  const name = req.body.name;
+  const surname = req.body.surname;
+  const idcard = req.body.idcard;
+  const gender = req.body.gender;
+  const birthdate = req.body.birthdate;
+  const address = req.body.address;
+  const mac1 = req.body.mac1;
+  const mac2 = req.body.mac2;
+  const department = req.body.department;
+
+  const user = req.body.user;
+  const password = req.body.password;
+  const type = req.body.type;
+
+  conn.query(
+    `UPDATE EMPLOYEE SET emp_name = ?, emp_surname = ?, emp_idcard = ?, emp_gender = ?,
+    emp_birthdate = ?, emp_address = ?, emp_mac1 = ?, emp_mac2 = ?, dept_id = ? WHERE emp_id = ?`,
+    [name, surname, idcard, gender, birthdate, address, mac1, mac2, department, id], 
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
+});
+
+// แก้ไขข้อมูลเวลาออกงาน
+app.put("/update_time", (request, response) => {
+  const time = req.body.time;
+  const date = req.body.date;
+  const employee = req.body.employee;
+
+  conn.query(
+    "UPDATE TIME_ATTENDANCE SET time_out = ? WHERE work_id = ? AND emp_id = ?",
+    [time, date, employee], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+// แก้ไขข้อมูลใบลา
+app.put("/update_leave", (request, response) => {
+  const appove = req.body.appove;
+  const date = req.body.date;
+  const employee = req.body.employee;
+
+  conn.query(
+    "UPDATE LEAVE_DAY SET leave_appove = ? WHERE leave_date = ? AND emp_id = ?",
+    [appove, date, employee], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+
+// -------------------- ข้อมูลพอร์ต --------------------
+
 app.listen(5000, () => {
-  console.log("Yey, your server is running on port 5000");
+  console.log("ฆerver is running on port 5000");
 });
