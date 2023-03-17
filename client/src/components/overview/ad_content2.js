@@ -31,14 +31,15 @@ function AdminContent2() {
 
     return (
         <>
-            <div className='ov-header-2'>
+            <div className='box-body ov-header-2'>
                 <p className='ov-lb-txt'>ใบบันทึกเวลา : {date}</p>
             </div>
-            <div className='ov-body-2'>
+            <div className='box-body ov-body-2'>
                 <div className='ov-content-3'>
                     <div className='ov-header-3'>
                         <p className='name'>ชื่อ - สกุล</p>
-                        <p className='time'>เวลา</p>
+                        <p className='time'>เวลาเข้า</p>
+                        <p className='time'>เวลาออก</p>
                         <p className='stat'>สถานะ</p>
                     </div>
                     <div className='ov-content-4'>
@@ -46,6 +47,7 @@ function AdminContent2() {
                             emp.map((item, index) => (
                                 <div className='ov-content-emp' key={index}>
                                     <p className="name">{item.name}</p>
+                                    <p className="time">{item.time}</p>
                                     <p className="time">{item.time}</p>
                                     <p className="stat">{item.status}</p>
                                 </div>

@@ -29,7 +29,7 @@ function EmployeeTable() {
 
     return (
         <>
-            <div className='em-body-2'>
+            <div className='box-body em-body-2'>
                 <div className='em-content-3'>
                     <div className='em-header-3'>
                         <p className='numb'>รหัส</p>

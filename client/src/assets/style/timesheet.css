@@ -9,6 +9,12 @@
     border-radius: 5px;
 }
 
+.ta-info {
+    background: white;
+    width: 95%;
+    border: 1px solid lightgray;
+}
+
 .ta-box-content {
     width: 95%;
     height: 100%;
@@ -30,11 +36,29 @@
 
 .ta-content {
     width: 95%;
-    height: 100%;
+    height: 670px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: scroll;
+    border-bottom: 1px solid lightgray;
+    border-left: 1px solid lightgray;
 }
+
+.ta-content::-webkit-scrollbar {
+    width: 1px;
+}
+
+.ta-content::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+}
+
+.ta-content::-webkit-scrollbar-thumb {
+    background: #ADE6F0; 
+    border-radius: 10px;
+}
+
 
 .ta-content-emp {
     margin-top: 20px;
@@ -45,14 +69,6 @@
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-}
-
-.ta-content-emp div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    width: 25%;
 }
 
 .ta-img-bx {
@@ -66,7 +82,11 @@
 }
 
 .ta-img-bx img {
-    width: 20px;
+    width: 15px;
+}
+
+.ta-img-bx:hover {
+    background: #ADE6F0;
 }
 
 p.ta-date {
@@ -74,10 +94,48 @@ p.ta-date {
     margin: 0;
     color: #424949;
     width: 25%;
+    text-align: center;
 }
 
 p.ta-time {
     font-size: 0.9rem;
+    margin: 0;
+    color: #424949;
+    width: 25%;
+    text-align: center;
+}
+
+.ta-content-time {
+    margin-top: 10px;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: default;
+    border-bottom: 1px solid white;
+}
+
+.ta-content-time:hover {
+    border-bottom: 1px solid #ADE6F0;
+}
+
+.ta-content-time div {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+}
+
+.ta-content-time p.date {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 25%;
+    text-align: center;
+}
+
+.ta-content-time p.time {
+    font-size: 0.8rem;
     margin: 0;
     color: #424949;
     width: 25%;

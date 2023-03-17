@@ -96,7 +96,7 @@ function CalendarDate() {
                     </div>
                 </div>
             </div>
-            <div className='box-body ca-body-bottom'>
+            {/* <div className='box-body ca-body-bottom'>
                 <div className='ta-box-content'>
                     <div className='ta-header'>
                         <p className='ta-date'>วันหยุด</p>
@@ -119,7 +119,7 @@ function CalendarDate() {
                         }
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };
