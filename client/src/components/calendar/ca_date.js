@@ -2,7 +2,6 @@ import { React } from 'react';
 import { useState } from 'react';
 import right from '../../assets/icon/angle-right.png';
 import left from '../../assets/icon/angle-left.png';
-import ne from '../../assets/icon/note-edit.png';
 
 
 function CalendarDate() {
@@ -96,30 +95,24 @@ function CalendarDate() {
                     </div>
                 </div>
             </div>
-            {/* <div className='box-body ca-body-bottom'>
-                <div className='ta-box-content'>
-                    <div className='ta-header'>
-                        <p className='ta-date'>วันหยุด</p>
-                        <p className='ta-time'>วันที่</p>
-                        <p className='ta-time'>แก้ไข</p>
+            <div className='box-body ca-body-bottom'>
+                <div className='ca-box-content'>
+                    <div className='ca-header'>
+                        <p className='ca-name'>วันหยุด</p>
+                        <p className='ca-date'>วันที่</p>
                     </div>
-                    <div className='ta-content'>
+                    <div className='ca-content'>
                         {
                             emp.map((item, index) => (
-                                <div className='ta-content-emp' key={index}>
-                                    <p className="ta-date">{item.date}</p>
-                                    <p className="ta-time">{item.timeIn}</p>
-                                    <div>
-                                        <div className='ta-img-bx'>
-                                            <img src={ne} alt=''/>
-                                        </div>
-                                    </div>
+                                <div className='ca-content-info' key={index}>
+                                    <p className="ca-name">{item.date}</p>
+                                    <p className="ca-date">{item.timeIn}</p>
                                 </div>
                             ))
                         }
                     </div>
                 </div>
-            </div> */}
+            </div>
         </>
     );
 };
