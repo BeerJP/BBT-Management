@@ -75,7 +75,7 @@ app.get('/department', (request, response) => {
 
 // แสดงข้อมูล Employee
 app.get('/employee', (request, response) => {
-  conn.query("SELECT * FROM EMPLOYEE", (err, result) => {
+  conn.query("SELECT * FROM EMPLOYEE INNER JOIN DEPARTMENT ON EMPLOYEE.dept_id = DEPARTMENT.dept_id", (err, result) => {
     response.send(result);
   });
 });
@@ -118,6 +118,14 @@ app.get('/holiday', (request, response) => {
 // แสดงข้อมูล Time Attendance
 app.get('/time', (request, response) => {
   conn.query("SELECT * FROM TIME_ATTENDANCE", (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล Time Attendance แบบเจาะจง
+app.post('/timesheet', (request, response) => {
+  const empId = request.body.id;
+  conn.query("SELECT * FROM TIME_ATTENDANCE INNER JOIN WORKDAY ON TIME_ATTENDANCE.work_id = WORKDAY.work_id WHERE emp_id = ? ", [empId], (err, result) => {
     response.send(result);
   });
 });
@@ -312,5 +320,5 @@ app.put("/update_leave", (request, response) => {
 // -------------------- ข้อมูลพอร์ต --------------------
 
 app.listen(5000, () => {
-  console.log("ฆerver is running on port 5000");
+  console.log("server is running on port 5000");
 });

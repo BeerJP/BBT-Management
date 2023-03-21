@@ -8,7 +8,6 @@ import EmployeeTable from '../components/employee/emp_table';
 function Employee() {
 
     const [employee, setEmployee] = useState([]);
-    const [department, setDepartment] = useState([]);
     const [selectEmp, setSelect] = useState();
 
     const getSelect = (data) => {
@@ -20,14 +19,7 @@ function Employee() {
         .then(response => {
             setEmployee(response.data);
         });
-
-        axios.get("http://localhost:5000/department", {crossdomain: true})
-        .then(response => {
-            setDepartment(response.data);
-        });
-
     }, []);
-
 
     return (
         <>
@@ -35,7 +27,7 @@ function Employee() {
                 <EmployeeInfo data={employee[selectEmp - 1]}/>
             </div>
             <div className='box-content'>
-                <EmployeeTable data={[employee, department, getSelect]}/>
+                <EmployeeTable data={[employee, getSelect]}/>
             </div>
         </>
     );

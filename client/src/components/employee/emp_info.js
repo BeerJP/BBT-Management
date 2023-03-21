@@ -7,7 +7,6 @@ function EmployeeInfo(props) {
 
     if (!props.data) {
         var emp = {
-
             emp_name: '-',
             emp_surname: '-',
             emp_idcard: '-',
@@ -16,7 +15,7 @@ function EmployeeInfo(props) {
             emp_mac2: '-',
             emp_status: '-',
             emp_startdate: '-',
-            emp_endtdate: '-',
+            emp_enddate: '-',
             emp_address: '-',
             dept_id: '-'
         };
@@ -48,7 +47,7 @@ function EmployeeInfo(props) {
                         </div>
                         <div>
                             <label>แผนก</label>
-                            <label>{emp['dept_id']}</label>
+                            <label>{emp['dept_name']}</label>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>

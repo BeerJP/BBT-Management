@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 
 
 function EmployeeTable(props) {
@@ -18,10 +18,10 @@ function EmployeeTable(props) {
                     <div className='em-content-4'>
                         {
                             emp.map((item, index) => (
-                                <div className='em-content-emp' key={index} onClick={() => props.data[2](item.emp_id)}>
+                                <div className='em-content-emp' key={index} onClick={() => props.data[1](item.emp_id)}>
                                     <p className="numb">{item.emp_id}</p>
                                     <p className="name">{item.emp_name + " " + item.emp_surname}</p>
-                                    <p className="dept">{item.dept_id}</p>
+                                    <p className="dept">{item.dept_name}</p>
                                 </div>
                             ))
                         }

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 14, 2023 at 10:03 AM
--- Server version: 10.4.18-MariaDB
--- PHP Version: 8.0.3
+-- Generation Time: Mar 21, 2023 at 04:31 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `department` (
   `dept_id` int(1) NOT NULL,
   `dept_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `department`
@@ -64,7 +64,7 @@ CREATE TABLE `employee` (
   `emp_mac1` varchar(17) DEFAULT NULL,
   `emp_mac2` varchar(17) DEFAULT NULL,
   `dept_id` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `employee`
@@ -82,7 +82,7 @@ INSERT INTO `employee` (`emp_id`, `emp_name`, `emp_surname`, `emp_idcard`, `emp_
 CREATE TABLE `holiday` (
   `holi_name` varchar(50) NOT NULL,
   `work_id` varchar(8) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -96,7 +96,7 @@ CREATE TABLE `leave_day` (
   `leave_description` varchar(255) NOT NULL,
   `leave_appove` tinyint(1) NOT NULL DEFAULT 0,
   `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -109,7 +109,15 @@ CREATE TABLE `time_attendance` (
   `time_out` time DEFAULT NULL,
   `work_id` varchar(8) NOT NULL,
   `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `time_attendance`
+--
+
+INSERT INTO `time_attendance` (`time_in`, `time_out`, `work_id`, `emp_id`) VALUES
+('08:40:00', '17:00:00', '25660103', 1001),
+('08:35:00', '17:00:00', '25660104', 1001);
 
 -- --------------------------------------------------------
 
@@ -120,7 +128,7 @@ CREATE TABLE `time_attendance` (
 CREATE TABLE `type` (
   `type_id` int(1) NOT NULL,
   `type_name` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `type`
@@ -142,7 +150,7 @@ CREATE TABLE `user` (
   `user_password` varchar(12) NOT NULL,
   `type_id` int(1) NOT NULL,
   `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `user`
@@ -161,7 +169,90 @@ CREATE TABLE `workday` (
   `work_id` varchar(8) NOT NULL,
   `work_date` date NOT NULL,
   `work_status` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `workday`
+--
+
+INSERT INTO `workday` (`work_id`, `work_date`, `work_status`) VALUES
+('25660102', '2023-01-02', 1),
+('25660103', '2023-01-03', 1),
+('25660104', '2023-01-04', 1),
+('25660105', '2023-01-05', 1),
+('25660106', '2023-01-06', 1),
+('25660107', '2023-01-07', 1),
+('25660109', '2023-01-09', 1),
+('25660110', '2023-01-10', 1),
+('25660111', '2023-01-11', 1),
+('25660112', '2023-01-12', 1),
+('25660113', '2023-01-13', 1),
+('25660114', '2023-01-14', 1),
+('25660116', '2023-01-16', 1),
+('25660117', '2023-01-17', 1),
+('25660118', '2023-01-18', 1),
+('25660119', '2023-01-19', 1),
+('25660120', '2023-01-20', 1),
+('25660121', '2023-01-21', 1),
+('25660123', '2023-01-23', 1),
+('25660124', '2023-01-24', 1),
+('25660125', '2023-01-25', 1),
+('25660126', '2023-01-26', 1),
+('25660127', '2023-01-27', 1),
+('25660128', '2023-01-28', 1),
+('25660130', '2023-01-30', 1),
+('25660131', '2023-01-31', 1),
+('25660201', '2023-02-01', 1),
+('25660202', '2023-02-02', 1),
+('25660203', '2023-02-03', 1),
+('25660204', '2023-02-04', 1),
+('25660206', '2023-02-06', 1),
+('25660207', '2023-02-07', 1),
+('25660208', '2023-02-08', 1),
+('25660209', '2023-02-09', 1),
+('25660210', '2023-02-10', 1),
+('25660211', '2023-02-11', 1),
+('25660213', '2023-02-13', 1),
+('25660214', '2023-02-14', 1),
+('25660215', '2023-02-15', 1),
+('25660216', '2023-02-16', 1),
+('25660217', '2023-02-17', 1),
+('25660218', '2023-02-18', 1),
+('25660220', '2023-02-20', 1),
+('25660221', '2023-02-21', 1),
+('25660222', '2023-02-22', 1),
+('25660223', '2023-02-23', 1),
+('25660224', '2023-02-24', 1),
+('25660225', '2023-02-25', 1),
+('25660227', '2023-02-27', 1),
+('25660228', '2023-02-28', 1),
+('25660301', '2023-03-01', 1),
+('25660302', '2023-03-02', 1),
+('25660303', '2023-03-03', 1),
+('25660304', '2023-03-04', 1),
+('25660306', '2023-03-06', 1),
+('25660307', '2023-03-07', 1),
+('25660308', '2023-03-08', 1),
+('25660309', '2023-03-09', 1),
+('25660310', '2023-03-10', 1),
+('25660311', '2023-03-11', 1),
+('25660313', '2023-03-13', 1),
+('25660314', '2023-03-14', 1),
+('25660315', '2023-03-15', 1),
+('25660316', '2023-03-16', 1),
+('25660317', '2023-03-17', 1),
+('25660318', '2023-03-18', 1),
+('25660320', '2023-03-20', 1),
+('25660321', '2023-03-21', 1),
+('25660322', '2023-03-22', 1),
+('25660323', '2023-03-23', 1),
+('25660324', '2023-03-24', 1),
+('25660325', '2023-03-25', 1),
+('25660327', '2023-03-27', 1),
+('25660328', '2023-03-28', 1),
+('25660329', '2023-03-29', 1),
+('25660330', '2023-03-30', 1),
+('25660331', '2023-03-31', 1);
 
 --
 -- Indexes for dumped tables
