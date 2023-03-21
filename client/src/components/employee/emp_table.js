@@ -1,31 +1,10 @@
-import { React } from 'react';
+import { React, useState } from 'react';
 
 
-function EmployeeTable() {
+function EmployeeTable(props) {
 
-    const emp = [
+    const emp = props.data[0];
 
-        {   name:"1001",
-            time:"น้อยหน่อย โจโจ๊ะ",
-            status:"เจ้าหน้าที่ขนส่ง"
-        },
-
-        {   name:"1002",
-            time:"จักรพันธ์ ภูพาพุทธ",
-            status:"เจ้าหน้าที่ขนส่ง"
-        },
-
-        {   name:"1003",
-            time:"test test",
-            status:"เจ้าหน้าที่ขนส่ง"
-        },
-
-        {   name:"1004",
-            time:"test test",
-            status:"เจ้าหน้าที่ขนส่ง"
-        }
-
-    ];
 
     return (
         <>
@@ -39,10 +18,10 @@ function EmployeeTable() {
                     <div className='em-content-4'>
                         {
                             emp.map((item, index) => (
-                                <div className='em-content-emp' key={index}>
-                                    <p className="numb">{item.name}</p>
-                                    <p className="name">{item.time}</p>
-                                    <p className="dept">{item.status}</p>
+                                <div className='em-content-emp' key={index} onClick={() => props.data[2](item.emp_id)}>
+                                    <p className="numb">{item.emp_id}</p>
+                                    <p className="name">{item.emp_name + " " + item.emp_surname}</p>
+                                    <p className="dept">{item.dept_id}</p>
                                 </div>
                             ))
                         }

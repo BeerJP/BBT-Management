@@ -1,0 +1,182 @@
+.le-body {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    border-radius: 5px;
+}
+
+.le-box-header {    
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    color: white;
+    height: 40px;
+    width: 95%;
+    padding: 5px;
+    margin-top: 5px;
+    background: deepskyblue;
+}
+
+.le-box-header2 {    
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.1rem;
+    color: #424949;
+    height: 40px;
+    width: 95%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid lightgray;
+}
+
+.le-box-header2 label {
+    width: 30%;
+    text-align: center;
+}
+
+.le-box-content {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.le-header {
+    width: 95%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.le-header p.le-empl {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 15%;
+    text-align: center;
+}
+
+.le-header p.le-date {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 20%;
+    text-align: center;
+}
+
+.le-header p.le-type {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 15%;
+    text-align: center;
+}
+
+.le-header p.le-desc {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 40%;
+    text-align: center;
+}
+
+.le-header p.le-sett {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 10%;
+    text-align: center;
+}
+
+.le-content {
+    width: 95%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    border: 1px solid lightgray;
+}
+
+.le-content::-webkit-scrollbar {
+    width: 1px;
+}
+
+.le-content::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+}
+
+.le-content::-webkit-scrollbar-thumb {
+    background: #ADE6F0; 
+    border-radius: 10px;
+}
+
+.le-content-time {
+    margin-top: 10px;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: default;
+    border-bottom: 1px solid white;
+}
+
+.le-content-time p.empl {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 15%;
+    text-align: center;
+}
+
+.le-content-time p.date {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 20%;
+    text-align: center;
+}
+
+.le-content-time p.type {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 15%;
+    text-align: center;
+}
+
+.le-content-time p.desc {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 40%;
+    text-align: center;
+}
+
+.le-content-time p.sett {
+    font-size: 0.8rem;
+    margin: 0;
+    color: #424949;
+    width: 10%;
+    text-align: center;
+}
+
+.le-content-time div {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+}
+
+.le-img-bx img {
+    width: 15px;
+}
+

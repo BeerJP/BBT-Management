@@ -1,48 +1,157 @@
 import { React } from 'react';
+import ne from '../../assets/icon/note-edit.png';
 
 
 function LeaveTable() {
 
     const emp = [
 
-        {   name:"1001",
-            time:"น้อยหน่อย โจโจ๊ะ",
-            status:"เจ้าหน้าที่ขนส่ง"
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
         },
 
-        {   name:"1002",
-            time:"จักรพันธ์ ภูพาพุทธ",
-            status:"เจ้าหน้าที่ขนส่ง"
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
         },
 
-        {   name:"1003",
-            time:"test test",
-            status:"เจ้าหน้าที่ขนส่ง"
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+        
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
         },
 
-        {   name:"1004",
-            time:"test test",
-            status:"เจ้าหน้าที่ขนส่ง"
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+        
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+        
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
+        },
+        
+        {   emp:"1001",
+            date:"05/01/2566",
+            type:"กิจ",
+            des:"ไปต่างจังหวัด"
         }
 
     ];
 
     return (
         <>
-            <div className='box-body em-body-2'>
-                <div className='em-content-3'>
-                    <div className='em-header-3'>
-                        <p className='numb'>รหัส</p>
-                        <p className='name'>ชื่อ - สกุล</p>
-                        <p className='dept'>แผนก</p>
+            <div className='box-body le-body'>
+                <div className='le-box-header'>
+                    <label>รอการอนุมัติ</label>
+                </div>
+                <div className='le-box-content'>
+                    <div className='le-header'>
+                        <p className='le-empl'>พนักงาน</p>
+                        <p className='le-date'>วันที่</p>
+                        <p className='le-type'>ประเภท</p>
+                        <p className='le-type'>รูปแบบ</p>
+                        <p className='le-desc'>เหตุผลการลา</p>
+                        <p className='le-sett'></p>
                     </div>
-                    <div className='em-content-4'>
+                    <div className='le-content'>
                         {
                             emp.map((item, index) => (
-                                <div className='em-content-emp' key={index}>
-                                    <p className="numb">{item.name}</p>
-                                    <p className="name">{item.time}</p>
-                                    <p className="dept">{item.status}</p>
+                                <div className='le-content-time' key={index}>
+                                    <p className="empl">{item.emp}</p>
+                                    <p className="date">{item.date}</p>
+                                    <p className="type">{item.type}</p>
+                                    <p className="type">{item.type}</p>
+                                    <p className="desc">{item.des}</p>
+                                    <p className="sett">อนุมัติ</p>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+            <div className='box-body le-body'>
+                <div className='le-box-header'>
+                    <label>อนุมัติแล้ว</label>
+                </div>
+                <div className='le-box-content'>
+                    <div className='le-header'>
+                        <p className='le-empl'>พนักงาน</p>
+                        <p className='le-date'>วันที่</p>
+                        <p className='le-type'>ประเภท</p>
+                        <p className='le-type'>รูปแบบ</p>
+                        <p className='le-desc'>เหตุผลการลา</p>
+                        <p className='le-sett'></p>
+                    </div>
+                    <div className='le-content'>
+                        {
+                            emp.map((item, index) => (
+                                <div className='le-content-time' key={index}>
+                                    <p className="empl">{item.emp}</p>
+                                    <p className="date">{item.date}</p>
+                                    <p className="type">{item.type}</p>
+                                    <p className="type">{item.type}</p>
+                                    <p className="desc">{item.des}</p>
+                                    <p className="sett">ยกเลิก</p>
                                 </div>
                             ))
                         }

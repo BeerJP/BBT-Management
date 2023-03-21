@@ -1,6 +1,7 @@
 import { React } from 'react';
 import '../assets/style/leave.css';
 import LeaveTable from '../components/leave/leave_table';
+import LeaveSetting from '../components/leave/leave_setting';
 
 
 function Leave() {
@@ -11,7 +12,7 @@ function Leave() {
                 <LeaveTable/>
             </div>
             <div className='box-content'>
-                <LeaveTable/>
+                <LeaveSetting/>
             </div>
         </>
     );
