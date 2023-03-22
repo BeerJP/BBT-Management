@@ -23,7 +23,7 @@ function AdminContent2() {
                         <p className='name'>ชื่อ - สกุล</p>
                         <p className='time'>วันที่เริ่มงาน</p>
                         <p className='time'>ใบบันทึกเวลา</p>
-                        <p className='stat'>จำนวนวันลา</p>
+                        <p className='stat'>จำนวนใบลา</p>
                     </div>
                     <div className='ov-content-4'>
                         {

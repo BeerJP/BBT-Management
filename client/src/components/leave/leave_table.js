@@ -1,102 +1,25 @@
 import { React } from 'react';
-import ne from '../../assets/icon/note-edit.png';
+import axios from 'axios';
+import moment from "moment";
+// import ne from '../../assets/icon/note-edit.png';
 
 
-function LeaveTable() {
+function LeaveTable(props) {
 
-    const emp = [
+    const leave_p = props.data[0];
+    const leave_a = props.data[1];
 
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-        
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-        
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-        
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-        
-        {   emp:"1001",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        }
-
-    ];
+    const getId = (e) => {
+        const leaveId = e.target.id.split(" ");
+        console.log(leaveId);
+        axios.put("http://localhost:5000/update_leave", 
+        {   id: leaveId[0],
+            date: leaveId[1],
+            state: leaveId[2]
+        }).then(() => {
+            console.log("Success");
+        });
+    }
 
     return (
         <>
@@ -108,21 +31,20 @@ function LeaveTable() {
                     <div className='le-header'>
                         <p className='le-empl'>พนักงาน</p>
                         <p className='le-date'>วันที่</p>
-                        <p className='le-type'>ประเภท</p>
                         <p className='le-type'>รูปแบบ</p>
                         <p className='le-desc'>เหตุผลการลา</p>
                         <p className='le-sett'></p>
                     </div>
                     <div className='le-content'>
                         {
-                            emp.map((item, index) => (
+                            leave_p.map((item, index) => (
                                 <div className='le-content-time' key={index}>
-                                    <p className="empl">{item.emp}</p>
-                                    <p className="date">{item.date}</p>
-                                    <p className="type">{item.type}</p>
-                                    <p className="type">{item.type}</p>
-                                    <p className="desc">{item.des}</p>
-                                    <p className="sett">อนุมัติ</p>
+                                    <p className="empl">{item.emp_id}</p>
+                                    {/* <p className="date">{moment(item.leave_date).utc().format('DD/MM/YYYY')}</p> */}
+                                    <p className="date">{item.leave_date}</p>
+                                    <p className="type">{item.leave_type}</p>
+                                    <p className="desc">{item.leave_description}</p>
+                                    <button className="sett" id={item.emp_id + " " + item.leave_date + " 1"} onClick={getId}>อนุมัติ</button>
                                 </div>
                             ))
                         }
@@ -137,23 +59,21 @@ function LeaveTable() {
                     <div className='le-header'>
                         <p className='le-empl'>พนักงาน</p>
                         <p className='le-date'>วันที่</p>
-                        <p className='le-type'>ประเภท</p>
                         <p className='le-type'>รูปแบบ</p>
                         <p className='le-desc'>เหตุผลการลา</p>
                         <p className='le-sett'></p>
                     </div>
                     <div className='le-content'>
                         {
-                            emp.map((item, index) => (
-                                <div className='le-content-time' key={index}>
-                                    <p className="empl">{item.emp}</p>
-                                    <p className="date">{item.date}</p>
-                                    <p className="type">{item.type}</p>
-                                    <p className="type">{item.type}</p>
-                                    <p className="desc">{item.des}</p>
-                                    <p className="sett">ยกเลิก</p>
-                                </div>
-                            ))
+                         leave_a.map((item, index) => (
+                            <div className='le-content-time' key={index}>
+                                <p className="empl">{item.emp_id}</p>
+                                <p className="date">{moment(item.leave_date).utc().format('DD/MM/YYYY')}</p>
+                                <p className="type">{item.leave_type}</p>
+                                <p className="desc">{item.leave_description}</p>
+                                <button className="sett" id={item.emp_id + " " + item.leave_date + " 0"} onClick={getId}>ยกเลิก</button>
+                            </div>
+                        ))
                         }
                     </div>
                 </div>

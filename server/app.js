@@ -10,7 +10,8 @@ const conn = mysql.createConnection({
   host: "127.0.0.1",
   user: "root",
   password: "",
-  database: "rsw_management"
+  database: "rsw_management",
+  timezone: 'Z'
 });
 
 const app = express();
@@ -76,19 +77,13 @@ app.get('/overview', (request, response) => {
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'กิจ' ) AS bld,
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'พักร้อน' ) AS hld,
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ป่วย' ) AS sld,
-              ( SELECT COUNT(*) FROM WORKDAY ) AS wd,
+              ( SELECT COUNT(*) FROM WORKDAY WHERE work_status = '1') AS wd,
               ( SELECT COUNT(*) FROM HOLIDAY ) AS hd
               FROM EMPLOYEE`, 
   (err, result) => {
     response.send(result);
   });
 });
-// app.get('/overview', (request, response) => {
-//   conn.query(`SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in < '08:45:00'`, 
-//   (err, result) => {
-//     response.send(result);
-//   });
-// });
 
 // แสดงข้อมูล Department
 app.get('/department', (request, response) => {
@@ -121,9 +116,18 @@ app.get('/type', (request, response) => {
   });
 });
 
-// แสดงข้อมูล Leave Day
-app.get('/leave', (request, response) => {
-  conn.query("SELECT * FROM LEAVE_DAY", (err, result) => {
+// แสดงข้อมูล Leave Day ยังไม่อนุมัติ
+app.get('/leavepending', (request, response) => {
+  conn.query("SELECT *, DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date FROM LEAVE_DAY WHERE leave_appove = '0'", 
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล Leave Day อนุมัติแล้ว
+app.get('/leaveapprove', (request, response) => {
+  conn.query("SELECT *, DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date FROM LEAVE_DAY WHERE leave_appove = '1'", 
+  (err, result) => {
     response.send(result);
   });
 });
@@ -345,9 +349,9 @@ app.put("/update_time", (request, response) => {
 
 // แก้ไขข้อมูลใบลา
 app.put("/update_leave", (request, response) => {
-  const appove = req.body.appove;
-  const date = req.body.date;
-  const employee = req.body.employee;
+  const appove = request.body.state;
+  const date = request.body.date;
+  const employee = request.body.id;
 
   conn.query(
     "UPDATE LEAVE_DAY SET leave_appove = ? WHERE leave_date = ? AND emp_id = ?",

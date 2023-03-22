@@ -5,7 +5,6 @@ function EmployeeTable(props) {
 
     const emp = props.data[0];
 
-
     return (
         <>
             <div className='box-body em-body-2'>
