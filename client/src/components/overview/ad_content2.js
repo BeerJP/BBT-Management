@@ -1,55 +1,38 @@
-import { React } from 'react';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios';
+import moment from "moment";
 
 
 function AdminContent2() {
 
-    const emp = [
+    const [timeSheet, setTimesheet] = useState([]);
+    
+    useEffect(() => {
+        axios.get("http://localhost:5000/timecount", {crossdomain: true})
+        .then(response => {
+            setTimesheet(response.data);
+        });
+    }, []);
 
-        {   name:"Tester1",
-            time:"8.30น.",
-            status:"ปกติ"
-        },
-
-        {   name:"Tester2",
-            time:"8.30น.",
-            status:"ปกติ"
-        },
-
-        {   name:"Tester3",
-            time:"8.30น.",
-            status:"ปกติ"
-        },
-
-        {   name:"Tester4",
-            time:"8.30น.",
-            status:"ปกติ"
-        }
-        
-    ];
-
-    const date = "วันอังคาร 03/01/2566";
 
     return (
         <>
-            <div className='box-body ov-header-2'>
-                <p className='ov-lb-txt'>ใบบันทึกเวลา : {date}</p>
-            </div>
             <div className='box-body ov-body-2'>
                 <div className='ov-content-3'>
                     <div className='ov-header-3'>
                         <p className='name'>ชื่อ - สกุล</p>
-                        <p className='time'>เวลาเข้า</p>
-                        <p className='time'>เวลาออก</p>
-                        <p className='stat'>สถานะ</p>
+                        <p className='time'>วันที่เริ่มงาน</p>
+                        <p className='time'>ใบบันทึกเวลา</p>
+                        <p className='stat'>จำนวนวันลา</p>
                     </div>
                     <div className='ov-content-4'>
                         {
-                            emp.map((item, index) => (
+                            timeSheet.map((item, index) => (
                                 <div className='ov-content-emp' key={index}>
-                                    <p className="name">{item.name}</p>
-                                    <p className="time">{item.time}</p>
-                                    <p className="time">{item.time}</p>
-                                    <p className="stat">{item.status}</p>
+                                    <p className="name">{item.emp_name + " " + item.emp_surname}</p>
+                                    <p className="time">{moment(item.emp_startdate).utc().format('DD/MM/YYYY')}</p>
+                                    <p className="time">{item.ta}</p>
+                                    <p className="stat">{item.ld}</p>
                                 </div>
                             ))
                         }

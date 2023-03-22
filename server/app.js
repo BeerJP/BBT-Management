@@ -66,6 +66,30 @@ app.get('/session', function(request, response) {
 
 // -------------------- แสดงข้อมูล --------------------
 
+// แสดงข้อมูลสรุป
+app.get('/overview', (request, response) => {
+  conn.query(`SELECT COUNT(*) AS emp,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE ) AS ta,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in <= '08:45:00') AS nta,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in > '08:45:00') AS lta,
+              ( SELECT COUNT(*) FROM LEAVE_DAY ) AS ld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'กิจ' ) AS bld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'พักร้อน' ) AS hld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ป่วย' ) AS sld,
+              ( SELECT COUNT(*) FROM WORKDAY ) AS wd,
+              ( SELECT COUNT(*) FROM HOLIDAY ) AS hd
+              FROM EMPLOYEE`, 
+  (err, result) => {
+    response.send(result);
+  });
+});
+// app.get('/overview', (request, response) => {
+//   conn.query(`SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in < '08:45:00'`, 
+//   (err, result) => {
+//     response.send(result);
+//   });
+// });
+
 // แสดงข้อมูล Department
 app.get('/department', (request, response) => {
   conn.query("SELECT * FROM DEPARTMENT", (err, result) => {
@@ -75,7 +99,10 @@ app.get('/department', (request, response) => {
 
 // แสดงข้อมูล Employee
 app.get('/employee', (request, response) => {
-  conn.query("SELECT * FROM EMPLOYEE INNER JOIN DEPARTMENT ON EMPLOYEE.dept_id = DEPARTMENT.dept_id", (err, result) => {
+  conn.query(`SELECT * FROM EMPLOYEE 
+              INNER JOIN DEPARTMENT 
+              ON EMPLOYEE.dept_id = DEPARTMENT.dept_id`, 
+  (err, result) => {
     response.send(result);
   });
 });
@@ -122,10 +149,27 @@ app.get('/time', (request, response) => {
   });
 });
 
+// แสดงจำนวน Time Attendance & Leave Day
+app.get('/timecount', (request, response) => {
+  conn.query(`SELECT EMPLOYEE.emp_id, EMPLOYEE.emp_name, EMPLOYEE.emp_surname, EMPLOYEE.emp_startdate,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.emp_id = EMPLOYEE.emp_id ) AS ta,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.emp_id = EMPLOYEE.emp_id ) AS ld
+              FROM EMPLOYEE GROUP BY EMPLOYEE.emp_id`,
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+
 // แสดงข้อมูล Time Attendance แบบเจาะจง
 app.post('/timesheet', (request, response) => {
   const empId = request.body.id;
-  conn.query("SELECT * FROM TIME_ATTENDANCE INNER JOIN WORKDAY ON TIME_ATTENDANCE.work_id = WORKDAY.work_id WHERE emp_id = ? ", [empId], (err, result) => {
+  conn.query(`SELECT * 
+              FROM TIME_ATTENDANCE 
+              INNER JOIN WORKDAY 
+              ON TIME_ATTENDANCE.work_id = WORKDAY.work_id 
+              WHERE emp_id = ?`,
+  [empId], (err, result) => {
     response.send(result);
   });
 });

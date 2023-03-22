@@ -1,4 +1,5 @@
 import { React } from 'react';
+import moment from "moment";
 import ua from '../../assets/icon/user-add.png';
 import ue from '../../assets/icon/edit.png';
 
@@ -43,7 +44,7 @@ function EmployeeInfo(props) {
                     <div className='lb-box-long em-info'>
                         <div>
                             <label>ชื่อ - นามสกุล</label>
-                            <label>{emp['emp_name'] + " " + emp['emp_surname']}</label>
+                            <label>{emp.emp_name + " " + emp.emp_surname}</label>
                         </div>
                         <div>
                             <label>แผนก</label>

@@ -1,9 +1,34 @@
-import { React } from 'react';
-import al from '../../assets/icon/angle-left.png';
-import ar from '../../assets/icon/angle-right.png';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios';
+// import al from '../../assets/icon/angle-left.png';
+// import ar from '../../assets/icon/angle-right.png';
 
 
 function AdminContent1() {
+
+    const [overview, setOverview] = useState();
+
+    useEffect(() => {
+        async function getOverview() {
+
+            await axios.get("http://localhost:5000/overview", {crossdomain: true})
+            .then(response => {
+                setOverview(response.data);
+            });
+
+        };
+
+        if (!overview) {
+            getOverview();
+        }
+        // axios.get("http://localhost:5000/overview", {crossdomain: true})
+        // .then(response => {
+        //     setOverview(response.data);
+        // });
+    }, []);
+
+
+    console.log(overview);
 
     const sum_em = 15;
     const sum_ta = 15;
@@ -11,16 +36,8 @@ function AdminContent1() {
     const percen = 60;
 
     const styles = {
-        test:{
-            background: "linear-gradient(to Right, lightgreen "+ percen +"%, white 0%)"
-        },
-
         work:{
             background: "linear-gradient(to Right, blue "+ percen +"%, white 0%)"
-        },
-
-        wend:{
-            background: "linear-gradient(to Right, red "+ percen +"%, white 0%)"
         },
 
         holi:{
@@ -53,25 +70,20 @@ function AdminContent1() {
                 </div>
             </div>
             <div className='box-body ov-body-left'>
-                <div className='box-boy ov-header-combo'>
+                {/* <div className='box-boy ov-header-combo'>
                     <div><img src={al} alt=''/></div>
                     <p className='ov-select-txt'>มกราคม - 2566</p>
                     <div><img src={ar} alt=''/></div>
-                </div>
+                </div> */}
                 <div className='box-body ov-header-left'>
                     <div className='lb-box ov-work-bx'>
                         <p className='ov-date-txt'>วันทำงาน</p>
                         <p className='ov-date-num'>{sum_em} วัน ({percen}%)</p>
                         <div className='ov-date-percen' style={styles.work}></div>
                     </div>
-                    <div className='lb-box ov-wend-bx'>
-                        <p className='ov-date-txt'>วันหยุด</p>
-                        <p className='ov-date-num'>{sum_em}  วัน ({percen}%)</p>
-                        <div className='ov-date-percen' style={styles.wend}></div>
-                    </div>
                     <div className='lb-box ov-holi-bx'>
                         <p className='ov-date-txt'>วันหยุดนักขัตฤกษ์ / หยุดพิเศษ</p>
-                        <p className='ov-date-num'>{sum_em}  วัน ({percen}%)</p>
+                        <p className='ov-date-num'>{sum_em} วัน ({percen}%)</p>
                         <div className='ov-date-percen' style={styles.holi}></div>
                     </div>
                 </div>
@@ -88,10 +100,6 @@ function AdminContent1() {
                         </div>
                         <div>
                             <label><p>สาย</p><p>{sum_em} ({percen}%)</p></label>
-                            <div className='ov-ta-percen' style={styles.time}></div>
-                        </div>
-                        <div>
-                            <label><p>ขาด</p><p>{sum_em} ({percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.time}></div>
                         </div>
                     </div>
