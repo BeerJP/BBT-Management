@@ -1,9 +1,10 @@
 .ca-body-date {
     background: white;
+    height: 100%;
 }
 
 /* ------------------------------------ */
-.calendar { width: 95%; margin: auto; padding: 20px 10px; border-radius: 10px; background: white;}
+.calendar { width: 95%; margin: auto; padding: 20px 10px; border-radius: 10px; background: white; }
 .calendar .ca-menu { display: flex; flex-direction: row; justify-content: center; align-items: center; height: 60px; margin: auto; }
 .calendar .ca-menu .ca-label { display: flex; width: 280px; justify-content: space-between; }
 .calendar .ca-menu label { font-size: 2rem; text-align: center; margin: 0px 20px; }

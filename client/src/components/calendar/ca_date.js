@@ -40,24 +40,7 @@ function CalendarDate() {
         next[n] = n + 1;
     };
 
-    const emp = [
-
-        {   date:"วันขึ้นปีใหม่",
-            timeIn:"02-01-2566",
-            timeOut:"17.00 น."
-        },
-
-        {   date:"20/01/2566",
-            timeIn:"8.45 น.",
-            timeOut:"17.00 น."
-        },
-
-        {   date:"20/01/2566",
-            timeIn:"8.45 น.",
-            timeOut:"17.00 น."
-        }
-
-    ];
+    const emp = [];
 
     return (
         <>
@@ -95,7 +78,7 @@ function CalendarDate() {
                     </div>
                 </div>
             </div>
-            <div className='box-body ca-body-bottom'>
+            {/* <div className='box-body ca-body-bottom'>
                 <div className='ca-box-content'>
                     <div className='ca-header'>
                         <p className='ca-name'>วันหยุด</p>
@@ -112,7 +95,7 @@ function CalendarDate() {
                         }
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };

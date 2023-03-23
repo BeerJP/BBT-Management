@@ -94,9 +94,11 @@ app.get('/department', (request, response) => {
 
 // แสดงข้อมูล Employee
 app.get('/employee', (request, response) => {
-  conn.query(`SELECT * FROM EMPLOYEE 
+  conn.query(`SELECT *, DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate, DATE_FORMAT(emp_startdate, '%Y-%m-%d') as emp_startdate
+              FROM EMPLOYEE 
               INNER JOIN DEPARTMENT 
-              ON EMPLOYEE.dept_id = DEPARTMENT.dept_id`, 
+              ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+              ORDER BY EMPLOYEE.emp_id`, 
   (err, result) => {
     response.send(result);
   });
@@ -132,16 +134,22 @@ app.get('/leaveapprove', (request, response) => {
   });
 });
 
-// แสดงข้อมูล Workday
 app.get('/workday', (request, response) => {
-  conn.query("SELECT * FROM WORKDAY", (err, result) => {
+  conn.query(`SELECT *, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date FROM WORKDAY 
+              WHERE work_date > DATE_FORMAT(CURDATE(), '%Y-%m-%d') 
+              AND work_status = '1'`, (err, result) => {
     response.send(result);
   });
 });
 
 // แสดงข้อมูล Holiday
 app.get('/holiday', (request, response) => {
-  conn.query("SELECT * FROM HOLIDAY", (err, result) => {
+  conn.query(`SELECT *, DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date
+              FROM HOLIDAY
+              INNER JOIN WORKDAY 
+              ON HOLIDAY.work_id = WORKDAY.work_id
+              WHERE work_date >= DATE_FORMAT(CURDATE(), '%Y-%m-%d') `, 
+  (err, result) => {
     response.send(result);
   });
 });
@@ -274,25 +282,14 @@ app.post("/add_leave", (request, response) => {
 
 // เพิ่มข้อมูล Holiday
 app.post("/add_holiday", (request, response) => {
-  const name = req.body.name;
-  const date = req.body.date;
+  const name = request.body.name;
+  const date = request.body.date;
 
-  conn.query(
-    "INSERT INTO HOLIDAY (holi_name, work_id) VALUES (?, ?)",
+  conn.query("INSERT INTO HOLIDAY (holi_name, work_id) VALUES (?, ?)",
     [name, date],
     (err, result) => {
       if (err) {
         response.send(err);
-      }
-    }
-  );
-
-  conn.query(
-    "UPDATE WORKDAY SET work_status = ? WHERE work_id = ?", 
-    [0, date], 
-    (err, result) => {
-      if (err) {
-        console.log(err);
       }
     }
   );
@@ -318,13 +315,12 @@ app.put("/update_employee", (request, response) => {
   const password = req.body.password;
   const type = req.body.type;
 
-  conn.query(
-    `UPDATE EMPLOYEE SET emp_name = ?, emp_surname = ?, emp_idcard = ?, emp_gender = ?,
-    emp_birthdate = ?, emp_address = ?, emp_mac1 = ?, emp_mac2 = ?, dept_id = ? WHERE emp_id = ?`,
+  conn.query(`UPDATE EMPLOYEE SET emp_name = ?, emp_surname = ?, emp_idcard = ?, emp_gender = ?,
+              emp_birthdate = ?, emp_address = ?, emp_mac1 = ?, emp_mac2 = ?, dept_id = ? WHERE emp_id = ?`,
     [name, surname, idcard, gender, birthdate, address, mac1, mac2, department, id], 
     (err, result) => {
       if (err) {
-        console.log(err);
+        response.send(err);
       }
     }
   );
@@ -356,6 +352,21 @@ app.put("/update_leave", (request, response) => {
   conn.query(
     "UPDATE LEAVE_DAY SET leave_appove = ? WHERE leave_date = ? AND emp_id = ?",
     [appove, date, employee], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+// แก้ไขข้อมูลวันทำงาน
+app.put("/update_work", (request, response) => {
+  const date = request.body.date;
+
+  conn.query(
+    "UPDATE WORKDAY SET work_status = 0 WHERE work_id = ?",
+    [date], 
     (err, result) => {
       if (err) {
         response.send(err);

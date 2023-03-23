@@ -1,35 +1,30 @@
-import { React } from 'react';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios';
 
 
 function LeaveTable() {
 
-    const emp = [
+    const [workDay, setWorkday] = useState([{
+        work_id: '',
+        work_date: '',
+        work_status: ''
+    }]);
+    const [leaveType, setLeavetype] = useState('กิจ');
+    const [leaveName, setLeavename] = useState();
+    const [leaveDate, setLeavedate] = useState();
 
-        {   emp:"ปกติ",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
+    const getWorkday = async() => {
+        await axios.get("http://localhost:5000/workday", {crossdomain: true})
+        .then(response => {
+            setWorkday(response.data);
+        });
+    };
 
-        {   emp:"ปกติ",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
+    useEffect(() => {
+        getWorkday();
+    }, []);
 
-        {   emp:"ปกติ",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        },
-        
-        {   emp:"ปกติ",
-            date:"05/01/2566",
-            type:"กิจ",
-            des:"ไปต่างจังหวัด"
-        }
-
-    ];
+    const emp = [];
 
     return (
         <>
@@ -72,22 +67,38 @@ function LeaveTable() {
                 <div className='lb-box-long ca-sett'>
                     <div className='ca-sett-input'>
                         <label>ประเภท</label>
-                        <input></input>
+                        <select name="date" id="date" onChange={(event => {
+                            setLeavetype(event.target.value)
+                        })}>
+                            <option value={"กิจ"}>ลากิจ</option>
+                            <option value={"พักร้อน"}>ลาพักร้อน</option>
+                            <option value={"ป่วย"}>ลาป่วย</option>
+                        </select>
                     </div>
                     <div className='ca-sett-input'>
                         <label>เหตุผลการลา</label>
-                        <input></input>
+                        <input onChange={(event => {
+                            setLeavename(event.target.value)
+                        })}></input>
                     </div>
                 </div>
                 <div className='lb-box-long ca-sett'>
                     <div className='ca-sett-input'>
-                        <label>วันที่เริ่ม</label>
-                        <input></input>
+                        <label>วันที่</label>
+                        <select name="date" id="date" onChange={(event => {
+                            setLeavedate(event.target.value)
+                        })}>
+                            {
+                                workDay.map((item, index) => (
+                                    <option key={item.work_date} value={item.work_id}>{item.work_date}</option>
+                                ))
+                            }
+                        </select>
                     </div>
-                    <div className='ca-sett-input'>
+                    {/* <div className='ca-sett-input'>
                         <label>วันที่สิ้นสุด</label>
                         <input></input>
-                    </div>
+                    </div> */}
                 </div>
                 <div className='lb-box-long ca-sett'>
                     <div className='ca-sett-submit'>

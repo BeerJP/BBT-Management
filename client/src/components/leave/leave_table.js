@@ -1,25 +1,40 @@
-import { React } from 'react';
+import { React, useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from "moment";
 // import ne from '../../assets/icon/note-edit.png';
 
 
-function LeaveTable(props) {
+function LeaveTable() {
 
-    const leave_p = props.data[0];
-    const leave_a = props.data[1];
+    const [leavepen, setLeavepen] = useState([]);
+    const [leaveapp, setLeaveapp] = useState([]);
 
-    const getId = (e) => {
+    const getApi = async() => {
+        await axios.get("http://localhost:5000/leavepending", {crossdomain: true})
+        .then(response => {
+            setLeavepen(response.data);
+        });
+
+        await axios.get("http://localhost:5000/leaveapprove", {crossdomain: true})
+        .then(response => {
+            setLeaveapp(response.data);
+        });
+    };
+
+    useEffect(() => {
+        getApi();
+    }, []);
+
+    const getId = async(e) => {
         const leaveId = e.target.id.split(" ");
-        console.log(leaveId);
-        axios.put("http://localhost:5000/update_leave", 
+        await axios.put("http://localhost:5000/update_leave", 
         {   id: leaveId[0],
             date: leaveId[1],
             state: leaveId[2]
-        }).then(() => {
-            console.log("Success");
-        });
-    }
+        }).then(
+            await getApi()
+        );
+    };
 
     return (
         <>
@@ -37,7 +52,7 @@ function LeaveTable(props) {
                     </div>
                     <div className='le-content'>
                         {
-                            leave_p.map((item, index) => (
+                            leavepen.map((item, index) => (
                                 <div className='le-content-time' key={index}>
                                     <p className="empl">{item.emp_id}</p>
                                     {/* <p className="date">{moment(item.leave_date).utc().format('DD/MM/YYYY')}</p> */}
@@ -65,7 +80,7 @@ function LeaveTable(props) {
                     </div>
                     <div className='le-content'>
                         {
-                         leave_a.map((item, index) => (
+                         leaveapp.map((item, index) => (
                             <div className='le-content-time' key={index}>
                                 <p className="empl">{item.emp_id}</p>
                                 <p className="date">{moment(item.leave_date).utc().format('DD/MM/YYYY')}</p>

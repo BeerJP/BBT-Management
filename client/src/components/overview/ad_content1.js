@@ -7,15 +7,15 @@ function AdminContent1(props) {
 
     const ov = props.data;
 
-    const work_percen = ov[0].wd / (ov[0].wd + ov[0].hd) * 100;
-    const holi_percen = ov[0].hd / (ov[0].wd + ov[0].hd) * 100;
+    const work_percen = (ov[0].wd / (ov[0].wd + ov[0].hd) * 100).toFixed(0);
+    const holi_percen = (ov[0].hd / (ov[0].wd + ov[0].hd) * 100).toFixed(0);
 
-    const nta_percen = ov[0].nta / ov[0].ta * 100;
-    const lta_percen = ov[0].lta / ov[0].ta * 100;
+    const nta_percen = (ov[0].nta / ov[0].ta * 100).toFixed(0);
+    const lta_percen = (ov[0].lta / ov[0].ta * 100).toFixed(0);
 
-    const bld_percen = ov[0].bld / ov[0].ld * 100;
-    const hld_percen = ov[0].hld / ov[0].ld * 100;
-    const sld_percen = ov[0].sld / ov[0].ld * 100;
+    const bld_percen = (ov[0].bld / ov[0].ld * 100).toFixed(0);
+    const hld_percen = (ov[0].hld / ov[0].ld * 100).toFixed(0);
+    const sld_percen = (ov[0].sld / ov[0].ld * 100).toFixed(0);
 
     const styles = {
         work:{
@@ -49,7 +49,7 @@ function AdminContent1(props) {
 
     return (
         <>
-            <div className='box-body ov-header-left'>
+            <div className='box-body ov-header-left1'>
                 <div className='lb-box ov-emp-bx'>
                     <p className='ov-emp-num'>{ov[0].emp}</p>
                     <p className='ov-emp-txt'>พนักงาน</p>
@@ -69,7 +69,7 @@ function AdminContent1(props) {
                     <p className='ov-select-txt'>มกราคม - 2566</p>
                     <div><img src={ar} alt=''/></div>
                 </div> */}
-                <div className='box-body ov-header-left'>
+                <div className='box-body ov-header-left2'>
                     <div className='lb-box ov-work-bx'>
                         <p className='ov-date-txt'>วันทำงาน</p>
                         <p className='ov-date-num'>{ov[0].wd} วัน ({work_percen}%)</p>

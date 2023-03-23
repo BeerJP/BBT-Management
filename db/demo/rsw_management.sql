@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2023 at 04:31 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Mar 23, 2023 at 10:36 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `department` (
   `dept_id` int(1) NOT NULL,
   `dept_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `department`
@@ -64,14 +64,15 @@ CREATE TABLE `employee` (
   `emp_mac1` varchar(17) DEFAULT NULL,
   `emp_mac2` varchar(17) DEFAULT NULL,
   `dept_id` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `employee`
 --
 
 INSERT INTO `employee` (`emp_id`, `emp_name`, `emp_surname`, `emp_idcard`, `emp_gender`, `emp_birthdate`, `emp_address`, `emp_status`, `emp_startdate`, `emp_enddate`, `emp_mac1`, `emp_mac2`, `dept_id`) VALUES
-(1001, 'จักรพันธ์', 'ภูพาพุทธ', '1470900098834', 'ชาย', '1995-05-23', NULL, 1, '2013-05-23', NULL, NULL, NULL, 2);
+(1001, 'จักรพันธ์', 'ภูพาพุทธ', '1470900098834', 'ชาย', '1995-05-23', NULL, 1, '2013-05-23', NULL, NULL, NULL, 2),
+(1002, 'สมชาย', 'อัคเคอแมน', '1470900094000', 'ชาย', '1990-01-30', '', 1, '2013-05-23', NULL, '', '', 1);
 
 -- --------------------------------------------------------
 
@@ -82,7 +83,14 @@ INSERT INTO `employee` (`emp_id`, `emp_name`, `emp_surname`, `emp_idcard`, `emp_
 CREATE TABLE `holiday` (
   `holi_name` varchar(50) NOT NULL,
   `work_id` varchar(8) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `holiday`
+--
+
+INSERT INTO `holiday` (`holi_name`, `work_id`) VALUES
+('หยุดพิเศษ', '25660325');
 
 -- --------------------------------------------------------
 
@@ -96,7 +104,15 @@ CREATE TABLE `leave_day` (
   `leave_description` varchar(255) NOT NULL,
   `leave_appove` tinyint(1) NOT NULL DEFAULT 0,
   `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `leave_day`
+--
+
+INSERT INTO `leave_day` (`leave_type`, `leave_date`, `leave_description`, `leave_appove`, `emp_id`) VALUES
+('กิจ', '2023-01-21', 'ไปต่างจังหวัด', 0, 1001),
+('ป่วย', '2023-01-24', 'เป็นไข้', 0, 1001);
 
 -- --------------------------------------------------------
 
@@ -109,15 +125,36 @@ CREATE TABLE `time_attendance` (
   `time_out` time DEFAULT NULL,
   `work_id` varchar(8) NOT NULL,
   `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `time_attendance`
 --
 
 INSERT INTO `time_attendance` (`time_in`, `time_out`, `work_id`, `emp_id`) VALUES
-('08:40:00', '17:00:00', '25660103', 1001),
-('08:35:00', '17:00:00', '25660104', 1001);
+('08:38:00', '17:00:00', '25660103', 1001),
+('08:29:00', '17:00:00', '25660104', 1001),
+('08:31:00', '17:00:00', '25660105', 1001),
+('08:36:00', '17:00:00', '25660106', 1001),
+('08:25:00', '17:00:00', '25660107', 1001),
+('08:34:00', '17:00:00', '25660109', 1001),
+('08:31:00', '17:00:00', '25660110', 1001),
+('08:34:00', '17:00:00', '25660111', 1001),
+('08:37:00', '17:00:00', '25660112', 1001),
+('08:34:00', '17:00:00', '25660113', 1001),
+('08:31:00', '17:00:00', '25660114', 1001),
+('08:40:00', '17:00:00', '25660116', 1001),
+('08:32:00', '17:00:00', '25660117', 1001),
+('08:32:00', '17:00:00', '25660118', 1001),
+('08:33:00', '17:00:00', '25660119', 1001),
+('08:34:00', '17:00:00', '25660120', 1001),
+('08:35:00', '17:00:00', '25660123', 1001),
+('08:33:00', '17:00:00', '25660125', 1001),
+('08:37:00', '17:00:00', '25660126', 1001),
+('08:35:00', '17:00:00', '25660127', 1001),
+('08:45:00', '17:00:00', '25660130', 1001),
+('08:36:00', '17:00:00', '25660131', 1001),
+('08:36:00', '17:00:00', '25660103', 1002);
 
 -- --------------------------------------------------------
 
@@ -128,7 +165,7 @@ INSERT INTO `time_attendance` (`time_in`, `time_out`, `work_id`, `emp_id`) VALUE
 CREATE TABLE `type` (
   `type_id` int(1) NOT NULL,
   `type_name` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `type`
@@ -150,7 +187,7 @@ CREATE TABLE `user` (
   `user_password` varchar(12) NOT NULL,
   `type_id` int(1) NOT NULL,
   `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
@@ -169,7 +206,7 @@ CREATE TABLE `workday` (
   `work_id` varchar(8) NOT NULL,
   `work_date` date NOT NULL,
   `work_status` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `workday`
@@ -247,7 +284,7 @@ INSERT INTO `workday` (`work_id`, `work_date`, `work_status`) VALUES
 ('25660322', '2023-03-22', 1),
 ('25660323', '2023-03-23', 1),
 ('25660324', '2023-03-24', 1),
-('25660325', '2023-03-25', 1),
+('25660325', '2023-03-25', 0),
 ('25660327', '2023-03-27', 1),
 ('25660328', '2023-03-28', 1),
 ('25660329', '2023-03-29', 1),
@@ -323,7 +360,7 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `emp_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1002;
+  MODIFY `emp_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1003;
 
 --
 -- AUTO_INCREMENT for table `type`

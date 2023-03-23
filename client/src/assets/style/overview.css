@@ -1,6 +1,13 @@
 /* ----- Left Box ----- */
 
-.ov-header-left {
+.ov-header-left1 {
+    height: 150px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ov-header-left2 {
     height: 150px;
     flex-direction: row;
     justify-content: space-around;

@@ -12,7 +12,7 @@ function TimeSheet() {
     const [timeSheet, setTimesheet] = useState([]);
 
     const getSelect = (data) => {
-        axios.post("http://localhost:5000/timesheet", { id: data })
+        axios.post("http://localhost:5000/timesheet", { id: data }, {crossdomain: true})
         .then(response => {
             setTimesheet(response.data);
         });
