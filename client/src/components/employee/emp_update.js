@@ -1,7 +1,7 @@
 import { React } from 'react';
 
 
-function InfoCard(props) {
+function EditCard(props) {
 
     if (!props.data) {
         var emp = {
@@ -29,7 +29,7 @@ function InfoCard(props) {
 
     return (
         <>
-            <div className='box-body em-body-left'>
+           {/* <div className='box-body em-body-left'>
                 <div className='box-body em-article'>
                     <div className='em-header'>
                         <label>ข้อมูลส่วนตัว</label>
@@ -41,7 +41,7 @@ function InfoCard(props) {
                         </div>
                         <div>
                             <label>แผนก</label>
-                            <label>{emp.dept_name}</label>
+                            <input value={emp.dept_name}></input>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
@@ -51,17 +51,17 @@ function InfoCard(props) {
                         </div>
                         <div>
                             <label>MAC Address 1</label>
-                            <label>{emp.emp_mac1}</label>
+                            <input value={emp.emp_mac1}></input>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label>อายุ</label>
-                            <label>{emp.emp_age}</label>
+                            <label>วันเกิด</label>
+                            <label>{emp.emp_birthdate}</label>
                         </div>
                         <div>
                             <label>MAC Address 2</label>
-                            <label>{emp.emp_mac2}</label>
+                            <input value={emp.emp_mac1}></input>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
@@ -105,19 +105,19 @@ function InfoCard(props) {
                             <label>{emp.type_name}</label>
                         </div>
                     </div>
-                    {/* <div className='lb-box-long em-info'>
+                    <div className='lb-box-long em-info'>
                         <div>
                             <label>Password</label>
-                            <label>-</label>
+                            <label></label>
                         </div>
                         <div>
                             <button>บันทึก</button>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };
 
-export default InfoCard;
+export default EditCard;

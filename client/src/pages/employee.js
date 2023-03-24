@@ -1,14 +1,15 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
 import '../assets/style/employee.css';
-import EmployeeInfo from '../components/employee/emp_info';
+import EmployeeCard from '../components/employee/emp_card';
 import EmployeeTable from '../components/employee/emp_table';
 
 
 function Employee() {
 
     const [employee, setEmployee] = useState([]);
-    const [selectEmp, setSelect] = useState();
+    const [selectEmp, setSelect] = useState(0);
+    const [id, setId] = useState();
 
     const getSelect = (data) => {
         setSelect(data - 1000);
@@ -18,13 +19,14 @@ function Employee() {
         axios.get("http://localhost:5000/employee", {crossdomain: true})
         .then(response => {
             setEmployee(response.data);
+            setId(response.data[response.data.length - 1].emp_id + 1)
         });
     }, []);
 
     return (
         <>
             <div className='box-content'>
-                <EmployeeInfo data={employee[selectEmp - 1]}/>
+                <EmployeeCard data={[employee[selectEmp - 1], id]}/>
             </div>
             <div className='box-content'>
                 <EmployeeTable data={[employee, getSelect]}/>

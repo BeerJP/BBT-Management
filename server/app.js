@@ -94,10 +94,17 @@ app.get('/department', (request, response) => {
 
 // แสดงข้อมูล Employee
 app.get('/employee', (request, response) => {
-  conn.query(`SELECT *, DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate, DATE_FORMAT(emp_startdate, '%Y-%m-%d') as emp_startdate
-              FROM EMPLOYEE 
-              INNER JOIN DEPARTMENT 
-              ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+  conn.query(`SELECT *,
+                DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
+                DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
+                DATE_FORMAT(emp_startdate, '%Y-%m-%d') as emp_startdate
+              FROM EMPLOYEE
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+              INNER JOIN USER
+                ON EMPLOYEE.emp_id = USER.emp_id
+              INNER JOIN TYPE
+                ON USER.type_id = TYPE.type_id
               ORDER BY EMPLOYEE.emp_id`, 
   (err, result) => {
     response.send(result);
@@ -189,23 +196,19 @@ app.post('/timesheet', (request, response) => {
 
 // -------------------- เพิ่มข้อมูล --------------------
 
-// เพิ่มข้อมูล Employee & User
+// เพิ่มข้อมูล Employee
 app.post("/add_employee", (request, response) => {
-  const id = req.body.id;
-  const name = req.body.name;
-  const surname = req.body.surname;
-  const idcard = req.body.idcard;
-  const gender = req.body.gender;
-  const birthdate = req.body.birthdate;
-  const address = req.body.address;
-  const startdate = req.body.startdate;
-  const mac1 = req.body.mac1;
-  const mac2 = req.body.mac2;
-  const department = req.body.department;
-
-  const user = req.body.user;
-  const password = req.body.password;
-  const type = req.body.type;
+  const id = request.body.id;
+  const name = request.body.name;
+  const surname = request.body.surname;
+  const department = request.body.dept;
+  const gender = request.body.gender;
+  const birthdate = request.body.birth;
+  const idcard = request.body.idcard;
+  const mac1 = request.body.mac1;
+  const mac2 = request.body.mac2;
+  const startdate = request.body.start;
+  const address = request.body.address;
 
   conn.query(
     `INSERT INTO EMPLOYEE (emp_id, emp_name, emp_surname, emp_idcard, emp_gender, emp_birthdate, emp_address, 
@@ -217,6 +220,14 @@ app.post("/add_employee", (request, response) => {
       }
     }
   );
+});
+
+// เพิ่มข้อมูล User
+app.post("/add_user", (request, response) => {
+  const id = request.body.id;
+  const user = request.body.username;
+  const password = request.body.password;
+  const type = request.body.type;
 
   conn.query(
     "INSERT INTO USER (user_name, user_password, type_id, emp_id) VALUES (?, ?, ?, ?)",
@@ -231,8 +242,8 @@ app.post("/add_employee", (request, response) => {
 
 // เพิ่มข้อมูล Workday
 app.post("/add_work", (request, response) => {
-  const id = req.body.id;
-  const date = req.body.date;
+  const id = request.body.id;
+  const date = request.body.date;
 
   conn.query(
     "INSERT INTO WORKDAY (work_id, work_date) VALUES (?, ?)",
@@ -247,9 +258,9 @@ app.post("/add_work", (request, response) => {
 
 // เพิ่มข้อมูล Time Attendance
 app.post("/add_time", (request, response) => {
-  const time = req.body.time;
-  const date = req.body.date;
-  const employee = req.body.employee;
+  const time = request.body.time;
+  const date = request.body.date;
+  const employee = request.body.employee;
 
   conn.query(
     "INSERT INTO TIME_ATTENDANCE (time_in, work_id, emp_id) VALUES (?, ?, ?)",
@@ -264,10 +275,10 @@ app.post("/add_time", (request, response) => {
 
 // เพิ่มข้อมูล Leave Day
 app.post("/add_leave", (request, response) => {
-  const type = req.body.type;
-  const date = req.body.date;
-  const description = req.body.description;
-  const employee = req.body.employee;
+  const type = request.body.type;
+  const date = request.body.date;
+  const description = request.body.description;
+  const employee = request.body.employee;
 
   conn.query(
     "INSERT INTO LEAVE_DAY (leave_type, leave_date, leave_description, emp_id) VALUES (?, ?, ?, ?)",
@@ -300,20 +311,20 @@ app.post("/add_holiday", (request, response) => {
 
 // แก้ไขข้อมูล Employee
 app.put("/update_employee", (request, response) => {
-  const id = req.body.id;
-  const name = req.body.name;
-  const surname = req.body.surname;
-  const idcard = req.body.idcard;
-  const gender = req.body.gender;
-  const birthdate = req.body.birthdate;
-  const address = req.body.address;
-  const mac1 = req.body.mac1;
-  const mac2 = req.body.mac2;
-  const department = req.body.department;
+  const id = request.body.id;
+  const name = request.body.name;
+  const surname = request.body.surname;
+  const idcard = request.body.idcard;
+  const gender = request.body.gender;
+  const birthdate = request.body.birthdate;
+  const address = request.body.address;
+  const mac1 = request.body.mac1;
+  const mac2 = request.body.mac2;
+  const department = request.body.department;
 
-  const user = req.body.user;
-  const password = req.body.password;
-  const type = req.body.type;
+  const user = request.body.user;
+  const password = request.body.password;
+  const type = request.body.type;
 
   conn.query(`UPDATE EMPLOYEE SET emp_name = ?, emp_surname = ?, emp_idcard = ?, emp_gender = ?,
               emp_birthdate = ?, emp_address = ?, emp_mac1 = ?, emp_mac2 = ?, dept_id = ? WHERE emp_id = ?`,
@@ -328,9 +339,9 @@ app.put("/update_employee", (request, response) => {
 
 // แก้ไขข้อมูลเวลาออกงาน
 app.put("/update_time", (request, response) => {
-  const time = req.body.time;
-  const date = req.body.date;
-  const employee = req.body.employee;
+  const time = request.body.time;
+  const date = request.body.date;
+  const employee = request.body.employee;
 
   conn.query(
     "UPDATE TIME_ATTENDANCE SET time_out = ? WHERE work_id = ? AND emp_id = ?",

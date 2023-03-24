@@ -1,35 +1,50 @@
-import { React } from 'react';
+import { React, useState } from 'react';
+import ui from '../../assets/icon/user-line.png';
+import ua from '../../assets/icon/user-add.png';
+import ue from '../../assets/icon/edit.png';
+import InfoCard from './emp_info';
+import AddCard from './emp_add';
+import EditCard from './emp_update';
 
 
-function InfoCard(props) {
+function EmployeeCard(props) {
 
-    if (!props.data) {
-        var emp = {
-            emp_id: ' ',
-            emp_name: ' ',
-            emp_surname: ' ',
-            emp_idcard: ' ',
-            emp_gender: ' ',
-            emp_birthdate: ' ',
-            emp_address: ' ',
-            emp_status: ' ',
-            emp_startdate: ' ',
-            emp_enddate: ' ',
-            emp_mac1: ' ',
-            emp_mac2: ' ',
-            dept_id: ' ',
-            dept_name: ' ',
-            user_name: ' ',
-            type_name: ' ',
-            emp_age: ' '
-        };
-    } else {
-        emp = props.data;
-    };
+    const emp = props.data[0];
+
+    const [cardType, setCardtype] = useState('infomation');
+
+    const infoEmp = () => { setCardtype('infomation'); };
+    const addEmp = () => { setCardtype('add'); };
+    const editEmp = () => { setCardtype('edit'); };
+
 
     return (
         <>
-            <div className='box-body em-body-left'>
+            <div className='em-header-2'>
+                <div>
+                    <label>
+                        { cardType === 'infomation' ? 'แสดงข้อมูล' : cardType === 'add' ? 'เพิ่มข้อมูล' : 'แก้ไขข้อมูล' }
+                    </label>
+                </div>
+                <div>
+                    <div className="em-img-bx" onClick={infoEmp}>
+                        <img src={ui} alt=''/>
+                        <span className="tooltiptext">แสดงข้อมูล</span>
+                    </div>
+                    <div className="em-img-bx" onClick={editEmp}>
+                        <img src={ue} alt=''/>
+                        <span className="tooltiptext">แก้ไขข้อมูล</span>
+                    </div>
+                    <div className="em-img-bx" onClick={addEmp}>
+                        <img src={ua} alt=''/>
+                        <span className="tooltiptext">เพิ่มข้อมูล</span>
+                    </div>
+                </div>
+            </div>
+            {
+                cardType === 'infomation' ? <InfoCard data={emp} /> : cardType === 'add' ? <AddCard data={props.data[1]} /> : <EditCard  data={emp} />
+            }
+            {/* <div className='box-body em-body-left'>
                 <div className='box-body em-article'>
                     <div className='em-header'>
                         <label>ข้อมูลส่วนตัว</label>
@@ -57,7 +72,7 @@ function InfoCard(props) {
                     <div className='lb-box-long em-info'>
                         <div>
                             <label>อายุ</label>
-                            <label>{emp.emp_age}</label>
+                            <label>{emp.emp_birthdate}</label>
                         </div>
                         <div>
                             <label>MAC Address 2</label>
@@ -98,14 +113,14 @@ function InfoCard(props) {
                     <div className='lb-box-long em-info'>
                         <div>
                             <label>Username</label>
-                            <label>{emp.user_name}</label>
+                            <label>-</label>
                         </div>
                         <div>
                             <label>User Type</label>
-                            <label>{emp.type_name}</label>
+                            <label>-</label>
                         </div>
                     </div>
-                    {/* <div className='lb-box-long em-info'>
+                    <div className='lb-box-long em-info'>
                         <div>
                             <label>Password</label>
                             <label>-</label>
@@ -113,11 +128,11 @@ function InfoCard(props) {
                         <div>
                             <button>บันทึก</button>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };
 
-export default InfoCard;
+export default EmployeeCard;

@@ -9,6 +9,7 @@ function LeaveTable() {
         work_date: '',
         work_status: ''
     }]);
+    
     const [leaveType, setLeavetype] = useState('กิจ');
     const [leaveName, setLeavename] = useState();
     const [leaveDate, setLeavedate] = useState();
