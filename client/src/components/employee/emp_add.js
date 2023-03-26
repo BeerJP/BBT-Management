@@ -14,7 +14,7 @@ function AddCard(props) {
         type_name: ' '
     }]);
 
-    const [id, setId] = useState(props.data);
+    const id = props.data;
     const [name, setName] = useState(' ');
     const [surname, setSur] = useState(' ');
     const [dept, setDept] = useState(1);
@@ -38,13 +38,6 @@ function AddCard(props) {
     };
 
     const getType = async() => {
-        await axios.get("http://localhost:5000/type", {crossdomain: true})
-        .then(response => {
-            setTypeinfo(response.data);
-        });
-    };
-
-    const getId = async() => {
         await axios.get("http://localhost:5000/type", {crossdomain: true})
         .then(response => {
             setTypeinfo(response.data);
@@ -79,20 +72,20 @@ function AddCard(props) {
     }, []);
 
 
-    const test = () => {
-        console.log(id);
-        console.log(name);
-        console.log(surname);
-        console.log(dept);
-        console.log(gender);
-        console.log(mac1);
-        console.log(mac2);
-        console.log(idcard);
-        console.log(address);
-        console.log(username);
-        console.log(password);
-        console.log(type);
-    }
+    // const test = () => {
+    //     console.log(id);
+    //     console.log(name);
+    //     console.log(surname);
+    //     console.log(dept);
+    //     console.log(gender);
+    //     console.log(mac1);
+    //     console.log(mac2);
+    //     console.log(idcard);
+    //     console.log(address);
+    //     console.log(username);
+    //     console.log(password);
+    //     console.log(type);
+    // }
 
     return (
         <>
@@ -110,6 +103,16 @@ function AddCard(props) {
                             <label>นามสกุล</label>
                             <input onChange={(event => {setSur(event.target.value)})}></input>
                         </div>
+                    </div>
+                    <div className='lb-box-long em-info'>
+                        <div>
+                            <label>เพศ</label>
+                            <select name="gender" id="gen" onChange={(event => {setGender(event.target.value)})}>
+                                <option value={"ชาย"}>ชาย</option>
+                                <option value={"หญิง"}>หญิง</option>
+                                <option value={"อื่นๆ"}>อื่นๆ</option>
+                            </select>
+                        </div>
                         <div>
                             <label>แผนก</label>
                             <select name="department" id="dept" onChange={(event => {setDept(event.target.value)})}>
@@ -123,12 +126,8 @@ function AddCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label>เพศ</label>
-                            <select name="gender" id="gen" onChange={(event => {setGender(event.target.value)})}>
-                                <option value={"ชาย"}>ชาย</option>
-                                <option value={"หญิง"}>หญิง</option>
-                                <option value={"อื่นๆ"}>อื่นๆ</option>
-                            </select>
+                            <label>วันเกิด</label>
+                            <input onChange={(event => {setBirth(event.target.value)})}></input>
                         </div>
                         <div>
                             <label>MAC Address 1</label>
@@ -137,18 +136,12 @@ function AddCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label>วันเกิด</label>
-                            <input onChange={(event => {setBirth(event.target.value)})}></input>
+                            <label>เลขบัตรประชาชน</label>
+                            <input onChange={(event => {setIdcard(event.target.value)})}></input>
                         </div>
                         <div>
                             <label>MAC Address 2</label>
                             <input onChange={(event => {setMac2(event.target.value)})}></input>
-                        </div>
-                    </div>
-                    <div className='lb-box-long em-info'>
-                        <div>
-                            <label>เลขบัตรประชาชน</label>
-                            <input onChange={(event => {setIdcard(event.target.value)})}></input>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>

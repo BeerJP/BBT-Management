@@ -29,40 +29,61 @@ app.use(cors({
 }));
 
 
+
 // -------------------- เข้าสู่ระบบ --------------------
 
 app.post('/login', function(request, response) {
 	const username = request.body.username;
 	const password = request.body.password;
-	if (username && password) {
-		connection.query(`SELECT * FROM EMPLOYEE FULL OUTER JOIN USER ON EMPLOYEE.emp_id = USER.emp_id
-    WHERE username = ? AND password = ?`,
-    [username, password], function(error, results, fields) {
-			if (results.length > 0) {
-				request.session.loggedin = true;
-				request.session.username = results['emp_name'] + ' ' + results['emp_surname'];
-				response.redirect('/home');
-			} else {
-				response.send('Incorrect Username and/or Password!');
-			}
-			response.end();
-		});
-	} else {
-		response.send('Please enter Username and Password!');
-		response.end();
-	}
+  conn.query(`SELECT *,
+                DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
+                DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
+                DATE_FORMAT(emp_startdate, '%Y-%m-%d') as emp_startdate
+              FROM EMPLOYEE
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+              INNER JOIN USER
+                ON EMPLOYEE.emp_id = USER.emp_id
+              INNER JOIN TYPE
+                ON USER.type_id = TYPE.type_id
+              WHERE USER.user_name = ? AND USER.user_password = ?`, [username, password],  
+  (err, result) => {
+    response.send(result);
+  });
 });
+
+// app.post('/login', function(request, response) {
+// 	const username = request.body.username;
+// 	const password = request.body.password;
+// 	if (username && password) {
+// 		connection.query(`SELECT * FROM EMPLOYEE FULL OUTER JOIN USER ON EMPLOYEE.emp_id = USER.emp_id
+//     WHERE username = ? AND password = ?`,
+//     [username, password], function(error, results, fields) {
+// 			if (results.length > 0) {
+// 				request.session.loggedin = true;
+// 				request.session.username = results['emp_name'] + ' ' + results['emp_surname'];
+// 				response.redirect('/');
+// 			} else {
+// 				response.send('Incorrect Username and/or Password!');
+// 			}
+// 			response.end();
+// 		});
+// 	} else {
+// 		response.send('Please enter Username and Password!');
+// 		response.end();
+// 	}
+// });
 
 // -------------------- ตรวจสอบสถานะการเข้าสู่ระบบ --------------------
 
-app.get('/session', function(request, response) {
-	if (request.session.loggedin) {
-		response.send('Welcome back, ' + request.session.username + '!');
-	} else {
-		response.send('Please login to view this page!');
-	}
-	response.end();
-});
+// app.get('/session', function(request, response) {
+// 	if (request.session.loggedin) {
+// 		response.send('Welcome back, ' + request.session.username + '!');
+// 	} else {
+// 		response.send('Please login to view this page!');
+// 	}
+// 	response.end();
+// });
 
 
 // -------------------- แสดงข้อมูล --------------------
@@ -77,7 +98,7 @@ app.get('/overview', (request, response) => {
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'กิจ' ) AS bld,
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'พักร้อน' ) AS hld,
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ป่วย' ) AS sld,
-              ( SELECT COUNT(*) FROM WORKDAY WHERE work_status = '1') AS wd,
+              ( SELECT COUNT(*) FROM WORKDAY WHERE work_status = '1' AND work_date <= CURDATE()) AS wd,
               ( SELECT COUNT(*) FROM HOLIDAY ) AS hd
               FROM EMPLOYEE`, 
   (err, result) => {
@@ -125,6 +146,38 @@ app.get('/type', (request, response) => {
   });
 });
 
+// แสดงข้อมูล Leave Day สรุปแบบเจาะจง
+app.post('/leave_emp_sum', (request, response) => {
+  const id = request.body.id;
+
+  conn.query(`SELECT COUNT(*) AS ld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'กิจ' ) AS bld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'พักร้อน' ) AS hld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ป่วย' ) AS sld
+              FROM LEAVE_DAY
+              WHERE emp_id = ?`,
+  [id],
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล Leave Day แบบเจาะจง
+app.post('/leave_emp', (request, response) => {
+  const id = request.body.id;
+
+  conn.query(`SELECT *,
+                DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
+              CASE
+                WHEN leave_appove = '1' THEN 'อนุมัติ'
+                ELSE 'ไม่อนุมัติ'
+              END AS leave_appove
+              FROM LEAVE_DAY WHERE emp_id = ?`, [id],
+  (err, result) => {
+    response.send(result);
+  });
+});
+
 // แสดงข้อมูล Leave Day ยังไม่อนุมัติ
 app.get('/leavepending', (request, response) => {
   conn.query("SELECT *, DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date FROM LEAVE_DAY WHERE leave_appove = '0'", 
@@ -141,6 +194,7 @@ app.get('/leaveapprove', (request, response) => {
   });
 });
 
+// แสดงข้อมูล Work Day
 app.get('/workday', (request, response) => {
   conn.query(`SELECT *, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date FROM WORKDAY 
               WHERE work_date > DATE_FORMAT(CURDATE(), '%Y-%m-%d') 
@@ -316,19 +370,46 @@ app.put("/update_employee", (request, response) => {
   const surname = request.body.surname;
   const idcard = request.body.idcard;
   const gender = request.body.gender;
-  const birthdate = request.body.birthdate;
+  const birthdate = request.body.birth;
   const address = request.body.address;
   const mac1 = request.body.mac1;
   const mac2 = request.body.mac2;
-  const department = request.body.department;
+  const end = request.body.end;
+  const department = request.body.dept;
 
-  const user = request.body.user;
+  conn.query(`UPDATE EMPLOYEE SET 
+                emp_name = ?, 
+                emp_surname = ?, 
+                emp_idcard = ?, 
+                emp_gender = ?,
+                emp_birthdate = ?, 
+                emp_address = ?, 
+                emp_mac1 = ?, 
+                emp_mac2 = ?,
+                emp_enddate = ?,
+                dept_id = ? 
+              WHERE emp_id = ?`,
+    [name, surname, idcard, gender, birthdate, address, mac1, mac2, end, department, id], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+app.put("/update_user", (request, response) => {
+  const id = request.body.id;
+  const username = request.body.username;
   const password = request.body.password;
   const type = request.body.type;
 
-  conn.query(`UPDATE EMPLOYEE SET emp_name = ?, emp_surname = ?, emp_idcard = ?, emp_gender = ?,
-              emp_birthdate = ?, emp_address = ?, emp_mac1 = ?, emp_mac2 = ?, dept_id = ? WHERE emp_id = ?`,
-    [name, surname, idcard, gender, birthdate, address, mac1, mac2, department, id], 
+  conn.query(`UPDATE USER SET 
+                user_name = ?,
+                user_password = ?,
+                type_id = ?
+              WHERE emp_id = ?`,
+    [username, password, type, id], 
     (err, result) => {
       if (err) {
         response.send(err);

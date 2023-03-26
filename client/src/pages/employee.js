@@ -11,6 +11,8 @@ function Employee() {
     const [selectEmp, setSelect] = useState(0);
     const [id, setId] = useState();
 
+    const [cardType, setCardtype] = useState('infomation');
+
     const getSelect = (data) => {
         setSelect(data - 1000);
     };
@@ -26,10 +28,10 @@ function Employee() {
     return (
         <>
             <div className='box-content'>
-                <EmployeeCard data={[employee[selectEmp - 1], id]}/>
+                <EmployeeCard data={[employee[selectEmp - 1], id, cardType, setCardtype]}/>
             </div>
             <div className='box-content'>
-                <EmployeeTable data={[employee, getSelect]}/>
+                <EmployeeTable data={[employee, getSelect, setCardtype]}/>
             </div>
         </>
     );

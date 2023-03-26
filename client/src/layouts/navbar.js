@@ -1,35 +1,57 @@
-import { React } from 'react';
-import { NavLink } from 'react-router-dom';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios';
 import SideBar from './sidebar';
+import Login from '../pages/login';
 
 
 function NavBar({children}) {
 
+    const [session, setSession] = useState([{
+        emp_id: '',
+        emp_name: ' ',
+        emp_surname: ' ',
+        emp_idcard: ' ',
+        emp_gender: ' ',
+        emp_birthdate: ' ',
+        emp_address: ' ',
+        emp_status: ' ',
+        emp_startdate: ' ',
+        emp_enddate: ' ',
+        emp_mac1: ' ',
+        emp_mac2: ' ',
+        dept_id: ' ',
+        dept_name: ' ',
+        user_name: ' ',
+        user_password: ' ',
+        type_id: ' ',
+        type_name: ' ',
+        emp_age: ' '
+    }]);
+
     return (
         <>
-        <nav className='navbar'>
-            <div className='nav-container'>
-                <div className='left-box'>
-                    <NavLink to="/" className='home-menu'>BBTE Management</NavLink>
+            <nav className='navbar'>
+                <div className='nav-container'>
+                    <div className='left-box'>
+                        <label className='home-menu'>BBTE Management</label>
+                    </div>
+                    <div className='right-box'>
+                        <label>
+                            <p>{session[0].emp_name} {session[0].emp_surname}</p>
+                            <p>{session[0].type_name}</p>
+                        </label>
+                    </div>
                 </div>
-                <div className='right-box'>
-                    <label>
-                        <p>Jakkapan Pupaput</p>
-                        <p>Admin</p>
-                    </label>
+            </nav>
+            <div className='container'>
+                <div className='content'>
+                    {
+                        session[0].emp_id === '' ? 
+                        <Login data={setSession}/> : 
+                        [<div><SideBar data={[session, setSession]}/></div>, <div className='main-content'>{children}</div>]
+                    }
                 </div>
             </div>
-        </nav>
-        <div className='container'>
-            <div className='content'>
-                <div>
-                    <SideBar/>
-                </div>
-                <div className='main-content'>
-                    {children}
-                </div>
-            </div>
-        </div>
         </>
     );
 };

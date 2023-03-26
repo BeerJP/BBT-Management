@@ -7,7 +7,9 @@ import ca from '../assets/icon/calendar.png';
 import dc from '../assets/icon/document.png';
 
 
-function SideBar() {
+function SideBar(props) {
+
+    const logout = props.data[1];
 
     return (
         <>  <div className='side-menu'>
@@ -32,6 +34,7 @@ function SideBar() {
                         <img src={dc} alt=''/>
                         <p>จัดการใบลา</p>
                     </NavLink>
+                    <button onClick={() => logout(null)}>Logout</button>
                 </div>
             </div>
         </>

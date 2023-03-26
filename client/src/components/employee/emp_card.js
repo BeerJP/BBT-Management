@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import ui from '../../assets/icon/user-line.png';
 import ua from '../../assets/icon/user-add.png';
 import ue from '../../assets/icon/edit.png';
@@ -10,13 +10,12 @@ import EditCard from './emp_update';
 function EmployeeCard(props) {
 
     const emp = props.data[0];
+    const cardType = props.data[2];
+    const setCardType = props.data[3];
 
-    const [cardType, setCardtype] = useState('infomation');
-
-    const infoEmp = () => { setCardtype('infomation'); };
-    const addEmp = () => { setCardtype('add'); };
-    const editEmp = () => { setCardtype('edit'); };
-
+    const infoEmp = () => { setCardType('infomation'); };
+    const addEmp = () => { setCardType('add'); };
+    const editEmp = () => { setCardType('edit'); };
 
     return (
         <>

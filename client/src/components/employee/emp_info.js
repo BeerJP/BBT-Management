@@ -20,6 +20,8 @@ function InfoCard(props) {
             dept_id: ' ',
             dept_name: ' ',
             user_name: ' ',
+            user_password: ' ',
+            type_id: ' ',
             type_name: ' ',
             emp_age: ' '
         };

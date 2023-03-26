@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { React } from 'react';
-import axios from 'axios';
 import './assets/style/app.css';
 import './assets/style/layout.css';
 import NavBar from './layouts/navbar';

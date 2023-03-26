@@ -4,6 +4,8 @@ import axios from 'axios';
 
 function LeaveTable() {
 
+    const id = '1001';
+
     const [workDay, setWorkday] = useState([{
         work_id: '',
         work_date: '',
@@ -14,6 +16,20 @@ function LeaveTable() {
     const [leaveName, setLeavename] = useState();
     const [leaveDate, setLeavedate] = useState();
 
+    const [leaveSum, setLeavesum] = useState([{
+        ld:0,
+        bld:0,
+        hld:0,
+        sld:0
+    }]);
+
+    const [leaveEmp, setLeaveemp] = useState([{
+        leave_type: '',
+        leave_date: '',
+        leave_description: '',
+        leave_appove: ''
+    }]);
+
     const getWorkday = async() => {
         await axios.get("http://localhost:5000/workday", {crossdomain: true})
         .then(response => {
@@ -21,9 +37,31 @@ function LeaveTable() {
         });
     };
 
+    const getLeavesum = () => {
+        axios.post("http://localhost:5000/leave_emp_sum", { 
+            id: id,
+        }, {crossdomain: true})
+        .then(response => {
+            setLeavesum(response.data);
+        });
+    };
+
+    const getLeaveemp = () => {
+        axios.post("http://localhost:5000/leave_emp", { 
+            id: id,
+        }, {crossdomain: true})
+        .then(response => {
+            setLeaveemp(response.data);
+        });
+    };
+
     useEffect(() => {
         getWorkday();
+        getLeavesum();
+        getLeaveemp();
     }, []);
+
+    console.log(leaveEmp);
 
     const emp = [];
 
@@ -34,13 +72,12 @@ function LeaveTable() {
                     <label>ข้อมูลการลา</label>
                 </div>
                 <div className='le-box-header2'>
-                    <label>ลากิจ : 1</label>
-                    <label>ลาพักร้อน : 2</label>
-                    <label>ลาป่วย : 3</label>
+                    <label>ลากิจ : {leaveSum[0].bld}</label>
+                    <label>ลาพักร้อน : {leaveSum[0].hld}</label>
+                    <label>ลาป่วย : {leaveSum[0].sld}</label>
                 </div>
                 <div className='le-box-content'>
                     <div className='le-header'>
-                        <p className='le-empl'>รูปแบบ</p>
                         <p className='le-date'>วันที่</p>
                         <p className='le-type'>ประเภท</p>
                         <p className='le-desc'>เหตุผลการลา</p>
@@ -48,13 +85,12 @@ function LeaveTable() {
                     </div>
                     <div className='le-content'>
                         {
-                            emp.map((item, index) => (
+                            leaveEmp.map((item, index) => (
                                 <div className='le-content-time' key={index}>
-                                    <p className="empl">{item.emp}</p>
-                                    <p className="date">{item.date}</p>
-                                    <p className="type">{item.type}</p>
-                                    <p className="desc">{item.des}</p>
-                                    <p className="sett">รออนุมัติ</p>
+                                    <p className="date">{item.leave_date}</p>
+                                    <p className="type">{item.leave_type}</p>
+                                    <p className="desc">{item.leave_description}</p>
+                                    <p className="sett">{item.leave_appove}</p>
                                 </div>
                             ))
                         }
@@ -96,15 +132,10 @@ function LeaveTable() {
                             }
                         </select>
                     </div>
-                    {/* <div className='ca-sett-input'>
-                        <label>วันที่สิ้นสุด</label>
-                        <input></input>
-                    </div> */}
                 </div>
                 <div className='lb-box-long ca-sett'>
                     <div className='ca-sett-submit'>
                         <button>บันทึก</button>
-                        <button>ลบ</button>
                     </div>               
                 </div>
             </div>
