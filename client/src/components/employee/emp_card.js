@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React } from 'react';
 import ui from '../../assets/icon/user-line.png';
 import ua from '../../assets/icon/user-add.png';
 import ue from '../../assets/icon/edit.png';
@@ -17,31 +17,34 @@ function EmployeeCard(props) {
     const addEmp = () => { setCardType('add'); };
     const editEmp = () => { setCardType('edit'); };
 
+
     return (
         <>
             <div className='em-header-2'>
                 <div>
                     <label>
-                        { cardType === 'infomation' ? 'แสดงข้อมูล' : cardType === 'add' ? 'เพิ่มข้อมูล' : 'แก้ไขข้อมูล' }
+                        ข้อมูลส่วนตัว & ข้อมูลสำหรับเข้าสู่ระบบ
                     </label>
                 </div>
                 <div>
-                    <div className="em-img-bx" onClick={infoEmp}>
+                    <div className="em-img-bx" style={cardType === 'infomation' ? {background: '#34C2DB'} : {}} onClick={infoEmp}>
                         <img src={ui} alt=''/>
                         <span className="tooltiptext">แสดงข้อมูล</span>
                     </div>
-                    <div className="em-img-bx" onClick={editEmp}>
+                    <div className="em-img-bx" style={emp == null ? {'pointer-events': 'none'} : 
+                    cardType === 'edit' ? {background: '#F4D03F'} : {'pointer-events': 'auto'}} onClick={editEmp}>
                         <img src={ue} alt=''/>
                         <span className="tooltiptext">แก้ไขข้อมูล</span>
                     </div>
-                    <div className="em-img-bx" onClick={addEmp}>
+                    <div className="em-img-bx" style={cardType === 'add' ? {background: '#58D68D'} : {}} onClick={addEmp}>
                         <img src={ua} alt=''/>
                         <span className="tooltiptext">เพิ่มข้อมูล</span>
                     </div>
                 </div>
             </div>
             {
-                cardType === 'infomation' ? <InfoCard data={emp} /> : cardType === 'add' ? <AddCard data={props.data[1]} /> : <EditCard  data={emp} />
+                cardType === 'infomation' ? <InfoCard data={emp} /> : 
+                cardType === 'add' ? <AddCard data={[props.data[1], setCardType]} /> : <EditCard  data={[emp, setCardType]} />
             }
         </>
     );

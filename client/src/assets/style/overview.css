@@ -46,12 +46,12 @@
 }
 
 .ov-emp-txt {
-    font-size: 0.7rem;
+    font-size: 1rem;
     margin: 0;
 }
 
 .ov-emp-num {
-    font-size: 2rem;
+    font-size: 2.3rem;
     margin: 15px;
 }
 
@@ -126,45 +126,49 @@
 }
 
 .ov-date-txt {
-    font-size: 0.7rem;
+    font-size: 1rem;
     margin: 0;
 }
 
 .ov-date-num {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin: 15px;
 }
 
 .ov-article-left {
-    height: 150px;
-    margin-top: 20px;
+    height: 180px;
+    margin: auto;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
 }
 
 .top-bx {
+    text-align: center;
+    height: 100%;
     border-right: 1px solid lightgray;
-    background: linear-gradient(to Right, deepskyblue 2%, white 0%)
+    background: linear-gradient(to Right, deepskyblue 2%, white 0%);
 }
 
 .bot-bx {
+    text-align: center;
+    height: 100%;
     border-right: 1px solid lightgray;
-    background: linear-gradient(to Right, orange 2%, white 0%)
+    background: linear-gradient(to Right, orange 2%, white 0%);
 }
 
 .ov-ta-txt {
-    font-size: 0.8rem;
+    font-size: 1rem;
     margin-left: 20px;
 }
 
-.ov-ta-num {
-    font-size: 1.5rem;
-    margin-left: 20px;
+.lb-box img {
+    width: 80px;
+    margin: auto;
 }
 
 .lb-stat-bx {
-    width: 300px;
+    width: 350px;
     height: 100%;
     margin-top: -15px;
     display: flex;
@@ -179,12 +183,12 @@
 }
 
 .lb-stat-bx p {
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: #424949;
 }
 
 .ov-ta-percen {
-    height: 3px;
+    height: 6px;
     width: 99%;
     border-radius: 2px;
     border: 1px solid lightgray;
@@ -321,7 +325,6 @@
     width: 95%;
     height: 50px;
     display: flex;
-    font-weight: bold;
     flex-direction: row;
     align-items: center;
     justify-content: center;

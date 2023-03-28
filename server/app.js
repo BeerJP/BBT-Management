@@ -118,7 +118,7 @@ app.get('/employee', (request, response) => {
   conn.query(`SELECT *,
                 DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
                 DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
-                DATE_FORMAT(DATE_ADD(EMPLOYEE.emp_startdate, INTERVAL 543 YEAR), '%Y-%m-%d') as emp_startdate,
+                DATE_FORMAT(EMPLOYEE.emp_startdate, '%Y-%m-%d') as emp_startdate,
               CASE
                 WHEN emp_status = '1' THEN 'ปกติ'
               ELSE 'พ้นสภาพ'

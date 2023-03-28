@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
-// import ne from '../../assets/icon/note-edit.png';
+import sc from '../../assets/icon/sand-clock.png';
+import cl from '../../assets/icon/checked.png';
 
 
 function LeaveTable() {
@@ -39,6 +40,7 @@ function LeaveTable() {
         <>
             <div className='box-body le-body'>
                 <div className='le-box-header'>
+                    <img src={sc} alt=''/>
                     <label>รอการอนุมัติ</label>
                 </div>
                 <div className='le-box-content'>
@@ -66,6 +68,7 @@ function LeaveTable() {
             </div>
             <div className='box-body le-body'>
                 <div className='le-box-header'>
+                    <img src={cl} alt=''/>
                     <label>อนุมัติแล้ว</label>
                 </div>
                 <div className='le-box-content'>

@@ -1,4 +1,6 @@
 import { React } from 'react';
+import ts from '../../assets/icon/timesheet.png';
+import ld from '../../assets/icon/leave.png';
 // import al from '../../assets/icon/angle-left.png';
 // import ar from '../../assets/icon/angle-right.png';
 
@@ -76,7 +78,7 @@ function AdminContent1(props) {
                         <div className='ov-date-percen' style={styles.work}></div>
                     </div>
                     <div className='lb-box ov-holi-bx'>
-                        <p className='ov-date-txt'>วันหยุดนักขัตฤกษ์ / หยุดพิเศษ</p>
+                        <p className='ov-date-txt'>วันหยุดนักขัตฤกษ์</p>
                         <p className='ov-date-num'>{ov[0].hd} วัน ({holi_percen}%)</p>
                         <div className='ov-date-percen' style={styles.holi}></div>
                     </div>
@@ -85,7 +87,7 @@ function AdminContent1(props) {
                 <div className='box-body ov-article-left'>
                     <div className='lb-box top-bx'>
                         <p className='ov-ta-txt'>จำนวนการบันทึกเวลา</p>
-                        <p className='ov-ta-num'>{ov[0].ta}</p>
+                        <img src={ts} alt=''></img>
                     </div>
                     <div className='lb-stat-bx'>
                         <div>
@@ -101,7 +103,7 @@ function AdminContent1(props) {
                 <div className='box-body ov-article-left'>
                     <div className='lb-box bot-bx'>
                         <p className='ov-ta-txt'>จำนวนการลา</p>
-                        <p className='ov-ta-num'>{ov[0].ld}</p>
+                        <img src={ld} alt=''></img>
                     </div>
                     <div className='lb-stat-bx'>
                         <div>

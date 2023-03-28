@@ -1,6 +1,6 @@
 import { React } from 'react';
 import moment from "moment";
-import ne from '../../assets/icon/note-edit.png';
+import et from '../../assets/icon/edit-ta.png';
 import al from '../../assets/icon/angle-left.png';
 import ar from '../../assets/icon/angle-right.png';
 
@@ -33,7 +33,7 @@ function TimeSheetInfo(props) {
                                     <p className="center">{item.time_out.substring(0, 5)}</p>
                                     <div>
                                         <div className='ta-img-bx'>
-                                            <img src={ne} alt=''/>
+                                            <img src={et} alt=''/>
                                         </div>
                                     </div>
                                 </div>

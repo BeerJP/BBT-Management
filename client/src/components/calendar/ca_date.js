@@ -23,9 +23,6 @@ function CalendarDate() {
     const lastDay = weekday.indexOf(day);
     const dateId = year + "-" + (monthName.indexOf(month.substring(0, 3)) + 1);
 
-    // const currentDate = dateId + "-" + ca.getDate()
-    
-
     const inMonth =[], previous = [], next = [];
 
     for (var d = 0; d < dayInMonth; d++){

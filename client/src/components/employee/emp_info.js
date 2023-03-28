@@ -33,9 +33,9 @@ function InfoCard(props) {
         <>
             <div className='box-body em-body-left'>
                 <div className='box-body em-article'>
-                    <div className='em-header'>
-                        <label>ข้อมูลส่วนตัว</label>
-                    </div>
+                    {/* <div className='em-header'>
+                        <label>ข้อมูลส่วนตัว & ข้อมูลสำหรับเข้าสู่ระบบ</label>
+                    </div> */}
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>ชื่อ - นามสกุล</label>
@@ -91,11 +91,6 @@ function InfoCard(props) {
                             <label className='lb-header'>ที่อยู่</label>
                             <label className='text-box emp-address'>{emp.emp_address}</label>
                         </div>
-                    </div>
-                </div>
-                <div className='box-body em-article'>
-                    <div className='em-header'>
-                        <label>ข้อมูลสำหรับเข้าสู่ระบบ</label>
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
