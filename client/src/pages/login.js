@@ -20,6 +20,8 @@ function Login(props) {
         {crossdomain: true})
         .then(response => {
             login(response.data);
+            console.log(response.data);
+            console.log(response);
         });
     };
 

@@ -298,7 +298,6 @@
     flex-direction: column;
     align-items: center;
     background: white;
-    border: 1px solid lightgray;
     border-radius: 5px;
 }
 
@@ -322,34 +321,30 @@
     width: 95%;
     height: 50px;
     display: flex;
+    font-weight: bold;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     border-bottom: 1px solid lightgray;
 }
 
-p.name {
-    font-size: 0.9rem;
+.ov-header-3 p {
+    font-size: 0.8rem;
     margin: 0;
-    color: #424949;
-    width: 20%;
-    margin-left: 10px;
+    width: 30%;
 }
 
-p.time {
-    font-size: 0.9rem;
+.ov-header-3 p.center {
+    font-size: 0.8rem;
     margin: 0;
-    color: #424949;
-    width: 25%;
+    width: 20%;
     text-align: center;
 }
 
-p.stat {
-    font-size: 0.9rem;
+.ov-header-3 p.left {
+    font-size: 0.8rem;
     margin: 0;
-    color: #424949;
     width: 20%;
-    text-align: center;
 }
 
 .ov-content-4 {
@@ -368,4 +363,26 @@ p.stat {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+}
+
+.ov-content-emp p {
+    font-size: 0.8rem;
+    color: #424949;
+    margin: 0;
+    width: 30%;
+}
+
+.ov-content-emp p.center {
+    font-size: 0.8rem;
+    color: #424949;
+    margin: 0;
+    width: 20%;
+    text-align: center;
+}
+
+.ov-content-emp p.left {
+    font-size: 0.8rem;
+    color: #424949;
+    margin: 0;
+    width: 20%;
 }

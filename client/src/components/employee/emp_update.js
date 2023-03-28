@@ -166,9 +166,9 @@ function EditCard(props) {
                     </div>
                 </div>
                 <div className='box-body em-article'>
-                    <div className='em-header'>
+                    {/* <div className='em-header'>
                         <label>ข้อมูลสำหรับเข้าสู่ระบบ</label>
-                    </div>
+                    </div> */}
                     <div className='lb-box-long em-info'>
                         <div>
                             <label>Username</label>

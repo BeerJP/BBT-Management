@@ -33,7 +33,7 @@ function TimeSheet() {
                 <TimeSheetInfo data={timeSheet}/>
             </div>
             <div className='box-content' >
-                <TimeSheetTable data={[employee, getSelect]}/>
+                <TimeSheetTable data={[getSelect]}/>
             </div>
         </>
     );

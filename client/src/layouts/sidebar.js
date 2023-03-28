@@ -12,7 +12,8 @@ function SideBar(props) {
     const logout = props.data[1];
 
     return (
-        <>  <div className='side-menu'>
+        <>  
+            <div className='side-menu'>
                 <div>
                     <NavLink to="/" className='menu-icon'>
                         <img src={hm} alt=''/>
@@ -34,8 +35,10 @@ function SideBar(props) {
                         <img src={dc} alt=''/>
                         <p>จัดการใบลา</p>
                     </NavLink>
-                    <button onClick={() => logout(null)}>Logout</button>
                 </div>
+                {/* <div>
+                    <button className='menu-icon' onClick={() => logout(null)}>Logout</button>
+                </div> */}
             </div>
         </>
     );

@@ -10,17 +10,19 @@ function EmployeeTable(props) {
             <div className='box-body em-body-2'>
                 <div className='em-content-3'>
                     <div className='em-header-3'>
-                        <p className='numb'>รหัส</p>
-                        <p className='name'>ชื่อ - สกุล</p>
-                        <p className='dept'>แผนก</p>
+                        <p className='left'>รหัส</p>
+                        <p>ชื่อ - สกุล</p>
+                        <p className='center'>วันเริ่มงาน</p>
+                        <p className='center'>แผนก</p>
                     </div>
                     <div className='em-content-4'>
                         {
                             emp.map((item, index) => (
                                 <div className='em-content-emp' key={index} onClick={() => {props.data[1](item.emp_id); props.data[2]('infomation');}}>
-                                    <p className="numb">{item.emp_id}</p>
-                                    <p className="name">{item.emp_name + " " + item.emp_surname}</p>
-                                    <p className="dept">{item.dept_name}</p>
+                                    <p className="left">{item.emp_id}</p>
+                                    <p>{item.emp_name + " " + item.emp_surname}</p>
+                                    <p className="center">{item.emp_startdate}</p>
+                                    <p className="center">{item.dept_name}</p>
                                 </div>
                             ))
                         }

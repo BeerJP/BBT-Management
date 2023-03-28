@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
-import moment from "moment";
 // import ne from '../../assets/icon/note-edit.png';
 
 
@@ -25,8 +24,8 @@ function LeaveTable() {
         getApi();
     }, []);
 
-    const getId = async(e) => {
-        const leaveId = e.target.id.split(" ");
+    const getId = async(event) => {
+        const leaveId = event.target.id.split(" ");
         await axios.put("http://localhost:5000/update_leave", 
         {   id: leaveId[0],
             date: leaveId[1],
@@ -44,22 +43,21 @@ function LeaveTable() {
                 </div>
                 <div className='le-box-content'>
                     <div className='le-header'>
-                        <p className='le-empl'>พนักงาน</p>
-                        <p className='le-date'>วันที่</p>
-                        <p className='le-type'>รูปแบบ</p>
-                        <p className='le-desc'>เหตุผลการลา</p>
-                        <p className='le-sett'></p>
+                        <p className='left'>พนักงาน</p>
+                        <p className='center'>วันที่</p>
+                        <p className='center'>รูปแบบ</p>
+                        <p>เหตุผลการลา</p>
+                        <p className='center'></p>
                     </div>
                     <div className='le-content'>
                         {
                             leavepen.map((item, index) => (
                                 <div className='le-content-time' key={index}>
-                                    <p className="empl">{item.emp_id}</p>
-                                    {/* <p className="date">{moment(item.leave_date).utc().format('DD/MM/YYYY')}</p> */}
-                                    <p className="date">{item.leave_date}</p>
-                                    <p className="type">{item.leave_type}</p>
-                                    <p className="desc">{item.leave_description}</p>
-                                    <button className="sett" id={item.emp_id + " " + item.leave_date + " 1"} onClick={getId}>อนุมัติ</button>
+                                    <p className="left">{item.emp_id}</p>
+                                    <p className="center">{item.leave_date}</p>
+                                    <p className="center">{item.leave_type}</p>
+                                    <p>{item.leave_description}</p>
+                                    <button className="center" id={item.emp_id + " " + item.leave_date + " 1"} onClick={getId}>อนุมัติ</button>
                                 </div>
                             ))
                         }
@@ -72,21 +70,21 @@ function LeaveTable() {
                 </div>
                 <div className='le-box-content'>
                     <div className='le-header'>
-                        <p className='le-empl'>พนักงาน</p>
-                        <p className='le-date'>วันที่</p>
-                        <p className='le-type'>รูปแบบ</p>
-                        <p className='le-desc'>เหตุผลการลา</p>
-                        <p className='le-sett'></p>
+                        <p className='left'>พนักงาน</p>
+                        <p className='center'>วันที่</p>
+                        <p className='center'>รูปแบบ</p>
+                        <p>เหตุผลการลา</p>
+                        <p className='center'></p>
                     </div>
                     <div className='le-content'>
                         {
                          leaveapp.map((item, index) => (
                             <div className='le-content-time' key={index}>
-                                <p className="empl">{item.emp_id}</p>
-                                <p className="date">{moment(item.leave_date).utc().format('DD/MM/YYYY')}</p>
-                                <p className="type">{item.leave_type}</p>
-                                <p className="desc">{item.leave_description}</p>
-                                <button className="sett" id={item.emp_id + " " + item.leave_date + " 0"} onClick={getId}>ยกเลิก</button>
+                                <p className="left">{item.emp_id}</p>
+                                <p className="center">{item.leave_date}</p>
+                                <p className="center">{item.leave_type}</p>
+                                <p>{item.leave_description}</p>
+                                <button className="center" id={item.emp_id + " " + item.leave_date + " 0"} onClick={getId}>ยกเลิก</button>
                             </div>
                         ))
                         }

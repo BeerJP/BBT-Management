@@ -37,21 +37,27 @@ function NavBar({children}) {
                     </div>
                     <div className='right-box'>
                         <label>
-                            <p>{session[0].emp_name} {session[0].emp_surname}</p>
-                            <p>{session[0].type_name}</p>
+                            <p>{session.emp_name} {session.emp_surname}</p>
+                            <p>{session.type_name}</p>
                         </label>
                     </div>
                 </div>
             </nav>
             <div className='container'>
+            <div><SideBar data={[session, setSession]}/></div> 
                 <div className='content'>
-                    {
+                    {/* {
                         session[0].emp_id === '' ? 
                         <Login data={setSession}/> : 
                         [<div><SideBar data={[session, setSession]}/></div>, <div className='main-content'>{children}</div>]
-                    }
+                    } */}
+                    
+                    <div 
+                        className='main-content'>{children}
+                    </div>
                 </div>
             </div>
+            <footer></footer>
         </>
     );
 };

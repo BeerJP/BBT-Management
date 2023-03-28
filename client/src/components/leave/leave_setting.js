@@ -61,10 +61,6 @@ function LeaveTable() {
         getLeaveemp();
     }, []);
 
-    console.log(leaveEmp);
-
-    const emp = [];
-
     return (
         <>
             <div className='box-body le-body'>
@@ -78,19 +74,19 @@ function LeaveTable() {
                 </div>
                 <div className='le-box-content'>
                     <div className='le-header'>
-                        <p className='le-date'>วันที่</p>
-                        <p className='le-type'>ประเภท</p>
-                        <p className='le-desc'>เหตุผลการลา</p>
-                        <p className='le-sett'>สถานะ</p>
+                        <p className='left'>วันที่</p>
+                        <p className='center'>ประเภท</p>
+                        <p>เหตุผลการลา</p>
+                        <p className='center'>สถานะ</p>
                     </div>
                     <div className='le-content'>
                         {
                             leaveEmp.map((item, index) => (
                                 <div className='le-content-time' key={index}>
-                                    <p className="date">{item.leave_date}</p>
-                                    <p className="type">{item.leave_type}</p>
-                                    <p className="desc">{item.leave_description}</p>
-                                    <p className="sett">{item.leave_appove}</p>
+                                    <p className="left">{item.leave_date}</p>
+                                    <p className="center">{item.leave_type}</p>
+                                    <p>{item.leave_description}</p>
+                                    <p className="center">{item.leave_appove}</p>
                                 </div>
                             ))
                         }

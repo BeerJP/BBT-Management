@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
-import moment from "moment";
 
 
 function AdminContent2() {
@@ -20,19 +19,21 @@ function AdminContent2() {
             <div className='box-body ov-body-2'>
                 <div className='ov-content-3'>
                     <div className='ov-header-3'>
-                        <p className='name'>ชื่อ - สกุล</p>
-                        <p className='time'>วันที่เริ่มงาน</p>
-                        <p className='time'>ใบบันทึกเวลา</p>
-                        <p className='stat'>จำนวนใบลา</p>
+                        <p className='left'>รหัส</p>
+                        <p>ชื่อ - สกุล</p>
+                        <p className='center'>วันเริ่มงาน</p>
+                        <p className='center'>วันทำงาน</p>
+                        <p className='center'>วันลางาน</p>
                     </div>
                     <div className='ov-content-4'>
                         {
                             timeSheet.map((item, index) => (
                                 <div className='ov-content-emp' key={index}>
-                                    <p className="name">{item.emp_name + " " + item.emp_surname}</p>
-                                    <p className="time">{moment(item.emp_startdate).utc().format('DD/MM/YYYY')}</p>
-                                    <p className="time">{item.ta}</p>
-                                    <p className="stat">{item.ld}</p>
+                                    <p className='left'>{item.emp_id}</p>
+                                    <p>{item.emp_name + " " + item.emp_surname}</p>
+                                    <p className="center">{item.emp_startdate}</p>
+                                    <p className="center">{item.ta}</p>
+                                    <p className="center">{item.ld}</p>
                                 </div>
                             ))
                         }

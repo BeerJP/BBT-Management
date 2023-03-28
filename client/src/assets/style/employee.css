@@ -27,18 +27,43 @@
 }
 
 .em-info {
-    font-size: 0.9rem;
-    display: flex;
-    margin-bottom: 10px;
-    margin-left: 10px;
+    margin-bottom: 20px;
+    margin-left: 20px;
 }
 
 .em-info div {
     display: flex;
-    height: 100%;
+    height: 30px;
     width: 100%;
-    flex-direction: column;
-    justify-content: space-between;
+    position: relative;
+}
+
+.em-info div .lb-header {
+    font-size: 0.7rem;
+    font-weight: bold;
+    position: absolute;
+    left: 10px;
+    top: -10px;
+    padding: 0 2px;
+    z-index: 1;
+    background: white;
+}
+
+.em-info div .text-box {
+    font-size: 0.9rem;
+    color: #424949;
+    border: 1px solid lightgray;
+    padding: 5px;
+    padding-left: 10px;
+    border-radius: 10px;
+    height: 100%;
+    width: 220px;
+    display: flex;
+    align-items: center;
+}
+
+.em-info div .emp-address {
+    width: 90%;
 }
 
 
@@ -71,12 +96,6 @@
     width: 95%;
     height: 300px;
 }
-
-
-
-
-
-
 
 .em-header-2 {
     width: 95%;
@@ -146,6 +165,7 @@
     margin-top: 10px;
     width: 95%;
     height: 50px;
+    font-weight: bold;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -153,27 +173,23 @@
     justify-content: center;
 }
 
-p.numb {
-    font-size: 0.9rem;
+.em-header-3 p {
+    font-size: 0.8rem;
     margin: 0;
-    color: #424949;
-    width: 25%;
-    margin-left: 10px;
+    width: 30%;
 }
 
-p.name {
-    font-size: 0.9rem;
+.em-header-3 p.center {
+    font-size: 0.8rem;
     margin: 0;
-    color: #424949;
-    width: 45%;
-}
-
-p.dept {
-    font-size: 0.9rem;
-    margin: 0;
-    color: #424949;
-    width: 25%;
+    width: 20%;
     text-align: center;
+}
+
+.em-header-3 p.left {
+    font-size: 0.8rem;
+    margin: 0;
+    width: 20%;
 }
 
 .em-content-4 {
@@ -194,6 +210,28 @@ p.dept {
     justify-content: center;
     cursor: pointer;;
     border-radius: 10px;
+}
+
+.em-content-emp p {
+    font-size: 0.8rem;
+    color: #424949;
+    margin: 0;
+    width: 30%;
+}
+
+.em-content-emp p.center {
+    font-size: 0.8rem;
+    color: #424949;
+    margin: 0;
+    width: 20%;
+    text-align: center;
+}
+
+.em-content-emp p.left {
+    font-size: 0.8rem;
+    color: #424949;
+    margin: 0;
+    width: 20%;
 }
 
 .em-content-emp:hover {

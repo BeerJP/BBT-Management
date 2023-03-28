@@ -118,7 +118,11 @@ app.get('/employee', (request, response) => {
   conn.query(`SELECT *,
                 DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
                 DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
-                DATE_FORMAT(emp_startdate, '%Y-%m-%d') as emp_startdate
+                DATE_FORMAT(DATE_ADD(EMPLOYEE.emp_startdate, INTERVAL 543 YEAR), '%Y-%m-%d') as emp_startdate,
+              CASE
+                WHEN emp_status = '1' THEN 'ปกติ'
+              ELSE 'พ้นสภาพ'
+              END AS emp_status
               FROM EMPLOYEE
               INNER JOIN DEPARTMENT
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
@@ -167,7 +171,7 @@ app.post('/leave_emp', (request, response) => {
   const id = request.body.id;
 
   conn.query(`SELECT *,
-                DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
+                DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%Y-%m-%d') as leave_date,
               CASE
                 WHEN leave_appove = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
@@ -180,7 +184,7 @@ app.post('/leave_emp', (request, response) => {
 
 // แสดงข้อมูล Leave Day ยังไม่อนุมัติ
 app.get('/leavepending', (request, response) => {
-  conn.query("SELECT *, DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date FROM LEAVE_DAY WHERE leave_appove = '0'", 
+  conn.query("SELECT *, DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%Y-%m-%d') as leave_date FROM LEAVE_DAY WHERE leave_appove = '0'", 
   (err, result) => {
     response.send(result);
   });
@@ -188,7 +192,7 @@ app.get('/leavepending', (request, response) => {
 
 // แสดงข้อมูล Leave Day อนุมัติแล้ว
 app.get('/leaveapprove', (request, response) => {
-  conn.query("SELECT *, DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date FROM LEAVE_DAY WHERE leave_appove = '1'", 
+  conn.query("SELECT *, DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%Y-%m-%d') as leave_date FROM LEAVE_DAY WHERE leave_appove = '1'", 
   (err, result) => {
     response.send(result);
   });
@@ -224,7 +228,10 @@ app.get('/time', (request, response) => {
 
 // แสดงจำนวน Time Attendance & Leave Day
 app.get('/timecount', (request, response) => {
-  conn.query(`SELECT EMPLOYEE.emp_id, EMPLOYEE.emp_name, EMPLOYEE.emp_surname, EMPLOYEE.emp_startdate,
+  conn.query(`SELECT EMPLOYEE.emp_id, 
+              EMPLOYEE.emp_name, 
+              EMPLOYEE.emp_surname, 
+              DATE_FORMAT(DATE_ADD(EMPLOYEE.emp_startdate, INTERVAL 543 YEAR), '%Y-%m-%d') as emp_startdate,
               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.emp_id = EMPLOYEE.emp_id ) AS ta,
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.emp_id = EMPLOYEE.emp_id ) AS ld
               FROM EMPLOYEE GROUP BY EMPLOYEE.emp_id`,
@@ -442,7 +449,7 @@ app.put("/update_leave", (request, response) => {
   const employee = request.body.id;
 
   conn.query(
-    "UPDATE LEAVE_DAY SET leave_appove = ? WHERE leave_date = ? AND emp_id = ?",
+    "UPDATE LEAVE_DAY SET leave_appove = ? WHERE leave_date = DATE_SUB(?, INTERVAL 543 YEAR) AND emp_id = ?",
     [appove, date, employee], 
     (err, result) => {
       if (err) {

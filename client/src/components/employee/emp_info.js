@@ -38,58 +38,58 @@ function InfoCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label>ชื่อ - นามสกุล</label>
-                            <label>{emp.emp_name + " " + emp.emp_surname}</label>
+                            <label className='lb-header'>ชื่อ - นามสกุล</label>
+                            <label className='text-box'>{emp.emp_name + " " + emp.emp_surname}</label>
                         </div>
                         <div>
-                            <label>แผนก</label>
-                            <label>{emp.dept_name}</label>
-                        </div>
-                    </div>
-                    <div className='lb-box-long em-info'>
-                        <div>
-                            <label>เพศ</label>
-                            <label>{emp.emp_gender}</label>
-                        </div>
-                        <div>
-                            <label>MAC Address 1</label>
-                            <label>{emp.emp_mac1}</label>
+                            <label className='lb-header'>แผนก</label>
+                            <label className='text-box'>{emp.dept_name}</label>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label>อายุ</label>
-                            <label>{emp.emp_age}</label>
+                            <label className='lb-header'>เพศ</label>
+                            <label className='text-box'>{emp.emp_gender}</label>
                         </div>
                         <div>
-                            <label>MAC Address 2</label>
-                            <label>{emp.emp_mac2}</label>
-                        </div>
-                    </div>
-                    <div className='lb-box-long em-info'>
-                        <div>
-                            <label>เลขบัตรประชาชน</label>
-                            <label>{emp.emp_idcard}</label>
-                        </div>
-                        <div>
-                            <label>สถานะ</label>
-                            <label>{emp.emp_status}</label>
+                            <label className='lb-header'>MAC Address 1</label>
+                            <label className='text-box'>{emp.emp_mac1}</label>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label>วันเริ่มงาน</label>
-                            <label>{emp.emp_startdate}</label>
+                            <label className='lb-header'>อายุ</label>
+                            <label className='text-box'>{emp.emp_age}</label>
                         </div>
                         <div>
-                            <label>วันสิ้นสุดงาน</label>
-                            <label>{emp.emp_enddate}</label>
+                            <label className='lb-header'>MAC Address 2</label>
+                            <label className='text-box'>{emp.emp_mac2}</label>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label>ที่อยู่</label>
-                            <label>{emp.emp_address}</label>
+                            <label className='lb-header'>เลขบัตรประชาชน</label>
+                            <label className='text-box'>{emp.emp_idcard}</label>
+                        </div>
+                        <div>
+                            <label className='lb-header'>สถานะ</label>
+                            <label className='text-box'>{emp.emp_status}</label>
+                        </div>
+                    </div>
+                    <div className='lb-box-long em-info'>
+                        <div>
+                            <label className='lb-header'>วันเริ่มงาน</label>
+                            <label className='text-box'>{emp.emp_startdate}</label>
+                        </div>
+                        <div>
+                            <label className='lb-header'>วันสิ้นสุดงาน</label>
+                            <label className='text-box'>{emp.emp_enddate}</label>
+                        </div>
+                    </div>
+                    <div className='lb-box-long em-info'>
+                        <div>
+                            <label className='lb-header'>ที่อยู่</label>
+                            <label className='text-box emp-address'>{emp.emp_address}</label>
                         </div>
                     </div>
                 </div>
@@ -99,23 +99,14 @@ function InfoCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label>Username</label>
-                            <label>{emp.user_name}</label>
+                            <label className='lb-header'>Username</label>
+                            <label className='text-box'>{emp.user_name}</label>
                         </div>
                         <div>
-                            <label>User Type</label>
-                            <label>{emp.type_name}</label>
+                            <label className='lb-header'>User Type</label>
+                            <label className='text-box'>{emp.type_name}</label>
                         </div>
                     </div>
-                    {/* <div className='lb-box-long em-info'>
-                        <div>
-                            <label>Password</label>
-                            <label>-</label>
-                        </div>
-                        <div>
-                            <button>บันทึก</button>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         </>

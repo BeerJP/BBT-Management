@@ -1,9 +1,17 @@
-import { React } from 'react';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios';
 
 
 function TimeSheetTable(props) {
 
-    const emp = props.data[0];
+    const [timeSheet, setTimesheet] = useState([]);
+    
+    useEffect(() => {
+        axios.get("http://localhost:5000/timecount", {crossdomain: true})
+        .then(response => {
+            setTimesheet(response.data);
+        });
+    }, []);
 
 
     return (
@@ -11,17 +19,19 @@ function TimeSheetTable(props) {
              <div className='box-body em-body-2'>
                 <div className='em-content-3'>
                     <div className='em-header-3'>
-                        <p className='numb'>รหัส</p>
-                        <p className='name'>ชื่อ - สกุล</p>
-                        <p className='dept'>แผนก</p>
+                        <p className='left'>รหัส</p>
+                        <p>ชื่อ - สกุล</p>
+                        <p className='center'>วันทำงาน</p>
+                        <p className='center'>วันลางาน</p>
                     </div>
                     <div className='em-content-4'>
                         {
-                            emp.map((item, index) => (
-                                <div className='em-content-emp' key={index} onClick={() => props.data[1](item.emp_id)}>
-                                    <p className="numb">{item.emp_id}</p>
-                                    <p className="name">{item.emp_name + " " + item.emp_surname}</p>
-                                    <p className="dept">{item.dept_name}</p>
+                            timeSheet.map((item, index) => (
+                                <div className='em-content-emp' key={index} onClick={() => props.data[0](item.emp_id)}>
+                                    <p className='left'>{item.emp_id}</p>
+                                    <p>{item.emp_name + " " + item.emp_surname}</p>
+                                    <p className="center">{item.ta}</p>
+                                    <p className="center">{item.ld}</p>
                                 </div>
                             ))
                         }
