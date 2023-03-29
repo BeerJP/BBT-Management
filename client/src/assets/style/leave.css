@@ -139,13 +139,37 @@
     width: 20%;
 }
 
-.le-content-time button.center {
+.le-content-time div.center {
     font-size: 0.8rem;
     color: #424949;
     margin: 0;
     width: 20%;
     text-align: center;
 }
+
+.le-content-time button.approve {
+    width: 50px;
+    height: 35px;
+    font-size: 0.8rem;
+    text-align: center;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    background: #1D8348;
+}
+
+.le-content-time button.cancel {
+    width: 50px;
+    height: 35px;
+    font-size: 0.8rem;
+    text-align: center;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    background: #E74C3C;
+}
+
+
 
 /* .le-content-time button.sett {
     font-size: 0.8rem;

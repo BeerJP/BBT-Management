@@ -88,18 +88,17 @@ function CalendarTable() {
                 <div className='ca-header'>
                     <p>จัดการวันหยุด</p>
                 </div>
-                <div className='lb-box-long ca-sett'>
-                    <div className='ca-sett-input'>
-                        <label>วันหยุด</label>
-                        <input onChange={(event => {
+                <br></br><br></br>
+                <div className='lb-box-long em-info'>
+                    <div>
+                        <label className='lb-header'>วันหยุด</label>
+                        <input className='text-box' onChange={(event => {
                             setHoliname(event.target.value)
                         })}></input>
                     </div>
-                </div>
-                <div className='lb-box-long ca-sett'>
-                    <div className='ca-sett-input'>
-                        <label>วันที่</label>
-                        <select name="date" id="date" onChange={(event => {
+                    <div>
+                        <label className='lb-header'>วันที่</label>
+                        <select className='text-box select-box' name="date" id="date" onChange={(event => {
                             setHolidate(event.target.value)
                         })}>
                             {
@@ -109,21 +108,9 @@ function CalendarTable() {
                             }
                         </select>
                     </div>
-                    {/* <div className='ca-sett-input'>
-                        <label>วันที่สิ้นสุด</label>
-                        <select name="date" id="date" onChange={(event => {
-                            setEnd(event.target.value)
-                        })}>
-                            {
-                              comboboxDate.map((item, index) => (
-                                    <option key={item} value={item}>{item}</option>
-                                ))
-                            }
-                        </select>
-                    </div> */}
                 </div>
-                <div className='lb-box-long ca-sett'>
-                    <div className='ca-sett-submit'>
+                <div className='lb-box-long em-info'>
+                    <div>
                         <button onClick={insertHoliday}>บันทึก</button>
                         <button>ลบ</button>
                     </div>               

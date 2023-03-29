@@ -59,7 +59,9 @@ function LeaveTable() {
                                     <p className="center">{item.leave_date}</p>
                                     <p className="center">{item.leave_type}</p>
                                     <p>{item.leave_description}</p>
-                                    <button className="center" id={item.emp_id + " " + item.leave_date + " 1"} onClick={getId}>อนุมัติ</button>
+                                    <div className="center">
+                                        <button className='approve' id={item.emp_id + " " + item.leave_date + " 1"} onClick={getId}>อนุมัติ</button>
+                                    </div>
                                 </div>
                             ))
                         }
@@ -87,7 +89,9 @@ function LeaveTable() {
                                 <p className="center">{item.leave_date}</p>
                                 <p className="center">{item.leave_type}</p>
                                 <p>{item.leave_description}</p>
-                                <button className="center" id={item.emp_id + " " + item.leave_date + " 0"} onClick={getId}>ยกเลิก</button>
+                                <div className="center">
+                                    <button className="cancel" id={item.emp_id + " " + item.leave_date + " 0"} onClick={getId}>ยกเลิก</button>
+                                </div>
                             </div>
                         ))
                         }

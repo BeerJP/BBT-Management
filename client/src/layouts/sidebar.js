@@ -17,23 +17,23 @@ function SideBar(props) {
                 <div>
                     <NavLink to="/" className='menu-icon'>
                         <img src={hm} alt=''/>
-                        <p>หน้าหลัก</p>
+                        <p className='menu-text'>หน้าหลัก</p>
                     </NavLink>
                     <NavLink to="/employee" className='menu-icon'>
                         <img src={em} alt=''/>
-                        <p>พนักงาน</p>
+                        <p className='menu-text'>พนักงาน</p>
                     </NavLink>
                     <NavLink to="/timesheet" className='menu-icon'>
                         <img src={ut} alt=''/>
-                        <p>ใบบันทึกเวลา</p>
+                        <p className='menu-text'>ใบบันทึกเวลา</p>
                     </NavLink>
                     <NavLink to="/calendar" className='menu-icon'>
                         <img src={ca} alt=''/>
-                        <p>ปฏิทิน</p>
+                        <p className='menu-text'>ปฏิทิน</p>
                     </NavLink>
                     <NavLink to="/leave" className='menu-icon'>
                         <img src={dc} alt=''/>
-                        <p>จัดการใบลา</p>
+                        <p className='menu-text'>จัดการใบลา</p>
                     </NavLink>
                 </div>
                 {/* <div>

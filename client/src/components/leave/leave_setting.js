@@ -97,10 +97,11 @@ function LeaveTable() {
                 <div className='ca-header'>
                     <p>จัดการใบลา</p>
                 </div>
-                <div className='lb-box-long ca-sett'>
-                    <div className='ca-sett-input'>
-                        <label>ประเภท</label>
-                        <select name="date" id="date" onChange={(event => {
+                <br></br><br></br>
+                <div className='lb-box-long em-info'>
+                    <div>
+                        <label className='lb-header'>ประเภท</label>
+                        <select className='text-box select-box' name="date" id="date" onChange={(event => {
                             setLeavetype(event.target.value)
                         })}>
                             <option value={"กิจ"}>ลากิจ</option>
@@ -109,16 +110,16 @@ function LeaveTable() {
                         </select>
                     </div>
                     <div className='ca-sett-input'>
-                        <label>เหตุผลการลา</label>
-                        <input onChange={(event => {
+                        <label className='lb-header'>เหตุผลการลา</label>
+                        <input className='text-box' onChange={(event => {
                             setLeavename(event.target.value)
                         })}></input>
                     </div>
                 </div>
-                <div className='lb-box-long ca-sett'>
-                    <div className='ca-sett-input'>
-                        <label>วันที่</label>
-                        <select name="date" id="date" onChange={(event => {
+                <div className='lb-box-long em-info'>
+                    <div>
+                        <label className='lb-header'>วันที่</label>
+                        <select className='text-box select-box' name="date" id="date" onChange={(event => {
                             setLeavedate(event.target.value)
                         })}>
                             {
@@ -128,11 +129,9 @@ function LeaveTable() {
                             }
                         </select>
                     </div>
-                </div>
-                <div className='lb-box-long ca-sett'>
-                    <div className='ca-sett-submit'>
+                    <div>
                         <button>บันทึก</button>
-                    </div>               
+                    </div>
                 </div>
             </div>
         </>

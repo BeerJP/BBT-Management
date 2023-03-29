@@ -23,14 +23,6 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `department`
---
-
-CREATE TABLE `department` (
-  `dept_id` int(1) NOT NULL,
-  `dept_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `department`
@@ -46,25 +38,6 @@ INSERT INTO `department` (`dept_id`, `dept_name`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `employee`
---
-
-CREATE TABLE `employee` (
-  `emp_id` int(4) NOT NULL,
-  `emp_name` varchar(50) NOT NULL,
-  `emp_surname` varchar(50) NOT NULL,
-  `emp_idcard` varchar(13) NOT NULL,
-  `emp_gender` varchar(6) NOT NULL,
-  `emp_birthdate` date NOT NULL,
-  `emp_address` varchar(255) DEFAULT NULL,
-  `emp_status` tinyint(1) NOT NULL DEFAULT 1,
-  `emp_startdate` date NOT NULL,
-  `emp_enddate` date DEFAULT NULL,
-  `emp_mac1` varchar(17) DEFAULT NULL,
-  `emp_mac2` varchar(17) DEFAULT NULL,
-  `dept_id` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `employee`
@@ -76,14 +49,6 @@ INSERT INTO `employee` (`emp_id`, `emp_name`, `emp_surname`, `emp_idcard`, `emp_
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `holiday`
---
-
-CREATE TABLE `holiday` (
-  `holi_name` varchar(50) NOT NULL,
-  `work_id` varchar(8) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `holiday`
@@ -94,17 +59,6 @@ INSERT INTO `holiday` (`holi_name`, `work_id`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `leave_day`
---
-
-CREATE TABLE `leave_day` (
-  `leave_type` varchar(10) NOT NULL,
-  `leave_date` date NOT NULL,
-  `leave_description` varchar(255) NOT NULL,
-  `leave_appove` tinyint(1) NOT NULL DEFAULT 0,
-  `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `leave_day`
@@ -116,16 +70,6 @@ INSERT INTO `leave_day` (`leave_type`, `leave_date`, `leave_description`, `leave
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `time_attendance`
---
-
-CREATE TABLE `time_attendance` (
-  `time_in` time NOT NULL,
-  `time_out` time DEFAULT NULL,
-  `work_id` varchar(8) NOT NULL,
-  `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `time_attendance`
@@ -158,14 +102,7 @@ INSERT INTO `time_attendance` (`time_in`, `time_out`, `work_id`, `emp_id`) VALUE
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `type`
---
 
-CREATE TABLE `type` (
-  `type_id` int(1) NOT NULL,
-  `type_name` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `type`
@@ -178,16 +115,7 @@ INSERT INTO `type` (`type_id`, `type_name`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `user`
---
 
-CREATE TABLE `user` (
-  `user_name` varchar(12) NOT NULL,
-  `user_password` varchar(12) NOT NULL,
-  `type_id` int(1) NOT NULL,
-  `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
@@ -198,15 +126,7 @@ INSERT INTO `user` (`user_name`, `user_password`, `type_id`, `emp_id`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `workday`
---
 
-CREATE TABLE `workday` (
-  `work_id` varchar(8) NOT NULL,
-  `work_date` date NOT NULL,
-  `work_status` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `workday`
