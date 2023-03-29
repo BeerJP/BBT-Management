@@ -1,11 +1,14 @@
-import { React, useState } from 'react';
+import { React, useState, useContext } from 'react';
 import axios from 'axios';
 import user from '../assets/icon/users.png';
 import lock from '../assets/icon/lock.png';
 import '../assets/style/login.css';
+import IpContext from '../ipContext';
 
 
 function Login(props) {
+
+    const ip = useContext(IpContext);
 
     const login = props.data;
 
@@ -13,7 +16,7 @@ function Login(props) {
     const [password, setPassword] = useState();
 
     const getLogin = () => {
-        axios.post("http://localhost:5000/login", {
+        axios.post("http://"+ ip +":5000/login", {
             username: username,
             password: password
         }, 

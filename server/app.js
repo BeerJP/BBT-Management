@@ -245,7 +245,7 @@ app.get('/timecount', (request, response) => {
 // แสดงข้อมูล Time Attendance แบบเจาะจง
 app.post('/timesheet', (request, response) => {
   const empId = request.body.id;
-  conn.query(`SELECT * 
+  conn.query(`SELECT *, DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date
               FROM TIME_ATTENDANCE 
               INNER JOIN WORKDAY 
               ON TIME_ATTENDANCE.work_id = WORKDAY.work_id 
@@ -371,6 +371,36 @@ app.post("/add_holiday", (request, response) => {
 
 // -------------------- แก้ไขข้อมูล --------------------
 
+// ลบข้อมูล Holiday
+app.post("/cancel_holiday", (request, response) => {
+  const date = request.body.date;
+
+  conn.query("DELETE FROM HOLIDAY WHERE work_id = ?",
+    [date],
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+// แก้ไขข้อมูลวันทำงาน
+app.put("/update_work", (request, response) => {
+  const state = request.body.state;
+  const date = request.body.date;
+
+  conn.query(
+    "UPDATE WORKDAY SET work_status = ? WHERE work_id = ?",
+    [state, date], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
 // แก้ไขข้อมูล Employee
 app.put("/update_employee", (request, response) => {
   const id = request.body.id;
@@ -452,21 +482,6 @@ app.put("/update_leave", (request, response) => {
   conn.query(
     "UPDATE LEAVE_DAY SET leave_appove = ? WHERE leave_date = DATE_SUB(?, INTERVAL 543 YEAR) AND emp_id = ?",
     [appove, date, employee], 
-    (err, result) => {
-      if (err) {
-        response.send(err);
-      }
-    }
-  );
-});
-
-// แก้ไขข้อมูลวันทำงาน
-app.put("/update_work", (request, response) => {
-  const date = request.body.date;
-
-  conn.query(
-    "UPDATE WORKDAY SET work_status = 0 WHERE work_id = ?",
-    [date], 
     (err, result) => {
       if (err) {
         response.send(err);

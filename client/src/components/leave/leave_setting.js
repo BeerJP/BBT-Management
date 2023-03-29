@@ -2,7 +2,13 @@ import { React, useState, useEffect } from 'react';
 import axios from 'axios';
 
 
-function LeaveTable() {
+function LeaveSetting(props) {
+
+    const ip = props.data[0];
+    const update = props.data[1];
+
+    console.log(update);
+
 
     const id = '1001';
 
@@ -31,14 +37,14 @@ function LeaveTable() {
     }]);
 
     const getWorkday = async() => {
-        await axios.get("http://localhost:5000/workday", {crossdomain: true})
+        await axios.get("http://"+ ip +":5000/workday", {crossdomain: true})
         .then(response => {
             setWorkday(response.data);
         });
     };
 
     const getLeavesum = () => {
-        axios.post("http://localhost:5000/leave_emp_sum", { 
+        axios.post("http://"+ ip +":5000/leave_emp_sum", { 
             id: id,
         }, {crossdomain: true})
         .then(response => {
@@ -47,7 +53,7 @@ function LeaveTable() {
     };
 
     const getLeaveemp = () => {
-        axios.post("http://localhost:5000/leave_emp", { 
+        axios.post("http://"+ ip +":5000/leave_emp", { 
             id: id,
         }, {crossdomain: true})
         .then(response => {
@@ -59,7 +65,7 @@ function LeaveTable() {
         getWorkday();
         getLeavesum();
         getLeaveemp();
-    }, []);
+    }, [update]);
 
     return (
         <>
@@ -138,4 +144,4 @@ function LeaveTable() {
     );
 };
 
-export default LeaveTable;
+export default LeaveSetting;

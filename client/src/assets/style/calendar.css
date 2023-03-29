@@ -17,7 +17,7 @@
 .calendar .ca-content ul li { display: flex; align-items: center; justify-content: center; margin-left: 0; font-size: 1rem; }
 .calendar .ca-content ul.weekdays { margin-bottom: 10px; height: 50px; width: 80%;}
 .calendar .ca-content ul.day-grid { margin-bottom: 10px; width: 80%;}
-.calendar .ca-content ul.day-grid li { border: 1px solid #EAEAEA; color: lightgray; border-radius: 10px; height: 40px; }
+.calendar .ca-content ul.day-grid li { border: 1px solid #EAEAEA; color: lightgray; border-radius: 10px; height: 55px; }
 .calendar .ca-content ul.day-grid .this-month { border: 1px solid #ADE6F0; color: black; }
 .calendar .ca-content ul.day-grid .this-month:nth-child(7n + 1) { border: 1px solid #F08080; cursor: default; }
 .calendar .ca-content ul.day-grid .this-month:nth-child(7n + 1):hover { background: none; }
@@ -146,3 +146,4 @@ p.ca-date {
     display: flex;
     margin-top: 20px;
 }
+

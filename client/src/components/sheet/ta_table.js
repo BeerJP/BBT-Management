@@ -4,10 +4,12 @@ import axios from 'axios';
 
 function TimeSheetTable(props) {
 
+    const ip = props.data[1];
+
     const [timeSheet, setTimesheet] = useState([]);
     
     useEffect(() => {
-        axios.get("http://localhost:5000/timecount", {crossdomain: true})
+        axios.get("http://"+ ip +":5000/timecount", {crossdomain: true})
         .then(response => {
             setTimesheet(response.data);
         });

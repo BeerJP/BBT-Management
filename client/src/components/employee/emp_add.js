@@ -4,6 +4,8 @@ import axios from 'axios';
 
 function AddCard(props) {
 
+    const ip = props.data[2];
+
     const [deptInfo, setDeptinfo] = useState([{
         dept_id: ' ',
         dept_name: ' '
@@ -32,21 +34,21 @@ function AddCard(props) {
     const setCardType = props.data[1];
 
     const getDepart = async() => {
-        await axios.get("http://localhost:5000/department", {crossdomain: true})
+        await axios.get("http://"+ ip +":5000/department", {crossdomain: true})
         .then(response => {
             setDeptinfo(response.data);
         });
     };
 
     const getType = async() => {
-        await axios.get("http://localhost:5000/type", {crossdomain: true})
+        await axios.get("http://"+ ip +":5000/type", {crossdomain: true})
         .then(response => {
             setTypeinfo(response.data);
         });
     };
 
     const insertEmployee = () => {
-        axios.post("http://localhost:5000/add_employee", { 
+        axios.post("http://"+ ip +":5000/add_employee", { 
             id: id,
             name: name, 
             surname: surname,
@@ -59,7 +61,7 @@ function AddCard(props) {
             start: start,
             address: address
         }, {crossdomain: true})
-        .then(axios.post("http://localhost:5000/add_user", { 
+        .then(axios.post("http://"+ ip +":5000/add_user", { 
             id: id,
             username: username,
             password: password,

@@ -1,11 +1,14 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../assets/style/employee.css';
 import EmployeeCard from '../components/employee/emp_card';
 import EmployeeTable from '../components/employee/emp_table';
+import IpContext from '../ipContext';
 
 
 function Employee() {
+
+    const ip = useContext(IpContext);
 
     const [employee, setEmployee] = useState([]);
     const [selectEmp, setSelect] = useState(0);
@@ -18,7 +21,7 @@ function Employee() {
     };
 
     useEffect(() => {
-        axios.get("http://localhost:5000/employee", {crossdomain: true})
+        axios.get("http://"+ ip +":5000/employee", {crossdomain: true})
         .then(response => {
             setEmployee(response.data);
             setId(response.data[response.data.length - 1].emp_id + 1)
@@ -28,7 +31,7 @@ function Employee() {
     return (
         <>
             <div className='box-content'>
-                <EmployeeCard data={[employee[selectEmp - 1], id, cardType, setCardtype]}/>
+                <EmployeeCard data={[employee[selectEmp - 1], id, cardType, setCardtype, ip]}/>
             </div>
             <div className='box-content'>
                 <EmployeeTable data={[employee, getSelect, setCardtype]}/>

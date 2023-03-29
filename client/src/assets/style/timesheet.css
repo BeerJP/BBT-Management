@@ -80,6 +80,12 @@
     border-radius: 10px;
 }
 
+.ta-header div {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+}
+
 .ta-img-bx {
     width: 25px;
     height: 35px;
@@ -91,8 +97,8 @@
 }
 
 .ta-img-bx img {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
 }
 
 .ta-img-bx:hover {
@@ -114,13 +120,21 @@
 .ta-content-time p.center {
     font-size: 0.9rem;
     color: #424949;
-    margin: 0;
-    width: 25%;
+    border-radius: 5px;
+    height: 25px;
+    margin: 5px;
+    width: 23%;
     text-align: center;
 }
 
-.ta-content-time:hover {
-    background: linear-gradient(to Right, #D6EAF8 72%, white 0%);
+.ta-content-time input.center {
+    font-size: 0.9rem;
+    color: #424949;
+    border-radius: 5px;
+    height: 25px;
+    margin: 5px;
+    width: 23%;
+    text-align: center;
 }
 
 .ta-content-time div {

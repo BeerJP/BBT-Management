@@ -61,11 +61,13 @@
     width: 220px;
     display: flex;
     align-items: center;
+    background: white;
 }
 
 .em-info div .select-box {
     height: 41.5px;
     width: 237px;
+    background: white;
 }
 
 .em-info div .emp-address {
@@ -85,6 +87,11 @@
 .em-info div button.clear {
     margin-left: 36px;
     background: deepskyblue;
+}
+
+.em-info div button.cancel {
+    margin-left: 36px;
+    background: #E74C3C;
 }
 
 .em-info div button:active {
@@ -170,7 +177,7 @@
     cursor: pointer;
 }
 
- .em-img-bx:hover {
+.em-img-bx:hover {
     border: 1px solid lightskyblue;
 }
 

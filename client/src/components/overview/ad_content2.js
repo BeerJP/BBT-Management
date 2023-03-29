@@ -1,17 +1,20 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import IpContext from '../../ipContext';
 
 
-function AdminContent2() {
+function AdminContent2(props) {
+
+    const ip = props.data;
 
     const [timeSheet, setTimesheet] = useState([]);
     
     useEffect(() => {
-        axios.get("http://localhost:5000/timecount", {crossdomain: true})
+        axios.get("http://"+ ip +":5000/timecount", {crossdomain: true})
         .then(response => {
             setTimesheet(response.data);
         });
-    }, []);
+    }, [ip]);
     
 
     return (
@@ -20,7 +23,7 @@ function AdminContent2() {
                 <div className='ov-content-3'>
                     <div className='ov-header-3'>
                         <p className='left'>รหัส</p>
-                        <p>ชื่อ - สกุล</p>
+                        <p className='center-name'>ชื่อ - สกุล</p>
                         <p className='center'>วันเริ่มงาน</p>
                         <p className='center'>วันทำงาน</p>
                         <p className='center'>วันลางาน</p>

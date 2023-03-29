@@ -9,6 +9,8 @@ import EditCard from './emp_update';
 
 function EmployeeCard(props) {
 
+    const ip = props.data[4];
+
     const emp = props.data[0];
     const cardType = props.data[2];
     const setCardType = props.data[3];
@@ -31,8 +33,8 @@ function EmployeeCard(props) {
                         <img src={ui} alt=''/>
                         <span className="tooltiptext">แสดงข้อมูล</span>
                     </div>
-                    <div className="em-img-bx" style={emp == null ? {'pointer-events': 'none'} : 
-                    cardType === 'edit' ? {background: '#F4D03F'} : {'pointer-events': 'auto'}} onClick={editEmp}>
+                    <div className="em-img-bx" pointEve style={emp == null ? {pointerEvents: 'none'} : 
+                    cardType === 'edit' ? {background: '#F4D03F'} : {pointerEvents: 'auto'}} onClick={editEmp}>
                         <img src={ue} alt=''/>
                         <span className="tooltiptext">แก้ไขข้อมูล</span>
                     </div>
@@ -44,7 +46,7 @@ function EmployeeCard(props) {
             </div>
             {
                 cardType === 'infomation' ? <InfoCard data={emp} /> : 
-                cardType === 'add' ? <AddCard data={[props.data[1], setCardType]} /> : <EditCard  data={[emp, setCardType]} />
+                cardType === 'add' ? <AddCard data={[props.data[1], setCardType, ip]} /> : <EditCard  data={[emp, setCardType, ip]} />
             }
         </>
     );

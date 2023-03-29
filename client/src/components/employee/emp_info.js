@@ -3,7 +3,7 @@ import { React } from 'react';
 
 function InfoCard(props) {
 
-    if (!props.data) {
+    if (props.data == null) {
         var emp = {
             emp_id: ' ',
             emp_name: ' ',

@@ -4,6 +4,8 @@ import axios from 'axios';
 
 function EditCard(props) {
 
+    const ip = props.data[2];
+
     if (props.data[0] == null) {
         var emp = {
             emp_id: ' ',
@@ -52,21 +54,21 @@ function EditCard(props) {
     const [type, setType] = useState(emp.type_id);
 
     const getDepart = async() => {
-        await axios.get("http://localhost:5000/department", {crossdomain: true})
+        await axios.get("http://"+ ip +":5000/department", {crossdomain: true})
         .then(response => {
             setDeptinfo(response.data);
         });
     };
 
     const getType = async() => {
-        await axios.get("http://localhost:5000/type", {crossdomain: true})
+        await axios.get("http://"+ ip +":5000/type", {crossdomain: true})
         .then(response => {
             setTypeinfo(response.data);
         });
     };
 
     const updateEmployee = () => {
-        axios.put("http://localhost:5000/update_employee", { 
+        axios.put("http://"+ ip +":5000/update_employee", { 
             id: id,
             name: name, 
             surname: surname,
@@ -80,7 +82,7 @@ function EditCard(props) {
             end: end,
             address: address
         }, {crossdomain: true})
-        .then(axios.put("http://localhost:5000/update_user", { 
+        .then(axios.put("http://"+ ip +":5000/update_user", { 
             id: id,
             username: username,
             password: password,

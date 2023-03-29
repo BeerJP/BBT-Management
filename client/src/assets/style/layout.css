@@ -50,6 +50,10 @@
     margin-left: 10px;
 }
 
+.navbar .nav-container .left-box img {
+    width: 100px;
+}
+
 .navbar .nav-container .left-box button {
     width: 40px;
     height: 40px;

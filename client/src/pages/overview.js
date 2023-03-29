@@ -1,11 +1,14 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../assets/style/overview.css';
 import AdminContent1 from '../components/overview/ad_content1';
 import AdminContent2 from '../components/overview/ad_content2';
+import IpContext from '../ipContext';
 
 
 function Overview() {
+
+    const ip = useContext(IpContext);
 
     const [overview, setOverview] = useState([{
         emp:0,
@@ -21,7 +24,7 @@ function Overview() {
     }]);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/overview", {crossdomain: true})
+        axios.get("http://"+ ip +":5000/overview", {crossdomain: true})
         .then(response => {
             setOverview(response.data);
         });
@@ -34,7 +37,7 @@ function Overview() {
                 <AdminContent1 data={overview}/>
             </div>
             <div className='box-content'>
-                <AdminContent2/>
+                <AdminContent2 data={ip}/>
             </div>
         </>
     );

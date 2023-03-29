@@ -1,10 +1,13 @@
-import { React } from 'react';
+import { React, useContext } from 'react';
 import '../assets/style/calendar.css';
 import CalendarInfo from '../components/calendar/ca_date';
 import CalendarTable from '../components/calendar/ca_table';
+import IpContext from '../ipContext';
 
 
 function Calendar() {
+
+    const ip = useContext(IpContext);
 
     return (
         <>
@@ -12,7 +15,7 @@ function Calendar() {
                 <CalendarInfo/>
             </div>
             <div className='box-content'>
-                <CalendarTable/>
+                <CalendarTable data={ip}/>
             </div>
         </>
     );
