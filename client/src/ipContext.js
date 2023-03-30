@@ -6,6 +6,5 @@ import React from 'react';
 // Lan
 const ipContext = React.createContext('192.168.1.43');
 
-//http://192.168.1.43:3000/
  
 export default ipContext;

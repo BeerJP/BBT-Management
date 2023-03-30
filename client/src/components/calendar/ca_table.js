@@ -5,6 +5,7 @@ import axios from 'axios';
 function CalendarTable(props) {
 
     const ip = props.data;
+    const [isUpdate, setUpdate] = useState(false);
 
     const ca = new Date();
     const dd = String(ca.getDate()).padStart(2, '0');
@@ -21,34 +22,37 @@ function CalendarTable(props) {
     const [holiName, setHoliname] = useState();
     const [holiDate, setHolidate] = useState(tomorrow);
 
-    const getHoliday = async() => {
-        await axios.get("http://"+ ip +":5000/holiday", {crossdomain: true})
-        .then(response => {
-            setHoliday(response.data);
-        });
-    };
-
-    const getWorkday = async() => {
-        await axios.get("http://"+ ip +":5000/workday", {crossdomain: true})
-        .then(response => {
-            setWorkday(response.data);
-        });
-    };
-
     const insertHoliday = () => {
         axios.post("http://"+ ip +":5000/add_holiday", { name: holiName, date: holiDate }, {crossdomain: true})
         .then(axios.put("http://"+ ip +":5000/update_work", {state: '0', date: holiDate }, {crossdomain: true}))
+        .then(setUpdate(!isUpdate))
     };
 
     const cancelHoliday = () => {
         axios.post("http://"+ ip +":5000/cancel_holiday", { name: holiName, date: holiDate }, {crossdomain: true})
         .then(axios.put("http://"+ ip +":5000/update_work", {state: '1', date: holiDate }, {crossdomain: true}))
+        .then(setUpdate(!isUpdate))
     };
 
     useEffect(() => {
+
+        const getHoliday = async() => {
+            await axios.get("http://"+ ip +":5000/holiday", {crossdomain: true})
+            .then(response => {
+                setHoliday(response.data);
+            });
+        };
+    
+        const getWorkday = async() => {
+            await axios.get("http://"+ ip +":5000/workday", {crossdomain: true})
+            .then(response => {
+                setWorkday(response.data);
+            });
+        };
+
         getWorkday();
         getHoliday();
-    }, []);
+    }, [ip, isUpdate]);
 
     // const ca = new Date();
     // const monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -111,7 +115,7 @@ function CalendarTable(props) {
                         })}>
                             {
                                 workDay.map((item, index) => (
-                                    <option key={item.work_date} value={item.work_id}>{item.work_date}</option>
+                                    <option key={item.work_date} value={item.work_id}>{item.th_date}</option>
                                 ))
                             }
                         </select>

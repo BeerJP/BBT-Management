@@ -16,7 +16,7 @@ function Leave() {
                 <LeaveTable data={[ip, upDate, setUpdate]}/>
             </div>
             <div className='box-content'>
-                <LeaveSetting data={[ip, upDate]}/>
+                <LeaveSetting data={[ip, upDate, setUpdate]}/>
             </div>
         </>
     );

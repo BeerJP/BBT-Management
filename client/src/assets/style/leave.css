@@ -11,7 +11,7 @@
 .le-box-header {    
     display: flex;
     align-items: center;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: white;
     height: 50px;
     width: 95%;
@@ -29,18 +29,26 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: #424949;
     height: 40px;
     width: 95%;
     padding: 5px;
     margin-top: 5px;
-    border: 1px solid lightgray;
+    border: 1px solid deepskyblue;
 }
 
 .le-box-header2 label {
+    height: 100%;
     width: 30%;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.le-box-header2 img {
+    width: 30px;
+    margin-right: 10px;
 }
 
 .le-box-content {
@@ -66,6 +74,13 @@
     width: 30%;
 }
 
+.le-header p.long-center {
+    font-size: 1rem;
+    margin: 0;
+    width: 30%;
+    text-align: center;
+}
+
 .le-header p.center {
     font-size: 1rem;
     margin: 0;
@@ -78,6 +93,17 @@
     margin: 0;
     width: 10%;
 
+}
+
+.le-header p.left-butt {
+    font-size: 1rem;
+    margin: 0;
+    width: 5%;
+
+}
+
+.le-header p.left-butt img {
+    width: 25px;
 }
 
 .le-content {
@@ -124,6 +150,14 @@
     width: 30%;
 }
 
+.le-content-time p.long-center {
+    font-size: 0.9rem;
+    color: #424949;
+    margin: 0;
+    width: 30%;
+    text-align: center;
+}
+
 .le-content-time p.center {
     font-size: 0.9rem;
     color: #424949;
@@ -139,6 +173,19 @@
     width: 10%;
 }
 
+.le-content-time p.left-butt {
+    font-size: 0.9rem;
+    color: #424949;
+    margin: 0;
+    width: 5%;
+}
+
+.le-content-time input.left-butt {
+    color: #424949;
+    margin: 0;
+    width: 5%;
+}
+
 .le-content-time div.center {
     font-size: 0.8rem;
     color: #424949;
@@ -148,10 +195,12 @@
 }
 
 .le-content-time button.approve {
-    width: 50px;
+    width: 55px;
     height: 35px;
     font-size: 0.8rem;
     text-align: center;
+    padding: 0;
+    margin-left: 50px;
     color: white;
     border: none;
     border-radius: 5px;
@@ -159,14 +208,19 @@
 }
 
 .le-content-time button.cancel {
-    width: 50px;
+    width: 55px;
     height: 35px;
     font-size: 0.8rem;
     text-align: center;
+    padding: 0;
     color: white;
     border: none;
     border-radius: 5px;
     background: #E74C3C;
+}
+
+.em-info div button.add_leave {
+    background: lightgray;
 }
 
 

@@ -28,7 +28,7 @@ function Overview() {
         .then(response => {
             setOverview(response.data);
         });
-    }, []);
+    }, [ip]);
 
 
     return (

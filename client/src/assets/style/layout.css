@@ -51,7 +51,8 @@
 }
 
 .navbar .nav-container .left-box img {
-    width: 100px;
+    width: 60px;
+    margin-right: 10px;
 }
 
 .navbar .nav-container .left-box button {

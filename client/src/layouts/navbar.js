@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react';
 import SideBar from './sidebar';
 import Login from '../pages/login';
-import logo from '../assets/icon/logo.png';
+import logo from '../assets/icon/time-management.png';
 
 
 function NavBar({children}) {
@@ -33,7 +33,7 @@ function NavBar({children}) {
             <nav className='navbar'>
                 <div className='nav-container'>
                     <div className='left-box'>
-                        {/* <img src={logo} alt=''></img> */}
+                        <img src={logo} alt=''></img>
                         <label className='home-menu'>BBTE Management</label>
                     </div>
                     <div className='right-box'>
