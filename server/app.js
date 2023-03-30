@@ -109,7 +109,7 @@ app.get('/overview', (request, response) => {
 
 // แสดงข้อมูล Department
 app.get('/department', (request, response) => {
-  conn.query("SELECT * FROM DEPARTMENT", (err, result) => {
+  conn.query("SELECT * FROM DEPARTMENT GROUP BY dept_id", (err, result) => {
     response.send(result);
   });
 });
@@ -122,7 +122,7 @@ app.get('/employee', (request, response) => {
                 DATE_FORMAT(EMPLOYEE.emp_startdate, '%Y-%m-%d') as emp_startdate,
               CASE
                 WHEN emp_status = '1' THEN 'ปกติ'
-              ELSE 'พ้นสภาพ'
+                ELSE 'พ้นสภาพ'
               END AS emp_status
               FROM EMPLOYEE
               INNER JOIN DEPARTMENT
@@ -131,6 +131,7 @@ app.get('/employee', (request, response) => {
                 ON EMPLOYEE.emp_id = USER.emp_id
               INNER JOIN TYPE
                 ON USER.type_id = TYPE.type_id
+              GROUP BY EMPLOYEE.emp_id
               ORDER BY EMPLOYEE.emp_id`, 
   (err, result) => {
     response.send(result);
@@ -146,7 +147,7 @@ app.get('/user', (request, response) => {
 
 // แสดงข้อมูล User Type
 app.get('/type', (request, response) => {
-  conn.query("SELECT * FROM TYPE", (err, result) => {
+  conn.query("SELECT * FROM TYPE GROUP BY type_id", (err, result) => {
     response.send(result);
   });
 });
@@ -171,9 +172,10 @@ app.post('/leave_emp_sum', (request, response) => {
 app.post('/leave_emp', (request, response) => {
   const id = request.body.id;
 
-  conn.query(`SELECT *,
+  conn.query(`SELECT *, leave_appove,
                 DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%Y-%m-%d') as leave_date,
               CASE
+                WHEN leave_appove = '0' THEN 'รอการอนุมัติ'
                 WHEN leave_appove = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
               END AS leave_appove
@@ -193,7 +195,13 @@ app.get('/leavepending', (request, response) => {
 
 // แสดงข้อมูล Leave Day อนุมัติแล้ว
 app.get('/leaveapprove', (request, response) => {
-  conn.query("SELECT *, DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%Y-%m-%d') as leave_date FROM LEAVE_DAY WHERE leave_appove = '1'", 
+  conn.query(`SELECT *,  leave_appove, 
+              DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%Y-%m-%d') as leave_date,
+              CASE
+                WHEN leave_appove = '1' THEN 'อนุมัติ'
+                ELSE 'ไม่อนุมัติ'
+              END AS leave_appove
+              FROM LEAVE_DAY WHERE leave_appove > '0'`, 
   (err, result) => {
     response.send(result);
   });
@@ -245,7 +253,9 @@ app.get('/timecount', (request, response) => {
 // แสดงข้อมูล Time Attendance แบบเจาะจง
 app.post('/timesheet', (request, response) => {
   const empId = request.body.id;
-  conn.query(`SELECT *, DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date
+  conn.query(`SELECT *, DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
+              TIME_FORMAT(TIME_ATTENDANCE.time_in, '%H:%i') as time_in,
+              TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i') as time_out
               FROM TIME_ATTENDANCE 
               INNER JOIN WORKDAY 
               ON TIME_ATTENDANCE.work_id = WORKDAY.work_id 

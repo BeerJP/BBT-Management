@@ -7,9 +7,6 @@ function LeaveSetting(props) {
     const ip = props.data[0];
     const update = props.data[1];
 
-    console.log(update);
-
-
     const id = '1001';
 
     const [workDay, setWorkday] = useState([{
@@ -80,7 +77,7 @@ function LeaveSetting(props) {
                 </div>
                 <div className='le-box-content'>
                     <div className='le-header'>
-                        <p className='left'>วันที่</p>
+                        <p className='center'>วันที่</p>
                         <p className='center'>ประเภท</p>
                         <p>เหตุผลการลา</p>
                         <p className='center'>สถานะ</p>
@@ -89,7 +86,7 @@ function LeaveSetting(props) {
                         {
                             leaveEmp.map((item, index) => (
                                 <div className='le-content-time' key={index}>
-                                    <p className="left">{item.leave_date}</p>
+                                    <p className="center">{item.leave_date}</p>
                                     <p className="center">{item.leave_type}</p>
                                     <p>{item.leave_description}</p>
                                     <p className="center">{item.leave_appove}</p>

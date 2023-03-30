@@ -11,7 +11,7 @@ function TimeSheet() {
 
     const ip = useContext(IpContext);
 
-    const [employee, setEmployee] = useState([]);
+    // const [employee, setEmployee] = useState([]);
     const [timeSheet, setTimesheet] = useState([]);
 
     const getSelect = (data) => {
@@ -21,14 +21,12 @@ function TimeSheet() {
         });
     };
 
-
-
-    useEffect(() => {
-        axios.get("http://"+ ip +":5000/employee", {crossdomain: true})
-        .then(response => {
-            setEmployee(response.data);
-        });
-    }, []);
+    // useEffect(() => {
+    //     axios.get("http://"+ ip +":5000/employee", {crossdomain: true})
+    //     .then(response => {
+    //         setEmployee(response.data);
+    //     });
+    // }, []);
 
     return (
         <>

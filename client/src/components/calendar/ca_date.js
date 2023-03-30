@@ -7,7 +7,7 @@ import left from '../../assets/icon/angle-left.png';
 function CalendarDate() {
 
     const ca = new Date();
-    const monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const weekday_th = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
 
@@ -21,7 +21,10 @@ function CalendarDate() {
     const dayInMonth = new Date(ca.getFullYear(), ca.getMonth() + 1 + count, 0).getDate();
     const previousDayInMonth = new Date(ca.getFullYear(), ca.getMonth() + count, 0).getDate();
     const lastDay = weekday.indexOf(day);
-    const dateId = year + "-" + (monthName.indexOf(month.substring(0, 3)) + 1);
+    const dateId = year + '-' + (monthName.indexOf(month.substring(0, 3)) + 1);
+    const thMonth = new Date(ca.getFullYear(), ca.getMonth() + count).toLocaleString('th-TH', {month: 'long'});
+
+
 
     const inMonth =[], previous = [], next = [];
 
@@ -37,8 +40,6 @@ function CalendarDate() {
         next[n] = n + 1;
     };
 
-    const emp = [];
-
     return (
         <>
             <div className='box-body ca-body-date'>
@@ -46,7 +47,7 @@ function CalendarDate() {
                     <div className="ca-menu">
                         <button onClick={minus}><img src={left} alt=""/></button>
                         <div className="ca-label">
-                            <label>{month}</label>
+                            <label>{thMonth}</label>
                             <label>{year}</label>
                         </div>
                         <button onClick={plus}><img src={right} alt=""/></button>

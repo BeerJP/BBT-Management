@@ -96,17 +96,31 @@ function AddCard(props) {
         setCardType('infomation');
     }
 
+    function addColon(input) {
+
+        var value = input.value
+        if (value.length == 12) {
+            value = value.slice(0,   2) + ":" + 
+                    value.slice(2,   4) + ":" + 
+                    value.slice(4,   6) + ":" + 
+                    value.slice(6,   8) + ":" + 
+                    value.slice(8,  10) + ":" + 
+                    value.slice(10, 12)
+        };
+        input.value = value;
+    };
+
     return (
         <>
             <div className='box-body em-body-left'>
                 <div className='box-body em-article'>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>ชื่อ</label>
+                            <label className='lb-header'>ชื่อ<a>*</a></label>
                             <input className='text-box' onChange={(event => {setName(event.target.value)})}></input>
                         </div>
                         <div>
-                            <label className='lb-header'>นามสกุล</label>
+                            <label className='lb-header'>นามสกุล<a>*</a></label>
                             <input className='text-box' onChange={(event => {setSur(event.target.value)})}></input>
                         </div>
                     </div>
@@ -132,22 +146,12 @@ function AddCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>วันเกิด</label>
+                            <label className='lb-header'>วันเกิด<a>*</a></label>
                             <input className='text-box' type='date' max='2004-12-31' onSelect={(event => {setBirth(event.target.value)})}></input>
                         </div>
                         <div>
-                            <label className='lb-header'>MAC Address 1</label>
-                            <input className='text-box' onChange={(event => {setMac1(event.target.value)})}></input>
-                        </div>
-                    </div>
-                    <div className='lb-box-long em-info'>
-                        <div>
-                            <label className='lb-header'>เลขบัตรประชาชน</label>
-                            <input className='text-box' maxLength={13} onChange={(event => {setIdcard(event.target.value)})}></input>
-                        </div>
-                        <div>
-                            <label className='lb-header'>MAC Address 2</label>
-                            <input className='text-box' onChange={(event => {setMac2(event.target.value)})}></input>
+                            <label className='lb-header'>MAC Address 1<a>*</a></label>
+                            <input className='text-box' maxlength='12' onKeyUp={(e => addColon(e.target))} onChange={(event => {setMac1(event.target.value)})}></input>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
@@ -156,6 +160,10 @@ function AddCard(props) {
                             <input className='text-box' type='date'onSelect={(event => {setStart(event.target.value)})}/>
                             {/* <input onChange={(event => {setStart(event.target.value)})}></input> */}
                         </div>
+                        <div>
+                            <label className='lb-header'>MAC Address 2</label>
+                            <input className='text-box' maxlength='12' onKeyUp={(e => addColon(e.target))} onChange={(event => {setMac2(event.target.value)})}></input>
+                        </div>
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
@@ -163,13 +171,14 @@ function AddCard(props) {
                             <input className='text-box emp-address' onChange={(event => {setAddress(event.target.value)})}></input>
                         </div>
                     </div>
+                    <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>Username</label>
+                            <label className='lb-header'>Username<a>*</a></label>
                             <input className='text-box' onChange={(event => {setUsername(event.target.value)})}></input>
                         </div>
                         <div>
-                            <label className='lb-header'>User Type</label>
+                            <label className='lb-header'>User Type<a>*</a></label>
                             <select className='text-box select-box' name="usertype" id="type" onClick={(event => {setType(event.target.value)})}>
                                 {
                                     typeInfo.map((item, index) => (
@@ -181,7 +190,7 @@ function AddCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>Password</label>
+                            <label className='lb-header'>Password<a>*</a></label>
                             <input className='text-box' onChange={(event => {setPassword(event.target.value)})}></input>
                         </div>
                         <div>

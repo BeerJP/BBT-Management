@@ -7,6 +7,8 @@ import cl from '../../assets/icon/checked.png';
 function LeaveTable(props) {
 
     const ip = props.data[0];
+    const upDate = props.data[1];
+    const setUpdate = props.data[2];
 
     const [leavepen, setLeavepen] = useState([]);
     const [leaveapp, setLeaveapp] = useState([]);
@@ -25,7 +27,7 @@ function LeaveTable(props) {
 
     useEffect(() => {
         getApi();
-    }, []);
+    }, [upDate]);
 
     const getApprove = async(event) => {
         const leaveId = event.target.id.split(" ");
@@ -34,19 +36,11 @@ function LeaveTable(props) {
             date: leaveId[1],
             state: leaveId[4]
         }).then(
-            setLeaveapp([...leaveapp,{
-                leave_type: leaveId[2],
-                leave_date: leaveId[1],
-                leave_description: leaveId[3],
-                leave_appove: 1, 
-                emp_id: leaveId[0]}
-            ])
-        ).then(
             setLeavepen(upValue => {
                 return upValue.filter(leavepen => leavepen.emp_id !== leaveId[0] && leavepen.leave_date !== leaveId[1])
             })
         ).then(
-            props.data[2](!props.data[1])
+            setUpdate(!upDate)
         );
     };
 
@@ -55,21 +49,13 @@ function LeaveTable(props) {
         await axios.put("http://"+ ip +":5000/update_leave", 
         {   id: leaveId[0],
             date: leaveId[1],
-            state: leaveId[4]
+            state: '0'
         }).then(
-            setLeavepen([...leavepen,{
-                leave_type: leaveId[2],
-                leave_date: leaveId[1],
-                leave_description: leaveId[3],
-                leave_appove: 0, 
-                emp_id: leaveId[0]}
-            ])
-        ).then(
             setLeaveapp(upValue => {
                 return upValue.filter(leaveapp => leaveapp.emp_id !== leaveId[0] && leaveapp.leave_date !== leaveId[1])
             })
         ).then(
-            props.data[2](!props.data[1])
+            setUpdate(!upDate)
         );
     };
 
@@ -85,8 +71,9 @@ function LeaveTable(props) {
                     <div className='le-header'>
                         <p className='left'>รหัส</p>
                         <p className='center'>วันที่</p>
-                        <p className='center'>รูปแบบ</p>
+                        <p className='center'>ประเภท</p>
                         <p>เหตุผลการลา</p>
+                        <p className='center'></p>
                         <p className='center'></p>
                     </div>
                     <div className='le-content'>
@@ -107,6 +94,16 @@ function LeaveTable(props) {
                                                 onClick={getApprove}>อนุมัติ
                                         </button>
                                     </div>
+                                    <div className="center">
+                                        <button className='cancel' 
+                                                id={item.emp_id + " " + 
+                                                    item.leave_date + " " +
+                                                    item.leave_type + " " + 
+                                                    item.leave_description + " " + 
+                                                    "2"} 
+                                                onClick={getApprove}>ไม่อนุมัติ
+                                        </button>
+                                    </div>
                                 </div>
                             ))
                         }
@@ -116,14 +113,15 @@ function LeaveTable(props) {
             <div className='box-body le-body'>
                 <div className='le-box-header'>
                     <img src={cl} alt=''/>
-                    <label>อนุมัติแล้ว</label>
+                    <label>ผลการอนุมัติ</label>
                 </div>
                 <div className='le-box-content'>
                     <div className='le-header'>
                         <p className='left'>รหัส</p>
                         <p className='center'>วันที่</p>
-                        <p className='center'>รูปแบบ</p>
+                        <p className='center'>ประเภท</p>
                         <p>เหตุผลการลา</p>
+                        <p className='center'>สถานะ</p>
                         <p className='center'></p>
                     </div>
                     <div className='le-content'>
@@ -134,14 +132,14 @@ function LeaveTable(props) {
                                 <p className="center">{item.leave_date}</p>
                                 <p className="center">{item.leave_type}</p>
                                 <p>{item.leave_description}</p>
+                                <p className="center">{item.leave_appove}</p>
                                 <div className="center">
                                         <button className='cancel' 
                                                 id={item.emp_id + " " + 
                                                     item.leave_date + " " +
                                                     item.leave_type + " " + 
-                                                    item.leave_description + " " + 
-                                                    "0"} 
-                                                onClick={getCancel}>ยกเลิก
+                                                    item.leave_description
+                                                }onClick={getCancel}>ยกเลิก
                                         </button>
                                     </div>
                             </div>

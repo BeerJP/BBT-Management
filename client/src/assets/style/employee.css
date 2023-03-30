@@ -50,6 +50,16 @@
     background: white;
 }
 
+.em-info div .lb-header a {
+    font-size: 1rem;
+    color: red;
+    position: absolute;
+    padding: 0 2px;
+    margin-left: 2px;
+    z-index: 1;
+    background: white;
+}
+
 .em-info div .text-box {
     font-size: 1rem;
     color: #424949;

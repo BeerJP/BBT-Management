@@ -162,8 +162,8 @@ function EditCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>เลขบัตรประชาชน</label>
-                            <input className='text-box' onChange={(event => {setIdcard(event.target.value)})} defaultValue={emp.emp_idcard}></input>
+                            <label className='lb-header'>วันสิ้นสุดงาน</label>
+                            <input className='text-box' type='date' onChange={(event => {setEnd(event.target.value)})} defaultValue={emp.emp_enddate}></input>
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 2</label>
@@ -172,20 +172,11 @@ function EditCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>วันเริ่มงาน</label>
-                            <input className='text-box' type='date' onChange={(event => {setStart(event.target.value)})} defaultValue={emp.emp_startdate}></input>
-                        </div>
-                        <div>
-                            <label className='lb-header'>วันสิ้นสุดงาน</label>
-                            <input className='text-box' type='date' onChange={(event => {setEnd(event.target.value)})} defaultValue={emp.emp_enddate}></input>
-                        </div>
-                    </div>
-                    <div className='lb-box-long em-info'>
-                        <div>
                             <label className='lb-header'>ที่อยู่</label>
                             <input className='text-box emp-address' onChange={(event => {setAddress(event.target.value)})} defaultValue={emp.emp_address}></input>
                         </div>
                     </div>
+                    <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>Username</label>

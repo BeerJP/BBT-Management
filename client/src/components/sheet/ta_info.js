@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import moment from "moment";
 import et from '../../assets/icon/edit-ta.png';
 import al from '../../assets/icon/angle-left.png';
@@ -11,13 +11,63 @@ function TimeSheetInfo(props) {
     const emp = props.data;
 
     const [timeEdit, setEdit] = useState(false);
+
     const edit = () => {
-        setEdit(!timeEdit);
-        const element = document.querySelectorAll("[id='input']");
-        for (var i = 0; i < element.length; i++) {
-            element[i].disabled = timeEdit;
+        
+        setEdit(!timeEdit)
+        const timeIn = document.querySelectorAll("[id='inputIn']");
+        const timeOut = document.querySelectorAll("[id='inputOut']");
+        for (var i = 0; i < timeIn.length; i++) {
+            timeIn[i].disabled = timeEdit;
+            timeOut[i].disabled = timeEdit;
         };
+
     };
+
+    const editDis = () => {
+
+        const timeIn = document.querySelectorAll("[id='inputIn']");
+        const timeOut = document.querySelectorAll("[id='inputOut']");
+        for (var i = 0; i < timeIn.length; i++) {
+            timeIn[i].disabled = true;
+            timeOut[i].disabled = true;
+        };
+
+    };
+
+    // const update = () => {
+        
+    // }
+    
+    // console.log(
+    //     emp.map((item, index) => [item.time_in.substring(0, 5), item.time_out.substring(0, 5)])
+    // );
+
+    useEffect(() => {
+        editDis();
+        (async() => {
+            const set = await setEdit(false);
+        })();
+    },[props.data]);
+
+    // const timeIn = document.querySelectorAll("[id='inputIn']");
+    // const tIn = [...timeIn].map(input => input.value);
+
+    // const timeOut = document.querySelectorAll("[id='inputOut']");
+    // const tOut = [...timeOut].map(input => input.value);
+
+    // console.log(
+    //     tIn.map((array, item) => [array, tOut[item]])
+    //   )
+
+    // console.log(tIn);
+    // console.log(tOut);
+
+    // for (var i = 0 ; i < emp.length ; i++){
+    //     if (emp[i] == emp[i]) {
+    //         console.log(i);
+    //     }
+    // } ;
 
     return (
         <>
@@ -33,9 +83,16 @@ function TimeSheetInfo(props) {
                         <p className='center'>เวลาเข้า</p>
                         <p className='center'>เวลาออก</p>
                         <div>
-                            <div className='ta-img-bx' onClick={edit}>
-                                <img src={tc} alt=''/>
-                            </div>
+                            {
+                                timeEdit == false ? 
+                                <div className='ta-img-bx' style={emp[0] == null ? {pointerEvents: 'none'} : {pointerEvents: 'auto'} } onClick={edit}>
+                                    <img src={tc} alt=''/>
+                                </div> 
+                                :
+                                <div className='ta-img-bx' style={{background : 'red'}}onClick={edit}>
+                                    <img src={tc} alt=''/>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div className='ta-content'>
@@ -55,8 +112,8 @@ function TimeSheetInfo(props) {
                             emp.map((item, index) => (
                                 <div className='ta-content-time' key={index}>
                                     <p className="center">{item.work_date}</p>
-                                    <input className="center" id='input' defaultValue={item.time_in.substring(0, 5)} disabled></input>
-                                    <input className="center" id='input' defaultValue={item.time_out.substring(0, 5)} disabled></input>
+                                    <input className="center" id='inputIn' type='time' defaultValue={item.time_in} disabled></input>
+                                    <input className="center" id='inputOut' type='time' defaultValue={item.time_out} disabled></input>
                                     <p className="center">-</p>
                                 </div>
                             ))

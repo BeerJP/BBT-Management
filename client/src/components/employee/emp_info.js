@@ -68,10 +68,6 @@ function InfoCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>เลขบัตรประชาชน</label>
-                            <label className='text-box'>{emp.emp_idcard}</label>
-                        </div>
-                        <div>
                             <label className='lb-header'>สถานะ</label>
                             <label className='text-box'>{emp.emp_status}</label>
                         </div>
