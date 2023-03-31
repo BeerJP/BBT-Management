@@ -13,7 +13,7 @@ function TimeSheetTable(props) {
         .then(response => {
             setTimesheet(response.data);
         });
-    }, []);
+    }, [ip]);
 
 
     return (

@@ -1,5 +1,7 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
+import lp from '../../assets/icon/paper.png';
+import tb from '../../assets/icon/trash-bin.png';
 
 
 function CalendarTable(props) {
@@ -7,32 +9,85 @@ function CalendarTable(props) {
     const ip = props.data;
     const [isUpdate, setUpdate] = useState(false);
 
-    const ca = new Date();
-    const dd = String(ca.getDate()).padStart(2, '0');
-    const mm = String(ca.getMonth() + 1).padStart(2, '0');
-    const yyyy = ca.getFullYear() + 543;
-    const tomorrow = yyyy + mm + (parseInt(dd) + 1);
+    const [isNotnull, setNotnull] = useState(true);
+    const [isChecked, setChecked] = useState(true);
 
     const [workDay, setWorkday] = useState([{
         work_id: '',
         work_date: '',
         work_status: ''
     }]);
+    
     const [holiDay, setHoliday] = useState([]);
-    const [holiName, setHoliname] = useState();
-    const [holiDate, setHolidate] = useState(tomorrow);
+    const [holiName, setHoliname] = useState('');
+    const [holiDate, setHolidate] = useState('');
+    const [isHoliday, setSelect] = useState([]);
+
+    useEffect(() => {
+
+        if (holiDate === '' || holiName.length === 0) {
+            setNotnull(false)
+        } else {
+            setNotnull(true)
+        }
+
+    }, [holiName, holiDate]);
+
+    useEffect(() => {
+
+        const lc = document.querySelectorAll("[type='checkbox']");
+        const el = [...lc].map(input => input.checked);
+
+        if (el.includes(true)) {
+            setChecked(true)
+        } else {
+            setChecked(false)
+        }
+
+    }, [isHoliday]);
 
     const insertHoliday = () => {
-        axios.post("http://"+ ip +":5000/add_holiday", { name: holiName, date: holiDate }, {crossdomain: true})
-        .then(axios.put("http://"+ ip +":5000/update_work", {state: '0', date: holiDate }, {crossdomain: true}))
-        .then(setUpdate(!isUpdate))
+        axios.post("http://"+ ip +":5000/add_holiday", { 
+            name: holiName, 
+            date: holiDate 
+        }, {crossdomain: true})
+        .then(axios.put("http://"+ ip +":5000/update_work", {
+            state: '0', 
+            date: holiDate 
+        }, {crossdomain: true}))
+
+        setUpdate(!isUpdate)
+        document.getElementById('date').options[0].selected=true;
+        setHoliname('');
+        setHolidate('');
     };
 
     const cancelHoliday = () => {
-        axios.post("http://"+ ip +":5000/cancel_holiday", { name: holiName, date: holiDate }, {crossdomain: true})
-        .then(axios.put("http://"+ ip +":5000/update_work", {state: '1', date: holiDate }, {crossdomain: true}))
-        .then(setUpdate(!isUpdate))
+        for (let i = 0; i < isHoliday.length ; i++) {
+            axios.post("http://"+ ip +":5000/cancel_holiday", { 
+                date: isHoliday[i][0],
+            }, {crossdomain: true})
+            .then(axios.put("http://"+ ip +":5000/update_work", {
+                state: '1', 
+                date: isHoliday[i][0] 
+            }, {crossdomain: true}))
+        }
+
+        setUpdate(!isUpdate)
     };
+
+    const setSelectHoliday = () => {
+        const lc = document.querySelectorAll("[type='checkbox']");
+        const el = [...lc].map(input => [input.value.split(" "), input.checked]);
+        const array = []
+
+        const leave = el.map(function(id) {
+            if (id[1]) {
+                array.push(id[0])
+            }
+        })
+        setSelect(array);
+    }
 
     useEffect(() => {
 
@@ -54,42 +109,31 @@ function CalendarTable(props) {
         getHoliday();
     }, [ip, isUpdate]);
 
-    // const ca = new Date();
-    // const monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    // const year = new Date(ca.getFullYear(), ca.getMonth() + 0).getFullYear() + 543;
-    // const month = new Date(ca.getFullYear(), ca.getMonth() + 0).toLocaleString('en-US', {month:'long'});
-    // const dayInMonth = new Date(ca.getFullYear(), ca.getMonth() + 1, 0).getDate();
-    // const dayNextMonth = new Date(ca.getFullYear(), ca.getMonth() + 2, 0).getDate();
-    // const dateId = year + "-" + (monthName.indexOf(month.substring(0, 3)) + 1);
-    // const ndateId = year + "-" + (monthName.indexOf(month.substring(0, 3)) + 2);
-
-    // const inMonth =[], next = [];
-
-    // for (var d = 0; d < dayInMonth; d++){
-    //     inMonth[d] = moment(dateId + "-" + (d + 1), 'YYYY-MM-DD').format('YYYY-MM-DD');
-    // };
-
-    // for (var n = 0; n < dayNextMonth; n++){
-    //     next[n] = moment(ndateId + "-" + (n + 1), 'YYYY-MM-DD').format('YYYY-MM-DD');
-    // };
-
-    // const comboboxDate = [...inMonth, ...next]
-
 
     return (
         <>
             <div className='box-body ca-body-bottom'>
                 <div className='ca-box-content'>
                     <div className='ca-header'>
+                        <p  className='left-butt' 
+                            onClick={cancelHoliday}
+                            style={isChecked ? {pointerEvents: 'auto'} : {pointerEvents: 'none'}}>
+                            {
+                                isChecked ? <img src={tb} alt=''/> : 'ตัวเลือก'
+                            }
+                        </p>
                         <p className='ca-name'>วันหยุด</p>
                         <p className='ca-date'>วันที่</p>
                     </div>
                     <div className='ca-content'>
                         {
                             holiDay.map((item, index) => (
-                                <div className='ca-table-info' key={index} onClick={() => [setHoliname(item.holi_name), setHolidate(item.work_id)]}>
+                                <div className='ca-table-info' key={index}>
+                                    <p className='left-butt'>
+                                        <input type="checkbox" value={item.work_id} onClick={setSelectHoliday}></input>
+                                    </p>
                                     <p className="ca-name">{item.holi_name}</p>
-                                    <p className="ca-date">{item.work_date}</p>
+                                    <p className="ca-date">{item.th_date}</p>
                                 </div>
                             ))
                         }
@@ -97,22 +141,26 @@ function CalendarTable(props) {
                 </div>
             </div>
             <div className='box-body ca-box-set'>
-                <div className='ca-header'>
-                    <p>จัดการวันหยุด</p>
+                <div className='le-box-header'>
+                <img src={lp} alt=''/>
+                    <label>
+                        จัดการวันหยุด
+                    </label>
                 </div>
                 <br></br><br></br>
                 <div className='lb-box-long em-info'>
                     <div>
-                        <label className='lb-header'>วันหยุด</label>
+                        <label className='lb-header'>วันหยุด<a>*</a></label>
                         <input className='text-box' placeholder={holiName} onChange={(event => {
                             setHoliname(event.target.value)
                         })}></input>
                     </div>
                     <div>
-                        <label className='lb-header'>วันที่</label>
+                        <label className='lb-header'>วันที่<a>*</a></label>
                         <select className='text-box select-box' name="date" id="date" onChange={(event => {
                             setHolidate(event.target.value)
                         })}>
+                            <option value="" disabled selected>กรุณาเลือกวันที่</option>
                             {
                                 workDay.map((item, index) => (
                                     <option key={item.work_date} value={item.work_id}>{item.th_date}</option>
@@ -123,8 +171,11 @@ function CalendarTable(props) {
                 </div>
                 <div className='lb-box-long em-info'>
                     <div>
-                        <button onClick={insertHoliday}>บันทึก</button>
-                        <button className='cancel' onClick={cancelHoliday}>ลบข้อมูล</button>
+                        <button className='add_leave' 
+                                onClick={insertHoliday} 
+                                style={isNotnull ? {pointerEvents: 'auto', background: '#1D8348'} : {pointerEvents: 'none'}}>
+                                บันทึก
+                        </button>
                     </div>               
                 </div>
             </div>

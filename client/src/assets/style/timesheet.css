@@ -121,22 +121,24 @@
 .ta-content-time p.center {
     font-size: 0.9rem;
     color: #424949;
-    border-radius: 5px;
     height: 25px;
-    margin: 5px;
-    width: 23%;
+    width: 25%;
     text-align: center;
 }
 
-.ta-content-time input.center {
+.ta-content-time div.center {
+    height: 25px;
+    width: 25%;
+    text-align: center;
+}
+
+.ta-content-time div.center input{
     font-size: 0.9rem;
     color: #424949;
-    border-radius: 5px;
-    height: 25px;
-    margin: 5px;
-    width: 23%;
     text-align: center;
+    border: 1px solid lightgray;
     background: white;
+    padding-left: 25px;
 }
 
 .ta-content-time div {

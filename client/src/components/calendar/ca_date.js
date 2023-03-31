@@ -1,10 +1,27 @@
-import { React } from 'react';
-import { useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios';
 import right from '../../assets/icon/angle-right.png';
 import left from '../../assets/icon/angle-left.png';
+import calen from '../../assets/icon/calendar-2.png';
 
 
-function CalendarDate() {
+function CalendarDate(props) {
+
+    const ip = props.data;
+
+    const [holiDay, setHoliday] = useState([]);
+
+    useEffect(() => {
+
+        const getHoliday = () => {
+            axios.get("http://"+ ip +":5000/holiday", {crossdomain: true})
+            .then(response => {
+                setHoliday(response.data);
+            });
+        };
+        getHoliday();
+
+    }, [ip]);
 
     const ca = new Date();
     const monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -21,7 +38,7 @@ function CalendarDate() {
     const dayInMonth = new Date(ca.getFullYear(), ca.getMonth() + 1 + count, 0).getDate();
     const previousDayInMonth = new Date(ca.getFullYear(), ca.getMonth() + count, 0).getDate();
     const lastDay = weekday.indexOf(day);
-    const dateId = year + '-' + (monthName.indexOf(month.substring(0, 3)) + 1);
+    const dateId = year + '' + (monthName.indexOf(month.substring(0, 3)) + 1).toString().padStart(2, '0');
     const thMonth = new Date(ca.getFullYear(), ca.getMonth() + count).toLocaleString('th-TH', {month: 'long'});
 
 
@@ -40,8 +57,34 @@ function CalendarDate() {
         next[n] = n + 1;
     };
 
+
+    useEffect(() => {
+
+        const hc = document.querySelectorAll("[class='this-month']");
+        const hd = [...hc].map(input => input.id);
+        const hb = [...holiDay].map(input => input.work_id);
+
+        const color = hd.map(function(id) {
+            if (hb.includes(id)){
+                document.getElementById(id).style.background = "#F1948A"
+            } else {
+                document.getElementById(id).style.background = "white"
+            }
+        })
+
+    }, [count, holiDay]);
+
+
     return (
-        <>
+        <>  
+            <div className='box-body'>
+                <div className='ca-box-header'>
+                    <img src={calen} alt=''/>
+                    <label>
+                        ตารางทำงาน
+                    </label>
+                </div>
+            </div>
             <div className='box-body ca-body-date'>
                 <div className="calendar">
                     <div className="ca-menu">
@@ -66,7 +109,7 @@ function CalendarDate() {
                         ))}
                         {
                             inMonth.map((day) => (
-                                <li className="this-month" key={day} id={dateId + "-" + day}>{day}</li>   
+                                <li className="this-month" key={day} id={dateId + '' + day.toString().padStart(2, '0')}>{day}</li>   
                         ))}
                         {
                             next.map((nday) => (

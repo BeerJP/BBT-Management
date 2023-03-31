@@ -10,6 +10,7 @@ function Leave() {
     const ip = useContext(IpContext);
     const [upDate, setUpdate] = useState(false);
 
+
     return (
         <>
             <div className='box-content'>

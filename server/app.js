@@ -96,9 +96,9 @@ app.get('/overview', (request, response) => {
               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in <= '08:45:00') AS nta,
               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in > '08:45:00') AS lta,
               ( SELECT COUNT(*) FROM LEAVE_DAY ) AS ld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'กิจ' ) AS bld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'พักร้อน' ) AS hld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ป่วย' ) AS sld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลากิจ' ) AS bld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลาพักร้อน' ) AS hld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลาป่วย' ) AS sld,
               ( SELECT COUNT(*) FROM WORKDAY WHERE work_status = '1' AND work_date <= CURDATE()) AS wd,
               ( SELECT COUNT(*) FROM HOLIDAY ) AS hd
               FROM EMPLOYEE`, 
@@ -174,6 +174,7 @@ app.post('/leave_emp', (request, response) => {
   const id = request.body.id;
 
   conn.query(`SELECT *, leave_appove,
+              DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
               CASE
                 WHEN leave_appove = '0' THEN 'รอการอนุมัติ'
@@ -222,7 +223,8 @@ app.get('/workday', (request, response) => {
               DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date
               FROM WORKDAY
               WHERE work_date > DATE_FORMAT(CURDATE(), '%Y-%m-%d') 
-              AND work_status = '1'`, (err, result) => {
+              AND work_status = '1'
+              LIMIT 60`, (err, result) => {
     response.send(result);
   });
 });
@@ -245,19 +247,31 @@ app.post('/workday_emp', (request, response) => {
                 AND employee.emp_id = ?
               )
               AND work_date > DATE_FORMAT(CURDATE(), '%Y-%m-%d') 
-              AND work_status = '1'`, [id],
+              AND work_status = '1'
+              LIMIT 60`, [id],
   (err, result) => {
     response.send(result);
   });
 });
 
 // แสดงข้อมูล Holiday
+// app.get('/holiday', (request, response) => {
+//   conn.query(`SELECT *, DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date
+//               FROM HOLIDAY
+//               INNER JOIN WORKDAY 
+//               ON HOLIDAY.work_id = WORKDAY.work_id
+//               WHERE work_date >= DATE_FORMAT(CURDATE(), '%Y-%m-%d') `, 
+//   (err, result) => {
+//     response.send(result);
+//   });
+// });
 app.get('/holiday', (request, response) => {
-  conn.query(`SELECT *, DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date
+  conn.query(`SELECT *, 
+              DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
+              DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date
               FROM HOLIDAY
               INNER JOIN WORKDAY 
-              ON HOLIDAY.work_id = WORKDAY.work_id
-              WHERE work_date >= DATE_FORMAT(CURDATE(), '%Y-%m-%d') `, 
+              ON HOLIDAY.work_id = WORKDAY.work_id`, 
   (err, result) => {
     response.send(result);
   });
@@ -289,12 +303,14 @@ app.get('/timecount', (request, response) => {
 app.post('/timesheet', (request, response) => {
   const empId = request.body.id;
   conn.query(`SELECT *, DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
+              DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
               TIME_FORMAT(TIME_ATTENDANCE.time_in, '%H:%i') as time_in,
               TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i') as time_out
               FROM TIME_ATTENDANCE 
               INNER JOIN WORKDAY 
               ON TIME_ATTENDANCE.work_id = WORKDAY.work_id 
-              WHERE emp_id = ?`,
+              WHERE emp_id = ?
+              ORDER BY work_date`,
   [empId], (err, result) => {
     response.send(result);
   });
@@ -422,6 +438,21 @@ app.post("/cancel_holiday", (request, response) => {
 
   conn.query("DELETE FROM HOLIDAY WHERE work_id = ?",
     [date],
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
+// ลบข้อมูล Leave Day
+app.post("/cancel_leave", (request, response) => {
+  const id = request.body.id;
+  const date = request.body.date;
+
+  conn.query("DELETE FROM LEAVE_DAY WHERE emp_id = ? AND leave_date = ?",
+    [id, date],
     (err, result) => {
       if (err) {
         response.send(err);

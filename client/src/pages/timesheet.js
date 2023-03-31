@@ -11,22 +11,23 @@ function TimeSheet() {
 
     const ip = useContext(IpContext);
 
-    // const [employee, setEmployee] = useState([]);
     const [timeSheet, setTimesheet] = useState([]);
+    const [isEmp, setEmp] = useState('');
 
-    const getSelect = (data) => {
-        axios.post("http://"+ ip +":5000/timesheet", { id: data }, {crossdomain: true})
-        .then(response => {
-            setTimesheet(response.data);
-        });
-    };
+    useEffect(() => {
+        
+        setTimesheet([])
 
-    // useEffect(() => {
-    //     axios.get("http://"+ ip +":5000/employee", {crossdomain: true})
-    //     .then(response => {
-    //         setEmployee(response.data);
-    //     });
-    // }, []);
+        const getSelect = () => {
+            axios.post("http://"+ ip +":5000/timesheet", { id: isEmp }, {crossdomain: true})
+            .then(response => {
+                setTimesheet(response.data);
+            });
+        };
+
+        getSelect();
+
+    }, [ip, isEmp]);
 
     return (
         <>
@@ -34,7 +35,7 @@ function TimeSheet() {
                 <TimeSheetInfo data={timeSheet}/>
             </div>
             <div className='box-content' >
-                <TimeSheetTable data={[getSelect, ip]}/>
+                <TimeSheetTable data={[setEmp, ip]}/>
             </div>
         </>
     );

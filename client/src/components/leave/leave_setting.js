@@ -13,6 +13,7 @@ function LeaveSetting(props) {
     const upDate = props.data[1];
 
     const [isNotnull, setNotnull] = useState(true);
+    const [isChecked, setChecked] = useState(true);
 
     const id = '1001';
 
@@ -26,6 +27,8 @@ function LeaveSetting(props) {
     const [leaveType, setLeavetype] = useState('');
     const [leaveName, setLeavename] = useState('');
     const [leaveDate, setLeavedate] = useState('');
+    const [isEmpleave, setLeave] = useState([]);
+
 
     useEffect(() => {
 
@@ -36,6 +39,19 @@ function LeaveSetting(props) {
         }
 
     }, [leaveType, leaveName, leaveDate]);
+
+    useEffect(() => {
+
+        const lc = document.querySelectorAll("[type='checkbox']");
+        const el = [...lc].map(input => input.checked);
+
+        if (el.includes(true)) {
+            setChecked(true)
+        } else {
+            setChecked(false)
+        }
+
+    }, [isEmpleave]);
 
     const [leaveSum, setLeavesum] = useState([{
         ld:0,
@@ -70,23 +86,30 @@ function LeaveSetting(props) {
         setLeavedate('');
     };
 
-    // const deleteLeave = () => {
-    //     axios.post("http://"+ ip +":5000/add_leave", { 
-    //         type: leaveType,
-    //         date: leaveDate,
-    //         description: leaveName,
-    //         id: id,
-    //     }, {crossdomain: true})
-    //     .then(
-    //         props.data[2](!upDate)
-    //     )
-    //     document.getElementById('type').options[0].selected=true;
-    //     document.getElementById('date').options[0].selected=true;
-    //     document.getElementById('desc').value = '';
-    //     setLeavetype('');
-    //     setLeavename('');
-    //     setLeavedate('');
-    // };
+    const setEmpleave = () => {
+        const lc = document.querySelectorAll("[type='checkbox']");
+        const el = [...lc].map(input => [input.value.split(" "), input.checked]);
+        const array = []
+
+        const leave = el.map(function(id) {
+            if (id[1]) {
+                array.push(id[0])
+            }
+        })
+        setLeave(array);
+    }
+
+    const deleteLeave = () => {
+        for (let i = 0; i < isEmpleave.length ; i++) {
+            axios.post("http://"+ ip +":5000/cancel_leave", { 
+                id: isEmpleave[i][0],
+                date: isEmpleave[i][1],
+            }, {crossdomain: true})
+        }
+
+        props.data[2](!upDate)
+
+    };
 
     useEffect(() => {
 
@@ -122,6 +145,7 @@ function LeaveSetting(props) {
         getLeaveemp();
     }, [ip, upDate]);
 
+
     return (
         <>
             <div className='box-body le-body'>
@@ -136,8 +160,12 @@ function LeaveSetting(props) {
                 </div>
                 <div className='le-box-content'>
                     <div className='le-header'>
-                        <p className='left-butt'>
-                            <img src={tb} alt=''/>
+                        <p  className='left-butt' 
+                            onClick={deleteLeave}
+                            style={isChecked ? {pointerEvents: 'auto'} : {pointerEvents: 'none'}}>
+                            {
+                                isChecked ? <img src={tb} alt=''/> : ''
+                            }
                         </p>
                         <p className='center'>วันที่</p>
                         <p className='center'>ประเภท</p>
@@ -149,7 +177,7 @@ function LeaveSetting(props) {
                             leaveEmp.map((item, index) => (
                                 <div className='le-content-time' key={index}>
                                     <p className='left-butt'>
-                                        <input type="checkbox"></input>
+                                        <input type="checkbox" value={item.emp_id + ' ' + item.leave_date} onClick={setEmpleave}></input>
                                     </p>
                                     <p className="center">{item.th_date}</p>
                                     <p className="center">{item.leave_type}</p>

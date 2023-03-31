@@ -8,18 +8,18 @@ import tc from '../../assets/icon/check.png';
 
 function TimeSheetInfo(props) {
 
-    const emp = props.data;
+    const isSheet = props.data;
 
-    const [timeEdit, setEdit] = useState(false);
+    const [isEdit, setEdit] = useState(false);
 
     const edit = () => {
         
-        setEdit(!timeEdit)
+        setEdit(!isEdit)
         const timeIn = document.querySelectorAll("[id='inputIn']");
         const timeOut = document.querySelectorAll("[id='inputOut']");
         for (var i = 0; i < timeIn.length; i++) {
-            timeIn[i].disabled = timeEdit;
-            timeOut[i].disabled = timeEdit;
+            timeIn[i].disabled = isEdit;
+            timeOut[i].disabled = isEdit;
         };
 
     };
@@ -84,8 +84,8 @@ function TimeSheetInfo(props) {
                         <p className='center'>เวลาออก</p>
                         <div>
                             {
-                                timeEdit == false ? 
-                                <div className='ta-img-bx' style={emp[0] == null ? {pointerEvents: 'none'} : {pointerEvents: 'auto'} } onClick={edit}>
+                                isEdit == false ? 
+                                <div className='ta-img-bx' style={isSheet[0] == null ? {pointerEvents: 'none'} : {pointerEvents: 'auto'} } onClick={edit}>
                                     <img src={tc} alt=''/>
                                 </div> 
                                 :
@@ -109,11 +109,15 @@ function TimeSheetInfo(props) {
                             //         </div>
                             //     </div>
                             // ))
-                            emp.map((item, index) => (
+                            isSheet.map((item, index) => (
                                 <div className='ta-content-time' key={index}>
-                                    <p className="center">{item.work_date}</p>
-                                    <input className="center" id='inputIn' type='time' defaultValue={item.time_in} disabled></input>
-                                    <input className="center" id='inputOut' type='time' defaultValue={item.time_out} disabled></input>
+                                    <p className="center">{item.th_date}</p>
+                                    <div className="center">
+                                        <input id='inputIn' type='time' defaultValue={item.time_in} disabled></input>
+                                    </div>
+                                    <div className="center">
+                                        <input id='inputOut' type='time' defaultValue={item.time_out} disabled></input>
+                                    </div>
                                     <p className="center">-</p>
                                 </div>
                             ))

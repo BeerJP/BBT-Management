@@ -34,7 +34,7 @@ function EmployeeCard(props) {
                         <span className="tooltiptext">แสดงข้อมูล</span>
                     </div>
                     <div className="em-img-bx" pointEve style={emp == null ? {pointerEvents: 'none'} : 
-                    cardType === 'edit' ? {background: '#F4D03F'} : {pointerEvents: 'auto'}} onClick={editEmp}>
+                        cardType === 'edit' ? {background: '#F4D03F'} : {pointerEvents: 'auto'}} onClick={editEmp}>
                         <img src={ue} alt=''/>
                         <span className="tooltiptext">แก้ไขข้อมูล</span>
                     </div>
