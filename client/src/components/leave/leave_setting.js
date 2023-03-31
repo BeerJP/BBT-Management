@@ -105,9 +105,10 @@ function LeaveSetting(props) {
                 id: isEmpleave[i][0],
                 date: isEmpleave[i][1],
             }, {crossdomain: true})
-        }
+        };
 
-        props.data[2](!upDate)
+        props.data[2](!upDate);
+        setChecked(false);
 
     };
 
@@ -164,7 +165,7 @@ function LeaveSetting(props) {
                             onClick={deleteLeave}
                             style={isChecked ? {pointerEvents: 'auto'} : {pointerEvents: 'none'}}>
                             {
-                                isChecked ? <img src={tb} alt=''/> : ''
+                                isChecked ? <img src={tb} alt=''/> : 'เลือก'
                             }
                         </p>
                         <p className='center'>วันที่</p>

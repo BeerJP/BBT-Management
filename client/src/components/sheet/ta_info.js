@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import moment from "moment";
+import axios from 'axios';
 import et from '../../assets/icon/edit-ta.png';
 import al from '../../assets/icon/angle-left.png';
 import ar from '../../assets/icon/angle-right.png';
@@ -8,9 +8,12 @@ import tc from '../../assets/icon/check.png';
 
 function TimeSheetInfo(props) {
 
-    const isSheet = props.data;
+    const isSheet = props.data[0];
+    const ip = props.data[1];
 
     const [isEdit, setEdit] = useState(false);
+    const [isOrigin, setOrigin] = useState([]);
+    const [isUpdate, setUpdate] = useState([]);
 
     const edit = () => {
         
@@ -24,31 +27,75 @@ function TimeSheetInfo(props) {
 
     };
 
-    const editDis = () => {
+    // const editDis = () => {
 
-        const timeIn = document.querySelectorAll("[id='inputIn']");
-        const timeOut = document.querySelectorAll("[id='inputOut']");
-        for (var i = 0; i < timeIn.length; i++) {
-            timeIn[i].disabled = true;
-            timeOut[i].disabled = true;
-        };
+    //     const timeIn = document.querySelectorAll("[id='inputIn']");
+    //     const timeOut = document.querySelectorAll("[id='inputOut']");
+    //     for (var i = 0; i < timeIn.length; i++) {
+    //         timeIn[i].disabled = true;
+    //         timeOut[i].disabled = true;
+    //     };
 
-    };
-
-    // const update = () => {
-        
-    // }
-    
-    // console.log(
-    //     emp.map((item, index) => [item.time_in.substring(0, 5), item.time_out.substring(0, 5)])
-    // );
+    // };
 
     useEffect(() => {
-        editDis();
-        (async() => {
-            const set = await setEdit(false);
-        })();
-    },[props.data]);
+
+        if (isEdit) {
+            const timeIn = document.querySelectorAll("[id='inputIn']");
+            const tIn = [...timeIn].map(input => input.value);
+            const timeOut = document.querySelectorAll("[id='inputOut']");
+            const tOut = [...timeOut].map(input => input.value);
+
+            const timeOrigin = tIn.map((array, item) => [array, tOut[item]]);
+            setOrigin(timeOrigin);
+        }
+        // } else {
+        //     const timeIn = document.querySelectorAll("[id='inputIn']");
+        //     const tIn = [...timeIn].map(input => input.value);
+        //     const timeOut = document.querySelectorAll("[id='inputOut']");
+        //     const tOut = [...timeOut].map(input => input.value);
+
+        //     const timeUpdate = tIn.map((array, item) => [array, tOut[item]]);
+        //     setUpdate(timeUpdate);
+        // };
+        console.log(isOrigin);
+
+    }, [isEdit]);
+
+    const test = async() => {
+        // await edit();
+
+        const timeIn = document.querySelectorAll("[id='inputIn']");
+        const tIn = [...timeIn].map(input => input.value);
+        const timeOut = document.querySelectorAll("[id='inputOut']");
+        const tOut = [...timeOut].map(input => input.value);
+
+        const timeUpdate = tIn.map((array, item) => [array, tOut[item]]);
+        setUpdate(timeUpdate);
+        
+        // for (let i = 0; i < isOrigin.length ; i++) {
+        //     console.log(isOrigin[i], isUpdate[i]);
+        // };
+        // axios.post("http://"+ ip +":5000/add_holiday", { 
+        //     name: holiName, 
+        //     date: holiDate 
+        // }, {crossdomain: true})
+        // getTime();
+        // console.log(isOrigin.length);
+        console.log(isUpdate);
+    }
+
+    // console.log('Original');
+    // console.log(isOrigin);
+    // console.log('Update');
+    // console.log(isUpdate);
+
+    // useEffect(() => {
+    //     editDis();
+    //     (async() => {
+    //         const set = await setEdit(false);
+    //     })();
+    // },[props.data]);
 
     // const timeIn = document.querySelectorAll("[id='inputIn']");
     // const tIn = [...timeIn].map(input => input.value);
@@ -69,6 +116,8 @@ function TimeSheetInfo(props) {
     //     }
     // } ;
 
+
+
     return (
         <>
             {/* <div className='box-body ov-header-combo ta-info'>
@@ -85,11 +134,14 @@ function TimeSheetInfo(props) {
                         <div>
                             {
                                 isEdit == false ? 
-                                <div className='ta-img-bx' style={isSheet[0] == null ? {pointerEvents: 'none'} : {pointerEvents: 'auto'} } onClick={edit}>
+                                <div className='ta-img-bx' 
+                                    style={isSheet[0] == null ? {pointerEvents: 'none'} 
+                                    : {pointerEvents: 'auto'} } 
+                                    onClick={edit}>
                                     <img src={tc} alt=''/>
                                 </div> 
                                 :
-                                <div className='ta-img-bx' style={{background : 'red'}}onClick={edit}>
+                                <div className='ta-img-bx' style={{background : 'red'}}onClick={test}>
                                     <img src={tc} alt=''/>
                                 </div>
                             }

@@ -32,7 +32,7 @@ function TimeSheet() {
     return (
         <>
             <div className='box-content'>
-                <TimeSheetInfo data={timeSheet}/>
+                <TimeSheetInfo data={[timeSheet, ip]}/>
             </div>
             <div className='box-content' >
                 <TimeSheetTable data={[setEmp, ip]}/>

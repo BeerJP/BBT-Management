@@ -156,9 +156,8 @@ function AddCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>วันเริ่มงาน</label>
+                            <label className='lb-header'>วันเริ่มงาน<a>*</a></label>
                             <input className='text-box' type='date'onSelect={(event => {setStart(event.target.value)})}/>
-                            {/* <input onChange={(event => {setStart(event.target.value)})}></input> */}
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 2</label>

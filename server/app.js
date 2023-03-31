@@ -549,6 +549,25 @@ app.put("/update_time", (request, response) => {
   );
 });
 
+// แก้ไขข้อมูลเวลาเข้าออกงาน
+app.put("/update_time", (request, response) => {
+  const timeIn = request.body.timeIn;
+  const timeOut = request.body.timeOut;
+  const work_id = request.body.date;
+  const emp_id = request.body.id;
+
+  conn.query(`UPDATE TIME_ATTENDANCE 
+              SET time_in = ?, time_out = ? 
+              WHERE work_id = ? AND emp_id = ?`,
+    [timeIn, timeOut, work_id, emp_id], 
+    (err, result) => {
+      if (err) {
+        response.send(err);
+      }
+    }
+  );
+});
+
 // แก้ไขข้อมูลใบลา
 app.put("/update_leave", (request, response) => {
   const appove = request.body.state;

@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import SideBar from './sidebar';
 import Login from '../pages/login';
 import logo from '../assets/icon/time-management.png';
@@ -45,12 +45,18 @@ function NavBar({children}) {
                 </div>
             </nav>
             <div className='container'>
+            {/* {
+                session[0].emp_id === '' ? 
+                '' : 
+                <div><SideBar data={[session, setSession]}/></div> 
+            } */}
+
             <div><SideBar data={[session, setSession]}/></div> 
                 <div className='content'>
                     {/* {
                         session[0].emp_id === '' ? 
                         <Login data={setSession}/> : 
-                        [<div><SideBar data={[session, setSession]}/></div>, <div className='main-content'>{children}</div>]
+                        <div className='main-content'>{children}</div>
                     } */}
                     
                     <div className='main-content'>

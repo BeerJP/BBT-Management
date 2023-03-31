@@ -26,9 +26,9 @@ function CalendarTable(props) {
     useEffect(() => {
 
         if (holiDate === '' || holiName.length === 0) {
-            setNotnull(false)
+            setNotnull(false);
         } else {
-            setNotnull(true)
+            setNotnull(true);
         }
 
     }, [holiName, holiDate]);
@@ -39,9 +39,9 @@ function CalendarTable(props) {
         const el = [...lc].map(input => input.checked);
 
         if (el.includes(true)) {
-            setChecked(true)
+            setChecked(true);
         } else {
-            setChecked(false)
+            setChecked(false);
         }
 
     }, [isHoliday]);
@@ -56,7 +56,7 @@ function CalendarTable(props) {
             date: holiDate 
         }, {crossdomain: true}))
 
-        setUpdate(!isUpdate)
+        setUpdate(!isUpdate);
         document.getElementById('date').options[0].selected=true;
         setHoliname('');
         setHolidate('');
@@ -71,9 +71,10 @@ function CalendarTable(props) {
                 state: '1', 
                 date: isHoliday[i][0] 
             }, {crossdomain: true}))
-        }
+        };
 
-        setUpdate(!isUpdate)
+        setUpdate(!isUpdate);
+        setChecked(false);
     };
 
     const setSelectHoliday = () => {
@@ -85,9 +86,9 @@ function CalendarTable(props) {
             if (id[1]) {
                 array.push(id[0])
             }
-        })
+        });
         setSelect(array);
-    }
+    };
 
     useEffect(() => {
 
@@ -119,7 +120,7 @@ function CalendarTable(props) {
                             onClick={cancelHoliday}
                             style={isChecked ? {pointerEvents: 'auto'} : {pointerEvents: 'none'}}>
                             {
-                                isChecked ? <img src={tb} alt=''/> : 'ตัวเลือก'
+                                isChecked ? <img src={tb} alt=''/> : 'เลือก'
                             }
                         </p>
                         <p className='ca-name'>วันหยุด</p>
