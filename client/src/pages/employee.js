@@ -26,7 +26,7 @@ function Employee() {
             setEmployee(response.data);
             setId(response.data[response.data.length - 1].emp_id + 1)
         });
-    }, []);
+    }, [ip, cardType]);
 
     return (
         <>

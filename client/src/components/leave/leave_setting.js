@@ -10,12 +10,13 @@ import tb from '../../assets/icon/trash-bin.png';
 function LeaveSetting(props) {
 
     const ip = props.data[0];
-    const upDate = props.data[1];
+    const id = props.data[3];
+    const isUpdate = props.data[1];
+    const setUpdate = props.data[2];;
 
     const [isNotnull, setNotnull] = useState(true);
     const [isChecked, setChecked] = useState(true);
 
-    const id = '1001';
 
     const [workDay, setWorkday] = useState([{
         work_id: '',
@@ -53,12 +54,12 @@ function LeaveSetting(props) {
 
     }, [isEmpleave]);
 
-    const [leaveSum, setLeavesum] = useState([{
+    const [leaveSum, setLeavesum] = useState({
         ld:0,
         bld:0,
         hld:0,
         sld:0
-    }]);
+    });
 
     const [leaveEmp, setLeaveemp] = useState([{
         leave_type: '',
@@ -75,9 +76,7 @@ function LeaveSetting(props) {
             description: leaveName,
             id: id,
         }, {crossdomain: true})
-        .then(
-            props.data[2](!upDate)
-        )
+        setUpdate(!isUpdate)
         document.getElementById('type').options[0].selected=true;
         document.getElementById('date').options[0].selected=true;
         document.getElementById('desc').value = '';
@@ -107,9 +106,8 @@ function LeaveSetting(props) {
             }, {crossdomain: true})
         };
 
-        props.data[2](!upDate);
+        setUpdate(!isUpdate);
         setChecked(false);
-
     };
 
     useEffect(() => {
@@ -144,7 +142,7 @@ function LeaveSetting(props) {
         getWorkday();
         getLeavesum();
         getLeaveemp();
-    }, [ip, upDate]);
+    }, [id, ip, isUpdate]);
 
 
     return (
@@ -155,9 +153,9 @@ function LeaveSetting(props) {
                     <label>ข้อมูลการลา</label>
                 </div>
                 <div className='le-box-header2'>
-                    <label><img src={d1} alt=''/>ลากิจ : {leaveSum[0].bld}</label>
-                    <label><img src={d3} alt=''/>ลาพักร้อน : {leaveSum[0].hld}</label>
-                    <label><img src={d2} alt=''/>ลาป่วย : {leaveSum[0].sld}</label>
+                    <label><img src={d1} alt=''/>ลากิจ : {leaveSum.bld}</label>
+                    <label><img src={d3} alt=''/>ลาพักร้อน : {leaveSum.hld}</label>
+                    <label><img src={d2} alt=''/>ลาป่วย : {leaveSum.sld}</label>
                 </div>
                 <div className='le-box-content'>
                     <div className='le-header'>

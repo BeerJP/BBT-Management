@@ -85,17 +85,19 @@
 .navbar .nav-container .left-box .home-menu {
     text-decoration: none;
     color: #34C2DB;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
 }
 
 .navbar .nav-container .right-box {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-right: 15px;
 }
 
 .navbar .nav-container .right-box p {
     color: #34C2DB;
+    font-size: 1.1rem;
 }
 
 footer {

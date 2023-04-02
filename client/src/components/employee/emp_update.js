@@ -53,19 +53,6 @@ function EditCard(props) {
     const [password, setPassword] = useState(emp.user_password);
     const [type, setType] = useState(emp.type_id);
 
-    const getDepart = async() => {
-        await axios.get("http://"+ ip +":5000/department", {crossdomain: true})
-        .then(response => {
-            setDeptinfo(response.data);
-        });
-    };
-
-    const getType = async() => {
-        await axios.get("http://"+ ip +":5000/type", {crossdomain: true})
-        .then(response => {
-            setTypeinfo(response.data);
-        });
-    };
 
     const updateEmployee = () => {
         axios.put("http://"+ ip +":5000/update_employee", { 
@@ -90,31 +77,50 @@ function EditCard(props) {
         }, {crossdomain: true}))
         .then(
             setCardType('infomation')
-        );
+        ).then((response) => {
+            emp = {
+                emp_id: ' ',
+                emp_name: ' ',
+                emp_surname: ' ',
+                emp_idcard: ' ',
+                emp_gender: ' ',
+                emp_birthdate: ' ',
+                emp_address: ' ',
+                emp_status: ' ',
+                emp_startdate: ' ',
+                emp_enddate: ' ',
+                emp_mac1: ' ',
+                emp_mac2: ' ',
+                dept_id: ' ',
+                dept_name: ' ',
+                user_name: ' ',
+                user_password: ' ',
+                type_id: ' ',
+                type_name: ' ',
+                emp_age: ' '
+            }
+        })
     };
 
     useEffect(() => {
+        const getDepart = async() => {
+            await axios.get("http://"+ ip +":5000/department", {crossdomain: true})
+            .then(response => {
+                setDeptinfo(response.data);
+            });
+        };
+    
+        const getType = async() => {
+            await axios.get("http://"+ ip +":5000/type", {crossdomain: true})
+            .then(response => {
+                setTypeinfo(response.data);
+            });
+        };
+
         getDepart();
         getType();
-    }, []);
+    }, [ip]);
 
-    const test = () => {
-        console.log(id);
-        console.log(name);
-        console.log(surname);
-        console.log(dept);
-        console.log(gender);
-        console.log(mac1);
-        console.log(mac2);
-        console.log(birth);
-        console.log(start);
-        console.log(idcard);
-        console.log(address);
-        console.log(username);
-        console.log(password);
-        console.log(type);
-        setCardType('infomation');
-    }
 
     return (
         <>
@@ -170,12 +176,13 @@ function EditCard(props) {
                             <input className='text-box' onChange={(event => {setMac2(event.target.value)})} defaultValue={emp.emp_mac2}></input>
                         </div>
                     </div>
-                    <div className='lb-box-long em-info'>
+                    {/* <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>ที่อยู่</label>
                             <input className='text-box emp-address' onChange={(event => {setAddress(event.target.value)})} defaultValue={emp.emp_address}></input>
                         </div>
-                    </div>
+                    </div> */}
+                    <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>
@@ -196,10 +203,10 @@ function EditCard(props) {
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>Password</label>
-                            <input className='text-box' onChange={(event => {setPassword(event.target.value)})} defaultValue={emp.user_password}></input>
+                            <input className='text-box' onChange={(event => {setPassword(event.target.value)})}></input>
                         </div>
                         <div>
-                            <button onClick={test}>บันทึก</button>
+                            <button className='update' onClick={updateEmployee}>บันทึก</button>
                         </div>
                     </div>
                 </div>

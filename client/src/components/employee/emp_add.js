@@ -6,6 +6,8 @@ function AddCard(props) {
 
     const ip = props.data[2];
 
+    const [isNotnull, setNotnull] = useState(true);
+
     const [deptInfo, setDeptinfo] = useState([{
         dept_id: ' ',
         dept_name: ' '
@@ -17,35 +19,32 @@ function AddCard(props) {
     }]);
 
     const id = props.data[0];
-    const [name, setName] = useState(' ');
-    const [surname, setSur] = useState(' ');
+    const [name, setName] = useState('');
+    const [surname, setSur] = useState('');
     const [dept, setDept] = useState(1);
     const [gender, setGender] = useState('ชาย');
-    const [birth, setBirth] = useState(' ');
-    const [idcard, setIdcard] = useState(' ');
-    const [mac1, setMac1] = useState(' ');
-    const [mac2, setMac2] = useState(' ');
-    const [start, setStart] = useState(' ');
-    const [address, setAddress] = useState(' ');
-    const [username, setUsername] = useState(' ');
-    const [password, setPassword] = useState(' ');
-    const [type, setType] = useState(1);
+    const [birth, setBirth] = useState('');
+    const [idcard, setIdcard] = useState('');
+    const [mac1, setMac1] = useState('');
+    const [mac2, setMac2] = useState('');
+    const [start, setStart] = useState('');
+    const [address, setAddress] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [type, setType] = useState('');
 
     const setCardType = props.data[1];
 
-    const getDepart = async() => {
-        await axios.get("http://"+ ip +":5000/department", {crossdomain: true})
-        .then(response => {
-            setDeptinfo(response.data);
-        });
-    };
+    useEffect(() => {
 
-    const getType = async() => {
-        await axios.get("http://"+ ip +":5000/type", {crossdomain: true})
-        .then(response => {
-            setTypeinfo(response.data);
-        });
-    };
+        if (name.length === 0 || surname.length === 0 || birth === '' || start === '' || mac1.length !== 17 ||
+            username.length === 0 || password.length === 0 || type === '') {
+            setNotnull(false);
+        } else {
+            setNotnull(true);
+        }
+
+    }, [birth, mac1, name, password, start, surname, type, username]);
 
     const insertEmployee = () => {
         axios.post("http://"+ ip +":5000/add_employee", { 
@@ -73,33 +72,28 @@ function AddCard(props) {
     };
 
     useEffect(() => {
+        const getDepart = async() => {
+            await axios.get("http://"+ ip +":5000/department", {crossdomain: true})
+            .then(response => {
+                setDeptinfo(response.data);
+            });
+        };
+    
+        const getType = async() => {
+            await axios.get("http://"+ ip +":5000/type", {crossdomain: true})
+            .then(response => {
+                setTypeinfo(response.data);
+            });
+        };
         getDepart();
         getType();
-    }, []);
+    }, [ip]);
 
 
-    const test = () => {
-        console.log(id);
-        console.log(name);
-        console.log(surname);
-        console.log(dept);
-        console.log(gender);
-        console.log(mac1);
-        console.log(mac2);
-        console.log(birth);
-        console.log(start);
-        console.log(idcard);
-        console.log(address);
-        console.log(username);
-        console.log(password);
-        console.log(type);
-        setCardType('infomation');
-    }
-
-    function addColon(input) {
+    function Mac1Colon(input) {
 
         var value = input.value
-        if (value.length == 12) {
+        if (value.length === 12) {
             value = value.slice(0,   2) + ":" + 
                     value.slice(2,   4) + ":" + 
                     value.slice(4,   6) + ":" + 
@@ -107,6 +101,22 @@ function AddCard(props) {
                     value.slice(8,  10) + ":" + 
                     value.slice(10, 12)
         };
+        setMac1(value)
+        input.value = value;
+    };
+
+    function Mac2Colon(input) {
+
+        var value = input.value
+        if (value.length === 12) {
+            value = value.slice(0,   2) + ":" + 
+                    value.slice(2,   4) + ":" + 
+                    value.slice(4,   6) + ":" + 
+                    value.slice(6,   8) + ":" + 
+                    value.slice(8,  10) + ":" + 
+                    value.slice(10, 12)
+        };
+        setMac2(value)
         input.value = value;
     };
 
@@ -151,7 +161,7 @@ function AddCard(props) {
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 1<a>*</a></label>
-                            <input className='text-box' maxlength='12' onKeyUp={(e => addColon(e.target))} onChange={(event => {setMac1(event.target.value)})}></input>
+                            <input className='text-box' maxLength='12' onKeyUp={(e => Mac1Colon(e.target))} onChange={(event => {setMac1(event.target.value)})}></input>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
@@ -161,15 +171,16 @@ function AddCard(props) {
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 2</label>
-                            <input className='text-box' maxlength='12' onKeyUp={(e => addColon(e.target))} onChange={(event => {setMac2(event.target.value)})}></input>
+                            <input className='text-box' maxLength='12' onKeyUp={(e => Mac2Colon(e.target))} onChange={(event => {setMac2(event.target.value)})}></input>
                         </div>
                     </div>
-                    <div className='lb-box-long em-info'>
+                    {/* <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>ที่อยู่</label>
                             <input className='text-box emp-address' onChange={(event => {setAddress(event.target.value)})}></input>
                         </div>
-                    </div>
+                    </div> */}
+                    <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>
@@ -179,6 +190,7 @@ function AddCard(props) {
                         <div>
                             <label className='lb-header'>User Type<a>*</a></label>
                             <select className='text-box select-box' name="usertype" id="type" onClick={(event => {setType(event.target.value)})}>
+                                <option value="" disabled selected>กรุณาเลือกประเภทของผู้ใช้</option>
                                 {
                                     typeInfo.map((item, index) => (
                                         <option key={item.type_id} value={item.type_id}>{item.type_name}</option>
@@ -193,8 +205,11 @@ function AddCard(props) {
                             <input className='text-box' onChange={(event => {setPassword(event.target.value)})}></input>
                         </div>
                         <div>
-                            <button onClick={test}>บันทึก</button>
-                            <button className='clear' onClick={test}>ล้างข้อมูล</button>
+                            <button onClick={insertEmployee} 
+                                    style={isNotnull ? {pointerEvents: 'auto', background: '#1D8348'} : {pointerEvents: 'none'}}>
+                                    บันทึก
+                            </button>
+                            <button className='clear' onClick={() => setCardType('infomation')}>ล้างข้อมูล</button>
                         </div>
                     </div>
                 </div>

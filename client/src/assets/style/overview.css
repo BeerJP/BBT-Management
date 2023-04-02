@@ -7,6 +7,13 @@
     align-items: center;
 }
 
+.ov-header-left1-user {
+    height: 150px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .ov-header-left2 {
     height: 150px;
     flex-direction: row;
@@ -38,11 +45,27 @@
     align-items: center;
 }
 
+.ov-header-left1-user .ov-tim-bx {
+    border-radius: 5px;
+    background: deepskyblue;
+    color: white;
+    align-items: center;
+    width: 45%;
+}
+
 .ov-lea-bx {
     border-radius: 5px;
     background: orange;
     color: white;
     align-items: center;
+}
+
+.ov-header-left1-user .ov-lea-bx {
+    border-radius: 5px;
+    background: orange;
+    color: white;
+    align-items: center;
+    width: 45%;
 }
 
 .ov-emp-txt {

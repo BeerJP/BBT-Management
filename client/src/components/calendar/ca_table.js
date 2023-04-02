@@ -6,8 +6,9 @@ import tb from '../../assets/icon/trash-bin.png';
 
 function CalendarTable(props) {
 
-    const ip = props.data;
-    const [isUpdate, setUpdate] = useState(false);
+    const ip = props.data[0];
+    const isUpdate = props.data[1];
+    const setUpdate = props.data[2];
 
     const [isNotnull, setNotnull] = useState(true);
     const [isChecked, setChecked] = useState(true);
@@ -108,7 +109,7 @@ function CalendarTable(props) {
 
         getWorkday();
         getHoliday();
-    }, [ip, isUpdate]);
+    }, [ip, isUpdate, holiDate, holiDate]);
 
 
     return (

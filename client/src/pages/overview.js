@@ -3,10 +3,21 @@ import axios from 'axios';
 import '../assets/style/overview.css';
 import AdminContent1 from '../components/overview/ad_content1';
 import AdminContent2 from '../components/overview/ad_content2';
+import UserContent from '../components/overview/us_content';
 import IpContext from '../ipContext';
 
 
 function Overview() {
+
+    const [isUserid, setUserid] = useState(1001)
+    const [isUsertype, setUsertype] = useState(1)
+
+    // useEffect(() => {
+
+    //     setUserid(location.state.id);
+    //     setUsertype(location.state.type);
+
+    // }, [location]);
 
     const ip = useContext(IpContext);
 
@@ -33,12 +44,14 @@ function Overview() {
 
     return (
         <>
-            <div className='box-content'>
-                <AdminContent1 data={overview}/>
-            </div>
-            <div className='box-content'>
-                <AdminContent2 data={ip}/>
-            </div>
+            {   
+                isUsertype === null ? '' :
+                isUsertype === 1 || isUsertype === 2 ?  
+                [<div className='box-content'><AdminContent1 data={overview}/></div>,
+                <div className='box-content'><AdminContent2 data={ip}/></div>] 
+                :
+                <div className='box-content'><UserContent data={[ip, isUserid]}/></div>
+            }
         </>
     );
 };

@@ -7,18 +7,23 @@ import IpContext from '../ipContext';
 
 function Leave() {
 
+    const [isUserid, setUserid] = useState(1001)
+    const [isUsertype, setUsertype] = useState(1)
+
     const ip = useContext(IpContext);
-    const [upDate, setUpdate] = useState(false);
+    const [isUpdate, setUpdate] = useState(false);
 
 
     return (
         <>
-            <div className='box-content'>
-                <LeaveTable data={[ip, upDate, setUpdate]}/>
-            </div>
-            <div className='box-content'>
-                <LeaveSetting data={[ip, upDate, setUpdate]}/>
-            </div>
+            {
+                isUsertype === 1 || isUsertype === 2 ?  
+                [<div className='box-content'><LeaveTable data={[ip, isUpdate, setUpdate]}/></div>,
+                <div className='box-content'><LeaveSetting data={[ip, isUpdate, setUpdate, isUserid]}/></div>] 
+                :
+                <div className='box-content'><LeaveSetting data={[ip, isUpdate, setUpdate, isUserid]}/></div>
+            }
+
         </>
     );
 };

@@ -4,7 +4,12 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const mysql = require("mysql");
 const cors = require("cors");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+
+const saltRounds = 10;
+var secret = 'BBTM-login';
 
 const conn = mysql.createConnection({
   host: "127.0.0.1",
@@ -34,8 +39,12 @@ app.use(cors({
 // -------------------- เข้าสู่ระบบ --------------------
 
 app.post('/login', function(request, response) {
-	const username = request.body.username;
+  const username = request.body.user;
 	const password = request.body.password;
+
+  // const username = 'admin';
+	// const password = '0000';
+
   conn.query(`SELECT *,
                 DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
                 DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
@@ -47,44 +56,33 @@ app.post('/login', function(request, response) {
                 ON EMPLOYEE.emp_id = USER.emp_id
               INNER JOIN TYPE
                 ON USER.type_id = TYPE.type_id
-              WHERE USER.user_name = ? AND USER.user_password = ?`, [username, password],  
-  (err, result) => {
-    response.send(result);
-  });
+              WHERE USER.user_name = ?`, [username], 
+    function(error, results, fields) {
+      if (error) { response.send(error) }
+      if (results.length == 0) { response.send(['Incorrect Username and/or Password!']) }
+      bcrypt.compare(password, results[0].user_password, function(err, result) {
+        if (result) {
+          var token = jwt.sign({ user: results[0].emp_id }, secret, { expiresIn: '1h' });
+          response.send([results, {token: token}])
+        } else {
+          response.send(['Incorrect Username and/or Password!'])
+        };
+      });
+    });
 });
 
-// app.post('/login', function(request, response) {
-// 	const username = request.body.username;
-// 	const password = request.body.password;
-// 	if (username && password) {
-// 		connection.query(`SELECT * FROM EMPLOYEE FULL OUTER JOIN USER ON EMPLOYEE.emp_id = USER.emp_id
-//     WHERE username = ? AND password = ?`,
-//     [username, password], function(error, results, fields) {
-// 			if (results.length > 0) {
-// 				request.session.loggedin = true;
-// 				request.session.username = results['emp_name'] + ' ' + results['emp_surname'];
-// 				response.redirect('/');
-// 			} else {
-// 				response.send('Incorrect Username and/or Password!');
-// 			}
-// 			response.end();
-// 		});
-// 	} else {
-// 		response.send('Please enter Username and Password!');
-// 		response.end();
-// 	}
-// });
 
 // -------------------- ตรวจสอบสถานะการเข้าสู่ระบบ --------------------
 
-// app.get('/session', function(request, response) {
-// 	if (request.session.loggedin) {
-// 		response.send('Welcome back, ' + request.session.username + '!');
-// 	} else {
-// 		response.send('Please login to view this page!');
-// 	}
-// 	response.end();
-// });
+app.post('/session', function(request, response) {
+  try {
+    const token = request.headers.authorization.split(' ')[1];
+    var decoded = jwt.verify(token, secret);
+    response.send(decoded);
+  } catch(error) {
+    response.send(error);
+  }
+});
 
 
 // -------------------- แสดงข้อมูล --------------------
@@ -92,16 +90,37 @@ app.post('/login', function(request, response) {
 // แสดงข้อมูลสรุป
 app.get('/overview', (request, response) => {
   conn.query(`SELECT COUNT(*) AS emp,
-              ( SELECT COUNT(*) FROM TIME_ATTENDANCE ) AS ta,
-              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in <= '08:45:00') AS nta,
-              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in > '08:45:00') AS lta,
-              ( SELECT COUNT(*) FROM LEAVE_DAY ) AS ld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลากิจ' ) AS bld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลาพักร้อน' ) AS hld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลาป่วย' ) AS sld,
+                ( SELECT COUNT(*) FROM TIME_ATTENDANCE ) AS ta,
+                ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in <= '08:45:00') AS nta,
+                ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE time_in > '08:45:00') AS lta,
+                ( SELECT COUNT(*) FROM LEAVE_DAY ) AS ld,
+                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลากิจ' ) AS bld,
+                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลาพักร้อน' ) AS hld,
+                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลาป่วย' ) AS sld,
+                ( SELECT COUNT(*) FROM WORKDAY WHERE work_status = '1' AND work_date <= CURDATE()) AS wd,
+                ( SELECT COUNT(*) FROM HOLIDAY ) AS hd
+              FROM EMPLOYEE
+              WHERE emp_status > '0'`, 
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูลสรุปสำหรับพนักงงาน
+app.post('/overview_user', (request, response) => {
+  const id = request.body.id;
+
+  conn.query(`SELECT *,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE emp_id = ? ) AS ta,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE emp_id = ? AND time_in <= '08:45:00' ) AS nta,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE emp_id = ? AND time_in > '08:45:00' ) AS lta,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? ) AS ld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? AND leave_type = 'ลากิจ' ) AS bld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? AND leave_type = 'ลาพักร้อน' ) AS hld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? AND leave_type = 'ลาป่วย' ) AS sld,
               ( SELECT COUNT(*) FROM WORKDAY WHERE work_status = '1' AND work_date <= CURDATE()) AS wd,
               ( SELECT COUNT(*) FROM HOLIDAY ) AS hd
-              FROM EMPLOYEE`, 
+              FROM EMPLOYEE WHERE EMPLOYEE.emp_id = ?`, [id, id, id, id, id, id, id, id],
   (err, result) => {
     response.send(result);
   });
@@ -131,6 +150,7 @@ app.get('/employee', (request, response) => {
                 ON EMPLOYEE.emp_id = USER.emp_id
               INNER JOIN TYPE
                 ON USER.type_id = TYPE.type_id
+              WHERE emp_status > '0'
               GROUP BY EMPLOYEE.emp_id
               ORDER BY EMPLOYEE.emp_id`, 
   (err, result) => {
@@ -157,12 +177,12 @@ app.post('/leave_emp_sum', (request, response) => {
   const id = request.body.id;
 
   conn.query(`SELECT COUNT(*) AS ld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลากิจ' ) AS bld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลาพักร้อน' ) AS hld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE leave_type = 'ลาป่วย' ) AS sld
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE WHERE emp_id = ? AND leave_type = 'ลากิจ' ) AS bld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE WHERE emp_id = ? AND leave_type = 'ลาพักร้อน' ) AS hld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE WHERE emp_id = ? AND leave_type = 'ลาป่วย' ) AS sld
               FROM LEAVE_DAY
               WHERE emp_id = ?`,
-  [id],
+  [id, id, id, id],
   (err, result) => {
     response.send(result);
   });
@@ -255,16 +275,6 @@ app.post('/workday_emp', (request, response) => {
 });
 
 // แสดงข้อมูล Holiday
-// app.get('/holiday', (request, response) => {
-//   conn.query(`SELECT *, DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date
-//               FROM HOLIDAY
-//               INNER JOIN WORKDAY 
-//               ON HOLIDAY.work_id = WORKDAY.work_id
-//               WHERE work_date >= DATE_FORMAT(CURDATE(), '%Y-%m-%d') `, 
-//   (err, result) => {
-//     response.send(result);
-//   });
-// });
 app.get('/holiday', (request, response) => {
   conn.query(`SELECT *, 
               DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
@@ -287,12 +297,14 @@ app.get('/time', (request, response) => {
 // แสดงจำนวน Time Attendance & Leave Day
 app.get('/timecount', (request, response) => {
   conn.query(`SELECT EMPLOYEE.emp_id, 
-              EMPLOYEE.emp_name, 
-              EMPLOYEE.emp_surname, 
-              DATE_FORMAT(DATE_ADD(EMPLOYEE.emp_startdate, INTERVAL 543 YEAR), '%Y-%m-%d') as emp_startdate,
-              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.emp_id = EMPLOYEE.emp_id ) AS ta,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.emp_id = EMPLOYEE.emp_id ) AS ld
-              FROM EMPLOYEE GROUP BY EMPLOYEE.emp_id`,
+                EMPLOYEE.emp_name, 
+                EMPLOYEE.emp_surname, 
+                DATE_FORMAT(DATE_ADD(EMPLOYEE.emp_startdate, INTERVAL 543 YEAR), '%Y-%m-%d') as emp_startdate,
+                ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.emp_id = EMPLOYEE.emp_id ) AS ta,
+                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.emp_id = EMPLOYEE.emp_id ) AS ld
+                FROM EMPLOYEE 
+              WHERE EMPLOYEE.emp_status > '0'
+              GROUP BY EMPLOYEE.emp_id`,
   (err, result) => {
     response.send(result);
   });
@@ -352,15 +364,17 @@ app.post("/add_user", (request, response) => {
   const password = request.body.password;
   const type = request.body.type;
 
-  conn.query(
-    "INSERT INTO USER (user_name, user_password, type_id, emp_id) VALUES (?, ?, ?, ?)",
-    [user, password, type, id], 
-    (err, result) => {
-      if (err) {
-        response.send(err);
+  bcrypt.hash(password, saltRounds, function(err, hash) {
+    conn.query(
+      "INSERT INTO USER (user_name, user_password, type_id, emp_id) VALUES (?, ?, ?, ?)",
+      [user, hash, type, id], 
+      (err, result) => {
+        if (err) {
+          response.send(err);
+        }
       }
-    }
-  );
+    );
+});
 });
 
 // เพิ่มข้อมูล Workday
@@ -517,23 +531,25 @@ app.put("/update_user", (request, response) => {
   const username = request.body.username;
   const password = request.body.password;
   const type = request.body.type;
-
-  conn.query(`UPDATE USER SET 
-                user_name = ?,
-                user_password = ?,
-                type_id = ?
-              WHERE emp_id = ?`,
-    [username, password, type, id], 
-    (err, result) => {
-      if (err) {
-        response.send(err);
+  
+  bcrypt.hash(password, saltRounds, function(err, hash) {
+    conn.query(`UPDATE USER SET 
+                  user_name = ?,
+                  user_password = ?,
+                  type_id = ?
+                WHERE emp_id = ?`,
+        [username, hash, type, id], 
+        (err, result) => {
+          if (err) {
+            response.send(err);
+        }
       }
-    }
-  );
+    );
+  });
 });
 
 // แก้ไขข้อมูลเวลาออกงาน
-app.put("/update_time", (request, response) => {
+app.put("/update_timeout", (request, response) => {
   const time = request.body.time;
   const date = request.body.date;
   const employee = request.body.employee;
@@ -551,8 +567,8 @@ app.put("/update_time", (request, response) => {
 
 // แก้ไขข้อมูลเวลาเข้าออกงาน
 app.put("/update_time", (request, response) => {
-  const timeIn = request.body.timeIn;
-  const timeOut = request.body.timeOut;
+  const timeIn = request.body.in;
+  const timeOut = request.body.out;
   const work_id = request.body.date;
   const emp_id = request.body.id;
 

@@ -10,7 +10,7 @@ function Login(props) {
 
     const ip = useContext(IpContext);
 
-    const login = props.data;
+    const setSession = props.data;
 
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
@@ -22,9 +22,7 @@ function Login(props) {
         }, 
         {crossdomain: true})
         .then(response => {
-            login(response.data);
-            console.log(response.data);
-            console.log(response);
+            setSession(response.data);
         });
     };
 

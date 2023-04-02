@@ -8,6 +8,7 @@ function LeaveTable(props) {
 
     const ip = props.data[0];
     const isUpdate = props.data[1];
+    const setUpdate = props.data[2];
 
     const [leavepen, setLeavepen] = useState([]);
     const [leaveapp, setLeaveapp] = useState([]);
@@ -37,7 +38,7 @@ function LeaveTable(props) {
                 date: leaveId[1],
                 state: leaveId[4]
             }).then(
-                props.data[2](!isUpdate)
+                setUpdate(!isUpdate)
             );
     }
 
@@ -48,7 +49,7 @@ function LeaveTable(props) {
             date: leaveId[1],
             state: '0'
         }).then(
-            props.data[2](!isUpdate)
+            setUpdate(!isUpdate)
         );
     };
 

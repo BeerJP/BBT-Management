@@ -1,19 +1,31 @@
 import { React, useEffect, useState } from 'react';
 import axios from 'axios';
-import et from '../../assets/icon/edit-ta.png';
-import al from '../../assets/icon/angle-left.png';
-import ar from '../../assets/icon/angle-right.png';
+// import et from '../../assets/icon/edit-ta.png';
+// import al from '../../assets/icon/angle-left.png';
+// import ar from '../../assets/icon/angle-right.png';
 import tc from '../../assets/icon/check.png';
 
 
 function TimeSheetInfo(props) {
 
-    const isSheet = props.data[0];
-    const ip = props.data[1];
+
+    const [isSheet, setSheet] = useState(props.data[0]);
+    const [isIp, setIp] = useState(props.data[1]);
+    const [isId, setId] = useState(props.data[2]);
+
+    useEffect(() => {
+
+        setSheet(props.data[0]);
+        setIp(props.data[1]);
+        setId(props.data[2]);
+
+    }, [props.data]);
+
 
     const [isEdit, setEdit] = useState(false);
     const [isOrigin, setOrigin] = useState([]);
     const [isUpdate, setUpdate] = useState([]);
+    const [isTime, setTime] = useState([]);
 
     const edit = () => {
         
@@ -27,95 +39,72 @@ function TimeSheetInfo(props) {
 
     };
 
-    // const editDis = () => {
-
-    //     const timeIn = document.querySelectorAll("[id='inputIn']");
-    //     const timeOut = document.querySelectorAll("[id='inputOut']");
-    //     for (var i = 0; i < timeIn.length; i++) {
-    //         timeIn[i].disabled = true;
-    //         timeOut[i].disabled = true;
-    //     };
-
-    // };
 
     useEffect(() => {
 
         if (isEdit) {
+            const date = document.querySelectorAll("[id='inputDate']");
+            const day = [...date].map(input => input.value);
             const timeIn = document.querySelectorAll("[id='inputIn']");
             const tIn = [...timeIn].map(input => input.value);
             const timeOut = document.querySelectorAll("[id='inputOut']");
             const tOut = [...timeOut].map(input => input.value);
 
-            const timeOrigin = tIn.map((array, item) => [array, tOut[item]]);
+            const timeOrigin = day.map((array, item) => [array, tIn[item], tOut[item]]);
             setOrigin(timeOrigin);
-        }
-        // } else {
-        //     const timeIn = document.querySelectorAll("[id='inputIn']");
-        //     const tIn = [...timeIn].map(input => input.value);
-        //     const timeOut = document.querySelectorAll("[id='inputOut']");
-        //     const tOut = [...timeOut].map(input => input.value);
+        } else {
+            const date = document.querySelectorAll("[id='inputDate']");
+            const day = [...date].map(input => input.value);
+            const timeIn = document.querySelectorAll("[id='inputIn']");
+            const tIn = [...timeIn].map(input => input.value);
+            const timeOut = document.querySelectorAll("[id='inputOut']");
+            const tOut = [...timeOut].map(input => input.value);
 
-        //     const timeUpdate = tIn.map((array, item) => [array, tOut[item]]);
-        //     setUpdate(timeUpdate);
-        // };
-        console.log(isOrigin);
+            const timeUpdate = day.map((array, item) => [array, tIn[item], tOut[item]]);
+            setUpdate(timeUpdate);
+        };
 
     }, [isEdit]);
 
-    const test = async() => {
-        // await edit();
 
-        const timeIn = document.querySelectorAll("[id='inputIn']");
-        const tIn = [...timeIn].map(input => input.value);
-        const timeOut = document.querySelectorAll("[id='inputOut']");
-        const tOut = [...timeOut].map(input => input.value);
+    useEffect(() => {
 
-        const timeUpdate = tIn.map((array, item) => [array, tOut[item]]);
-        setUpdate(timeUpdate);
-        
-        // for (let i = 0; i < isOrigin.length ; i++) {
-        //     console.log(isOrigin[i], isUpdate[i]);
-        // };
-        // axios.post("http://"+ ip +":5000/add_holiday", { 
-        //     name: holiName, 
-        //     date: holiDate 
-        // }, {crossdomain: true})
-        // getTime();
-        // console.log(isOrigin.length);
-        console.log(isUpdate);
-    }
+        const time = isOrigin.map((array, item) => {
+            if (JSON.stringify(array) !== JSON.stringify(isUpdate[item])){
+                return isUpdate[item]
+            }
+        }).filter(notUndefined => notUndefined !== undefined);
+        setTime(time);
 
-    // console.log('Original');
-    // console.log(isOrigin);
-    // console.log('Update');
-    // console.log(isUpdate);
+    }, [isUpdate]);
 
-    // useEffect(() => {
-    //     editDis();
-    //     (async() => {
-    //         const set = await setEdit(false);
-    //     })();
-    // },[props.data]);
 
-    // const timeIn = document.querySelectorAll("[id='inputIn']");
-    // const tIn = [...timeIn].map(input => input.value);
+    useEffect(() => {
 
-    // const timeOut = document.querySelectorAll("[id='inputOut']");
-    // const tOut = [...timeOut].map(input => input.value);
+        if (isTime.length > 0){
+            setClose(false)
+        }
 
-    // console.log(
-    //     tIn.map((array, item) => [array, tOut[item]])
-    //   )
+    }, [isTime]);
 
-    // console.log(tIn);
-    // console.log(tOut);
 
-    // for (var i = 0 ; i < emp.length ; i++){
-    //     if (emp[i] == emp[i]) {
-    //         console.log(i);
-    //     }
-    // } ;
+    const updateTime = () => {
 
+        for (let i = 0; i < isTime.length ; i++) {
+            axios.put("http://"+ isIp +":5000/update_time", { 
+                date: isTime[i][0],
+                in: isTime[i][1],
+                out: isTime[i][2],
+                id: isId,
+            }, {crossdomain: true})
+        };
+        setTime([])
+        setClose(true)
+
+    };
+
+
+    const [isClose, setClose] = useState(true);
 
 
     return (
@@ -125,6 +114,17 @@ function TimeSheetInfo(props) {
                 <p className='ov-select-txt'>มกราคม - 2566</p>
                 <div><img src={ar} alt=''/></div>
             </div> */}
+
+            <div id="myModal" className="modal" style={isClose ? {display: 'none'} : {display: 'block'}}>
+                <div className="modal-content">
+                    <label>มีรายการแก้ไขจำนวน {isTime.length} รายการ</label>
+                    <div>
+                        <button onClick={updateTime}>ยืนยัน</button>
+                        <button onClick={() => setClose(true)}>ยกเลิก</button>
+                    </div>
+                </div>
+            </div>
+            
             <div className='box-body ta-body'>
                 <div className='ta-box-content'>
                     <div className='ta-header'>
@@ -139,9 +139,9 @@ function TimeSheetInfo(props) {
                                     : {pointerEvents: 'auto'} } 
                                     onClick={edit}>
                                     <img src={tc} alt=''/>
-                                </div> 
+                                </div>
                                 :
-                                <div className='ta-img-bx' style={{background : 'red'}}onClick={test}>
+                                <div className='ta-img-bx' style={{background : 'red'}}onClick={edit}>
                                     <img src={tc} alt=''/>
                                 </div>
                             }
@@ -163,7 +163,7 @@ function TimeSheetInfo(props) {
                             // ))
                             isSheet.map((item, index) => (
                                 <div className='ta-content-time' key={index}>
-                                    <p className="center">{item.th_date}</p>
+                                    <li className="center" id='inputDate' value={item.work_id}>{item.th_date}</li>
                                     <div className="center">
                                         <input id='inputIn' type='time' defaultValue={item.time_in} disabled></input>
                                     </div>

@@ -7,7 +7,8 @@ import calen from '../../assets/icon/calendar-2.png';
 
 function CalendarDate(props) {
 
-    const ip = props.data;
+    const ip = props.data[0];
+    const isUpdate = props.data[1];
 
     const [holiDay, setHoliday] = useState([]);
 
@@ -21,7 +22,7 @@ function CalendarDate(props) {
         };
         getHoliday();
 
-    }, [ip]);
+    }, [ip, isUpdate]);
 
     const ca = new Date();
     const monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -72,7 +73,7 @@ function CalendarDate(props) {
             }
         })
 
-    }, [count, holiDay]);
+    }, [count, holiDay, isUpdate]);
 
 
     return (

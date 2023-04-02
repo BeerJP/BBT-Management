@@ -82,12 +82,13 @@ function InfoCard(props) {
                             <label className='text-box'>{emp.emp_enddate}</label>
                         </div>
                     </div>
-                    <div className='lb-box-long em-info'>
+                    {/* <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>ที่อยู่</label>
                             <label className='text-box emp-address'>{emp.emp_address}</label>
                         </div>
-                    </div>
+                    </div> */}
+                    <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>Username</label>
