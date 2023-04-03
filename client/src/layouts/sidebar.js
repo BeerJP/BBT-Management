@@ -9,18 +9,17 @@ import dc from '../assets/icon/document.png';
 
 function SideBar(props) {
 
-    // const user = props.data[0];
-    const logout = props.data[1];
+    const isTypeid = props.isTypeid;
 
-    const user = [{
-        emp_id: 1001,
-        type_id: 1
-    }];
+    const logout = () => {
+        localStorage.removeItem('token');
+        window.location = '/login';
+    };
 
     return (
         <>  
             {
-                user[0].type_id === 1 || user[0].type_id === 2 ?
+                isTypeid === 1 || isTypeid === 2 ?
                 <div className='side-menu'>
                     <div>
                         <NavLink to="/" 
@@ -49,6 +48,9 @@ function SideBar(props) {
                             <p className='menu-text'>จัดการใบลา</p>
                         </NavLink>
                     </div>
+                    <div>
+                        <button className='menu-icon' onClick={() => logout()}>Logout</button>
+                    </div>
                 </div>
                 :
                 <div className='side-menu'>
@@ -73,6 +75,9 @@ function SideBar(props) {
                             <img src={dc} alt=''/>
                             <p className='menu-text'>จัดการใบลา</p>
                         </NavLink>
+                    </div>
+                    <div>
+                        <button className='menu-icon' onClick={() => logout()}>Logout</button>
                     </div>
                 </div>
             }

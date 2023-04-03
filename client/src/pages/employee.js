@@ -21,12 +21,29 @@ function Employee() {
     };
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        axios.post("http://"+ ip +":5000/session", {
+            token: token
+        }, {crossdomain: true})
+        .then(response => {
+            if (response.data.user_id) {
+                
+            } 
+            else {
+                localStorage.removeItem('token')
+                window.location = '/login';
+            }
+        });
+    }, []);
+
+    useEffect(() => {
         axios.get("http://"+ ip +":5000/employee", {crossdomain: true})
         .then(response => {
             setEmployee(response.data);
             setId(response.data[response.data.length - 1].emp_id + 1)
         });
     }, [ip, cardType]);
+    
 
     return (
         <>

@@ -190,7 +190,7 @@ function AddCard(props) {
                         <div>
                             <label className='lb-header'>User Type<a>*</a></label>
                             <select className='text-box select-box' name="usertype" id="type" onClick={(event => {setType(event.target.value)})}>
-                                <option value="" disabled selected>กรุณาเลือกประเภทของผู้ใช้</option>
+                                <option disabled selected>กรุณาเลือกประเภทของผู้ใช้</option>
                                 {
                                     typeInfo.map((item, index) => (
                                         <option key={item.type_id} value={item.type_id}>{item.type_name}</option>

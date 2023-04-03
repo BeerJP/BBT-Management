@@ -6,12 +6,9 @@ import '../assets/style/login.css';
 import IpContext from '../ipContext';
 
 
-function Login(props) {
+function Login() {
 
     const ip = useContext(IpContext);
-
-    const setSession = props.data;
-
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
 
@@ -22,7 +19,12 @@ function Login(props) {
         }, 
         {crossdomain: true})
         .then(response => {
-            setSession(response.data);
+            if(response.data[0][0].emp_id){
+                localStorage.setItem('token', response.data[1].token)
+                window.location = '/';
+            } else {
+                console.log('No data')
+            }
         });
     };
 

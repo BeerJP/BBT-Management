@@ -21,12 +21,6 @@ const conn = mysql.createConnection({
 
 const app = express();
 
-// app.use(session({
-// 	secret: 'secret',
-// 	resave: true,
-// 	saveUninitialized: true
-// }));
-
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(cors({
@@ -39,11 +33,8 @@ app.use(cors({
 // -------------------- เข้าสู่ระบบ --------------------
 
 app.post('/login', function(request, response) {
-  const username = request.body.user;
+  const username = request.body.username;
 	const password = request.body.password;
-
-  // const username = 'admin';
-	// const password = '0000';
 
   conn.query(`SELECT *,
                 DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
@@ -56,13 +47,18 @@ app.post('/login', function(request, response) {
                 ON EMPLOYEE.emp_id = USER.emp_id
               INNER JOIN TYPE
                 ON USER.type_id = TYPE.type_id
-              WHERE USER.user_name = ?`, [username], 
+              WHERE USER.user_name = ?
+              GROUP BY EMPLOYEE.emp_id`, [username], 
     function(error, results, fields) {
       if (error) { response.send(error) }
       if (results.length == 0) { response.send(['Incorrect Username and/or Password!']) }
       bcrypt.compare(password, results[0].user_password, function(err, result) {
         if (result) {
-          var token = jwt.sign({ user: results[0].emp_id }, secret, { expiresIn: '1h' });
+          var token = jwt.sign({ 
+            user_id: results[0].emp_id, 
+            type_id: results[0].type_id,
+            user_name: results[0].emp_name + ' ' + results[0].emp_surname,
+            user_type: results[0].type_name}, secret, { expiresIn: '1h' });
           response.send([results, {token: token}])
         } else {
           response.send(['Incorrect Username and/or Password!'])
@@ -71,12 +67,12 @@ app.post('/login', function(request, response) {
     });
 });
 
-
 // -------------------- ตรวจสอบสถานะการเข้าสู่ระบบ --------------------
 
 app.post('/session', function(request, response) {
+ 
   try {
-    const token = request.headers.authorization.split(' ')[1];
+    const token = request.body.token;
     var decoded = jwt.verify(token, secret);
     response.send(decoded);
   } catch(error) {

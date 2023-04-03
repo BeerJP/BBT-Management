@@ -1,4 +1,5 @@
-import { React } from 'react';
+import { React, useState, useEffect, useReducer } from 'react';
+import axios from 'axios';
 import ts from '../../assets/icon/timesheet.png';
 import ld from '../../assets/icon/leave.png';
 // import al from '../../assets/icon/angle-left.png';
@@ -7,17 +8,36 @@ import ld from '../../assets/icon/leave.png';
 
 function AdminContent1(props) {
 
-    const ov = props.data;
+    const ip = props.data;
+    const [isOverview, setOverview] = useState([{
+        emp:0,
+        ta:0,
+        nta:0,
+        lta:0,
+        ld:0,
+        bld:0,
+        hld:0,
+        sld:0,
+        wd:0,
+        hd:0
+    }]);
 
-    const work_percen = Math.round(ov[0].wd / (ov[0].wd + ov[0].hd) * 100);
-    const holi_percen = Math.round(ov[0].hd / (ov[0].wd + ov[0].hd) * 100);
+    useEffect(() => {
+        axios.get("http://"+ ip +":5000/overview", {crossdomain: true})
+        .then(response => {
+            setOverview(response.data);
+        });
+    }, [ip]);
 
-    const nta_percen = Math.round(ov[0].nta / ov[0].ta * 100);
-    const lta_percen = Math.round(ov[0].lta / ov[0].ta * 100);
+    const work_percen = Math.round(isOverview[0].wd / (isOverview[0].wd + isOverview[0].hd) * 100);
+    const holi_percen = Math.round(isOverview[0].hd / (isOverview[0].wd + isOverview[0].hd) * 100);
 
-    const bld_percen = Math.round(ov[0].bld / ov[0].ld * 100);
-    const hld_percen = Math.round(ov[0].hld / ov[0].ld * 100);
-    const sld_percen = Math.round(ov[0].sld / ov[0].ld * 100);
+    const nta_percen = Math.round(isOverview[0].nta / isOverview[0].ta * 100);
+    const lta_percen = Math.round(isOverview[0].lta / isOverview[0].ta * 100);
+
+    const bld_percen = Math.round(isOverview[0].bld / isOverview[0].ld * 100);
+    const hld_percen = Math.round(isOverview[0].hld / isOverview[0].ld * 100);
+    const sld_percen = Math.round(isOverview[0].sld / isOverview[0].ld * 100);
 
     const styles = {
         work:{
@@ -53,15 +73,15 @@ function AdminContent1(props) {
         <>
             <div className='box-body ov-header-left1'>
                 <div className='lb-box ov-emp-bx'>
-                    <p className='ov-emp-num'>{ov[0].emp}</p>
+                    <p className='ov-emp-num'>{isOverview[0].emp}</p>
                     <p className='ov-emp-txt'>พนักงาน</p>
                 </div>
                 <div className='lb-box ov-tim-bx'>
-                    <p className='ov-emp-num'>{ov[0].ta}</p>
+                    <p className='ov-emp-num'>{isOverview[0].ta}</p>
                     <p className='ov-emp-txt'>ใบบันทึกเวลา</p>
                 </div>
                 <div className='lb-box ov-lea-bx'>
-                    <p className='ov-emp-num'>{ov[0].ld}</p>
+                    <p className='ov-emp-num'>{isOverview[0].ld}</p>
                     <p className='ov-emp-txt'>ใบลา</p>
                 </div>
             </div>
@@ -74,12 +94,12 @@ function AdminContent1(props) {
                 <div className='box-body ov-header-left2'>
                     <div className='lb-box ov-work-bx'>
                         <p className='ov-date-txt'>วันทำงาน</p>
-                        <p className='ov-date-num'>{ov[0].wd} วัน ({work_percen}%)</p>
+                        <p className='ov-date-num'>{isOverview[0].wd} วัน ({work_percen}%)</p>
                         <div className='ov-date-percen' style={styles.work}></div>
                     </div>
                     <div className='lb-box ov-holi-bx'>
                         <p className='ov-date-txt'>วันหยุดนักขัตฤกษ์</p>
-                        <p className='ov-date-num'>{ov[0].hd} วัน ({holi_percen}%)</p>
+                        <p className='ov-date-num'>{isOverview[0].hd} วัน ({holi_percen}%)</p>
                         <div className='ov-date-percen' style={styles.holi}></div>
                     </div>
                 </div>
@@ -91,11 +111,11 @@ function AdminContent1(props) {
                     </div>
                     <div className='lb-stat-bx'>
                         <div>
-                            <label><p>ปกติ</p><p>{ov[0].nta} ({nta_percen}%)</p></label>
+                            <label><p>ปกติ</p><p>{isOverview[0].nta} ({nta_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.nta}></div>
                         </div>
                         <div>
-                            <label><p>สาย</p><p>{ov[0].lta} ({lta_percen}%)</p></label>
+                            <label><p>สาย</p><p>{isOverview[0].lta} ({lta_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.lta}></div>
                         </div>
                     </div>
@@ -107,15 +127,15 @@ function AdminContent1(props) {
                     </div>
                     <div className='lb-stat-bx'>
                         <div>
-                            <label><p>ลากิจ</p><p>{ov[0].bld} ({bld_percen}%)</p></label>
+                            <label><p>ลากิจ</p><p>{isOverview[0].bld} ({bld_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.bld}></div>
                         </div>
                         <div>
-                            <label><p>ลาพักร้อน</p><p>{ov[0].hld} ({hld_percen}%)</p></label>
+                            <label><p>ลาพักร้อน</p><p>{isOverview[0].hld} ({hld_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.hld}></div>
                         </div>
                         <div>
-                            <label><p>ลาป่วย</p><p>{ov[0].sld} ({sld_percen}%)</p></label>
+                            <label><p>ลาป่วย</p><p>{isOverview[0].sld} ({sld_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.sld}></div>
                         </div>
                     </div>

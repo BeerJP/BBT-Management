@@ -8,47 +8,40 @@ import ld from '../../assets/icon/leave.png';
 
 function AdminContent1(props) {
 
-    const [isIp, setIp] = useState(props.data[0]);
-    const [isId, setId] = useState(props.data[1]);
-
-    useEffect(() => {
-
-        setIp(props.data[0]);
-        setId(props.data[1]);
-
-    }, [props.data]);
-
-    const [overview, setOverview] = useState([{
-        emp:0,
-        ta:0,
-        nta:0,
-        lta:0,
-        ld:0,
-        bld:0,
-        hld:0,
-        sld:0,
-        wd:0,
-        hd:0
+    const ip = props.data[0];
+    const isUserid = props.data[1];
+    const [isOverview, setOverview] = useState([{
+        emp: 0,
+        ta: 0,
+        nta: 0,
+        lta: 0,
+        ld: 0,
+        bld: 0,
+        hld: 0,
+        sld: 0,
+        wd: 0,
+        hd: 0,
     }]);
 
     useEffect(() => {
-        axios.post("http://"+ isIp +":5000/overview_user", {
-            id: isId
+        axios.post("http://"+ ip +":5000/overview_user", {
+            id: isUserid
         }, {crossdomain: true})
         .then(response => {
             setOverview(response.data);
+            console.log(response.data)
         });
-    }, [isIp, isId]);
+    }, [isUserid]);
 
-    const work_percen = Math.round(overview[0].wd / (overview[0].wd + overview[0].hd) * 100);
-    const holi_percen = Math.round(overview[0].hd / (overview[0].wd + overview[0].hd) * 100);
+    const work_percen = Math.round(isOverview[0].wd / (isOverview[0].wd + isOverview[0].hd) * 100);
+    const holi_percen = Math.round(isOverview[0].hd / (isOverview[0].wd + isOverview[0].hd) * 100);
 
-    const nta_percen = Math.round(overview[0].nta / overview[0].ta * 100);
-    const lta_percen = Math.round(overview[0].lta / overview[0].ta * 100);
+    const nta_percen = Math.round(isOverview[0].nta / isOverview[0].ta * 100);
+    const lta_percen = Math.round(isOverview[0].lta / isOverview[0].ta * 100);
 
-    const bld_percen = Math.round(overview[0].bld / overview[0].ld * 100);
-    const hld_percen = Math.round(overview[0].hld / overview[0].ld * 100);
-    const sld_percen = Math.round(overview[0].sld / overview[0].ld * 100);
+    const bld_percen = Math.round(isOverview[0].bld / isOverview[0].ld * 100);
+    const hld_percen = Math.round(isOverview[0].hld / isOverview[0].ld * 100);
+    const sld_percen = Math.round(isOverview[0].sld / isOverview[0].ld * 100);
 
     const styles = {
         work:{
@@ -84,11 +77,11 @@ function AdminContent1(props) {
         <>
             <div className='box-body ov-header-left1-user'>
                 <div className='lb-box ov-tim-bx'>
-                    <p className='ov-emp-num'>{overview[0].ta}</p>
+                    <p className='ov-emp-num'>{isOverview[0].ta}</p>
                     <p className='ov-emp-txt'>ใบบันทึกเวลา</p>
                 </div>
                 <div className='lb-box ov-lea-bx'>
-                    <p className='ov-emp-num'>{overview[0].ld}</p>
+                    <p className='ov-emp-num'>{isOverview[0].ld}</p>
                     <p className='ov-emp-txt'>ใบลา</p>
                 </div>
             </div>
@@ -101,12 +94,12 @@ function AdminContent1(props) {
                 <div className='box-body ov-header-left2'>
                     <div className='lb-box ov-work-bx'>
                         <p className='ov-date-txt'>วันทำงาน</p>
-                        <p className='ov-date-num'>{overview[0].wd} วัน ({work_percen}%)</p>
+                        <p className='ov-date-num'>{isOverview[0].wd} วัน ({work_percen}%)</p>
                         <div className='ov-date-percen' style={styles.work}></div>
                     </div>
                     <div className='lb-box ov-holi-bx'>
                         <p className='ov-date-txt'>วันหยุดนักขัตฤกษ์</p>
-                        <p className='ov-date-num'>{overview[0].hd} วัน ({holi_percen}%)</p>
+                        <p className='ov-date-num'>{isOverview[0].hd} วัน ({holi_percen}%)</p>
                         <div className='ov-date-percen' style={styles.holi}></div>
                     </div>
                 </div>
@@ -118,11 +111,11 @@ function AdminContent1(props) {
                     </div>
                     <div className='lb-stat-bx'>
                         <div>
-                            <label><p>ปกติ</p><p>{overview[0].nta} ({nta_percen}%)</p></label>
+                            <label><p>ปกติ</p><p>{isOverview[0].nta} ({nta_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.nta}></div>
                         </div>
                         <div>
-                            <label><p>สาย</p><p>{overview[0].lta} ({lta_percen}%)</p></label>
+                            <label><p>สาย</p><p>{isOverview[0].lta} ({lta_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.lta}></div>
                         </div>
                     </div>
@@ -134,15 +127,15 @@ function AdminContent1(props) {
                     </div>
                     <div className='lb-stat-bx'>
                         <div>
-                            <label><p>ลากิจ</p><p>{overview[0].bld} ({bld_percen}%)</p></label>
+                            <label><p>ลากิจ</p><p>{isOverview[0].bld} ({bld_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.bld}></div>
                         </div>
                         <div>
-                            <label><p>ลาพักร้อน</p><p>{overview[0].hld} ({hld_percen}%)</p></label>
+                            <label><p>ลาพักร้อน</p><p>{isOverview[0].hld} ({hld_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.hld}></div>
                         </div>
                         <div>
-                            <label><p>ลาป่วย</p><p>{overview[0].sld} ({sld_percen}%)</p></label>
+                            <label><p>ลาป่วย</p><p>{isOverview[0].sld} ({sld_percen}%)</p></label>
                             <div className='ov-ta-percen' style={styles.sld}></div>
                         </div>
                     </div>

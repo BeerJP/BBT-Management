@@ -412,3 +412,94 @@
     margin: 0;
     width: 15%;
 }
+
+/* Responsive */
+
+/* @media only screen and (max-width: 390px) { */
+    /* ----- Left Box ----- */
+    /* .ov-header-left1,
+    .ov-header-left1-user,
+    .ov-header-left2 {
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    } */
+    /* .ov-header-left1-user .ov-tim-bx,
+    .ov-header-left1-user .ov-lea-bx {
+    width: 100%;
+    } */
+    /* ----- Body Date Box ----- */
+    /* .ov-header-combo {
+    height: auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: none;
+    }
+    .ov-header-combo div {
+    width: 25px;
+    height: 25px;
+    margin-bottom: 5px;
+    }
+    .ov-header-combo img {
+    width: 15px;
+    }
+    .ov-select-txt {
+    width: 100%;
+    margin-bottom: 10px;
+    }
+    .ov-work-bx,
+    .ov-wend-bx,
+    .ov-holi-bx {
+    width: 90%;
+    margin-bottom: 10px;
+    }
+    .ov-date-percen {
+    height: 2px;
+    margin-bottom: 5px;
+    }
+    .ov-date-num {
+    font-size: 1rem;
+    margin: 5px 0;
+    }
+    .ov-article-left {
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    }
+    .top-bx,
+    .bot-bx {
+    height: auto;
+    border-right: none;
+    margin-bottom: 5px;
+    }
+    .ov-ta-txt {
+    font-size: 0.8rem;
+    margin: 5px 0;
+    }
+    .lb-box img {
+    width: 60px;
+    margin: 10px 0;
+    }
+    .lb-stat-bx {
+    width: 100%;
+    margin-top: 0;
+    }
+    .lb-stat-bx label {
+    flex-direction: column;
+    align-items: center;
+    }
+    .ov-ta-percen {
+    height: 4px;
+    margin-bottom: 5px;
+    } */
+    /* ----- Common ----- */
+    /* .ov-lb-num {
+    font-size: 1.5rem;
+    }
+    .ov-lb-txt {
+    font-size: 0.7rem;
+    }
+    } */

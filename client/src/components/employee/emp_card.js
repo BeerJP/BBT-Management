@@ -19,7 +19,6 @@ function EmployeeCard(props) {
     const addEmp = () => { setCardType('add'); };
     const editEmp = () => { setCardType('edit'); };
 
-
     return (
         <>
             <div className='em-header-2'>
@@ -33,7 +32,7 @@ function EmployeeCard(props) {
                         <img src={ui} alt=''/>
                         <span className="tooltiptext">แสดงข้อมูล</span>
                     </div>
-                    <div className="em-img-bx" pointEve style={emp == null ? {pointerEvents: 'none'} : 
+                    <div className="em-img-bx" style={emp == null ? {pointerEvents: 'none'} : 
                         cardType === 'edit' ? {background: '#F4D03F'} : {pointerEvents: 'auto'}} onClick={editEmp}>
                         <img src={ue} alt=''/>
                         <span className="tooltiptext">แก้ไขข้อมูล</span>

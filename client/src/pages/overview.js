@@ -9,48 +9,47 @@ import IpContext from '../ipContext';
 
 function Overview() {
 
-    const [isUserid, setUserid] = useState(1001)
-    const [isUsertype, setUsertype] = useState(1)
-
-    // useEffect(() => {
-
-    //     setUserid(location.state.id);
-    //     setUsertype(location.state.type);
-
-    // }, [location]);
-
     const ip = useContext(IpContext);
-
-    const [overview, setOverview] = useState([{
-        emp:0,
-        ta:0,
-        nta:0,
-        lta:0,
-        ld:0,
-        bld:0,
-        hld:0,
-        sld:0,
-        wd:0,
-        hd:0
-    }]);
+    const [isUserid, setUserid] = useState(0)
+    const [isTypeid, setTypeid] = useState(0)
+    const [isDisabled, setDisabled] = useState(true)
+    const [isUserdisa, setUserdisa] = useState(true)
 
     useEffect(() => {
-        axios.get("http://"+ ip +":5000/overview", {crossdomain: true})
+        const token = localStorage.getItem('token');
+        axios.post("http://"+ ip +":5000/session", {
+            token: token
+        }, {crossdomain: true})
         .then(response => {
-            setOverview(response.data);
+            if (response.data.user_id) {
+                setUserid(response.data.user_id)
+                setTypeid(response.data.type_id)
+                if (response.data.user_id === 1 || response.data.type_id === 2) {
+                    setDisabled(false)
+                    setUserdisa(true)
+                } else {
+                    setDisabled(true)
+                    setUserdisa(false)
+                }
+            } 
+            else {
+                localStorage.removeItem('token')
+                window.location.href ='/login'
+            }
         });
-    }, [ip]);
+    }, []);
 
+    console.log(isDisabled)
+    console.log(isUserdisa)
 
     return (
         <>
             {   
-                isUsertype === null ? '' :
-                isUsertype === 1 || isUsertype === 2 ?  
-                [<div className='box-content'><AdminContent1 data={overview}/></div>,
-                <div className='box-content'><AdminContent2 data={ip}/></div>] 
+                isTypeid === 1 || isTypeid === 2 ?  
+                [<div className='box-content' disabled={isDisabled} key='1'><AdminContent1 data={ip}/></div>,
+                <div className='box-content' disabled={isDisabled} key='2'><AdminContent2 data={ip}/></div>] 
                 :
-                <div className='box-content'><UserContent data={[ip, isUserid]}/></div>
+                <div className='box-content' disabled={isUserdisa} key='3'><UserContent data={[ip, isUserid]}/></div>
             }
         </>
     );

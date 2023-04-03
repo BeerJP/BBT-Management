@@ -6,7 +6,6 @@ import IpContext from '../../ipContext';
 function AdminContent2(props) {
 
     const ip = props.data;
-
     const [timeSheet, setTimesheet] = useState([]);
     
     useEffect(() => {
