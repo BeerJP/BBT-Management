@@ -40,17 +40,17 @@ function Overview() {
     }, []);
 
 
-
-
     return (
         <>
-            {   
-                isTypeid === 1 || isTypeid === 2 ?  
-                [<div className='box-content' disabled={isDisabled} key='1'><AdminContent1 data={ip}/></div>,
-                <div className='box-content' disabled={isDisabled} key='2'><AdminContent2 data={ip}/></div>] 
-                :
-                <div className='box-content' disabled={isUserdisa} key='3'><UserContent data={[ip, isUserid]}/></div>
-            }
+            <div className='container'>
+                {   
+                    isTypeid === 1 || isTypeid === 2 ?  
+                    [<div className='box-content' disabled={isDisabled} key='1'><AdminContent1 data={ip}/></div>,
+                    <div className='box-content' disabled={isDisabled} key='2'><AdminContent2 data={ip}/></div>] 
+                    :
+                    <div className='box-content' disabled={isUserdisa} key='3'><UserContent data={[ip, isUserid]}/></div>
+                }
+            </div>
         </>
     );
 };

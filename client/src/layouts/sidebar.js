@@ -1,5 +1,8 @@
-import { React } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+import logo from '../assets/icon/time-management.png';
+import IpContext from '../ipContext';
 import hm from '../assets/icon/home.png';
 import em from '../assets/icon/users-alt.png';
 import ut from '../assets/icon/user-time.png';
@@ -9,16 +12,36 @@ import dc from '../assets/icon/document.png';
 
 function SideBar(props) {
 
-    const isTypeid = props.isTypeid;
+    const ip = useContext(IpContext);
+    const [isTypeid, setTypeid] = useState(0)
+    const [isUserName, setUsername] = useState('')
+    const [isUsertype, setUsertype] = useState('')
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        axios.post("http://"+ ip +":5000/session", {
+            token: token
+        })
+        .then(response => {
+            if (response.data.user_id) {
+                setTypeid(response.data.type_id)
+                setUsername(response.data.user_name)
+                setUsertype(response.data.user_type)
+            }
+        });
+    }, []);
 
     const logout = () => {
         localStorage.removeItem('token');
         window.location = '/login';
     };
 
+    console.log(isTypeid)
+
     return (
         <>  
-            {
+            {   isTypeid === 0 ? '' 
+                :
                 isTypeid === 1 || isTypeid === 2 ?
                 <div className='side-menu'>
                     <div>

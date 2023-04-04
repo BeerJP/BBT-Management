@@ -4,6 +4,7 @@ import './assets/style/app.css';
 import './assets/style/layout.css';
 import Login from './pages/login';
 import NavBar from './layouts/navbar';
+import SideBar from './layouts/sidebar';
 import Overview from './pages/overview';
 import Employee from './pages/employee';
 import TimeSheet from './pages/timesheet';
@@ -17,16 +18,15 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar>
-        <Routes>
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/" element={<Overview/>}/>
-          <Route path="/employee" element={<Employee/>}/>
-          <Route path="/timesheet" element={<TimeSheet/>}/>
-          <Route path="/calendar" element={<Calendar/>}/>
-          <Route path="/leave" element={<Leave/>}/>
-        </Routes>
-      </NavBar>
+      <SideBar />
+      <Routes>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/" element={<Overview/>}/>
+        <Route path="/employee" element={<Employee/>}/>
+        <Route path="/timesheet" element={<TimeSheet/>}/>
+        <Route path="/calendar" element={<Calendar/>}/>
+        <Route path="/leave" element={<Leave/>}/>
+      </Routes>
     </BrowserRouter>
   );
 };

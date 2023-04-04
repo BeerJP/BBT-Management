@@ -5,7 +5,7 @@ import logo from '../assets/icon/time-management.png';
 import IpContext from '../ipContext';
 
 
-function NavBar({children}) {
+function NavBar() {
 
     const ip = useContext(IpContext);
     const [isTypeid, setTypeid] = useState(0)
@@ -24,11 +24,13 @@ function NavBar({children}) {
                 setUsertype(response.data.user_type)
             }
         });
-    }, [children]);
+    }, []);
 
     return (
-        <>
-            <nav className='navbar'>
+        <>  
+            {
+                isTypeid === 0 ? '' :
+            [<nav className='navbar'>
                 <div className='nav-container'>
                     <div className='left-box'>
                         <img src={logo} alt=''></img>
@@ -41,8 +43,11 @@ function NavBar({children}) {
                         </label>
                     </div>
                 </div>
-            </nav>
-            <div className='container'>
+            </nav>,
+            <SideBar isTypeid={isTypeid}/>]
+            }
+
+            {/* <div className='container'>
             {
                 isTypeid === 0 ? 
                 '' :
@@ -52,7 +57,7 @@ function NavBar({children}) {
                     <div className='main-content' key=''>{children}</div>
                 </div>
             </div>
-            <footer></footer>
+            <footer></footer> */}
         </>
     );
 };
