@@ -24,14 +24,15 @@ function AdminContent1(props) {
     }]);
 
     useEffect(() => {
-        axios.post("http://"+ ip +":5000/overview_user", {
-            id: isUserid
-        }, {crossdomain: true})
-        .then(response => {
-            setOverview(response.data);
-            console.log(response.data)
-        });
-    }, [isUserid]);
+        if (isUserid > 0) {
+            axios.post("http://"+ ip +":5000/overview_user", {
+                id: isUserid
+            }, {crossdomain: true})
+            .then(response => {
+                setOverview(response.data);
+            });
+        }
+    }, [ip, isUserid]);
 
     const work_percen = Math.round(isOverview[0].wd / (isOverview[0].wd + isOverview[0].hd) * 100);
     const holi_percen = Math.round(isOverview[0].hd / (isOverview[0].wd + isOverview[0].hd) * 100);

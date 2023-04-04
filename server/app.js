@@ -129,8 +129,10 @@ app.get('/department', (request, response) => {
   });
 });
 
-// แสดงข้อมูล Employee
-app.get('/employee', (request, response) => {
+// แสดงข้อมูล Employee info
+app.post('/employee_info', (request, response) => {
+  const id = request.body.id;
+
   conn.query(`SELECT *,
                 DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
                 DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
@@ -146,6 +148,19 @@ app.get('/employee', (request, response) => {
                 ON EMPLOYEE.emp_id = USER.emp_id
               INNER JOIN TYPE
                 ON USER.type_id = TYPE.type_id
+              WHERE emp_status > '0' AND EMPLOYEE.emp_id = ?`, [id], 
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล Employee table
+app.get('/employee_table', (request, response) => {
+  conn.query(`SELECT EMPLOYEE.emp_id, EMPLOYEE.emp_name, EMPLOYEE.emp_surname, DEPARTMENT.dept_name,
+                DATE_FORMAT(EMPLOYEE.emp_startdate, '%Y-%m-%d') as emp_startdate
+              FROM EMPLOYEE
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
               WHERE emp_status > '0'
               GROUP BY EMPLOYEE.emp_id
               ORDER BY EMPLOYEE.emp_id`, 
@@ -157,6 +172,13 @@ app.get('/employee', (request, response) => {
 // แสดงข้อมูล User
 app.get('/user', (request, response) => {
   conn.query("SELECT * FROM USER", (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล User ID
+app.get('/emp_id', (request, response) => {
+  conn.query("SELECT MAX(emp_id) AS emp_id FROM EMPLOYEE", (err, result) => {
     response.send(result);
   });
 });
@@ -292,10 +314,10 @@ app.get('/time', (request, response) => {
 
 // แสดงจำนวน Time Attendance & Leave Day
 app.get('/timecount', (request, response) => {
-  conn.query(`SELECT EMPLOYEE.emp_id, 
+  conn.query(`SELECT EMPLOYEE.emp_id AS id, 
                 EMPLOYEE.emp_name, 
                 EMPLOYEE.emp_surname, 
-                DATE_FORMAT(DATE_ADD(EMPLOYEE.emp_startdate, INTERVAL 543 YEAR), '%Y-%m-%d') as emp_startdate,
+                DATE_FORMAT(DATE_ADD(EMPLOYEE.emp_startdate, INTERVAL 543 YEAR), '%Y-%m-%d') AS emp_startdate,
                 ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.emp_id = EMPLOYEE.emp_id ) AS ta,
                 ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.emp_id = EMPLOYEE.emp_id ) AS ld
                 FROM EMPLOYEE 
@@ -492,10 +514,8 @@ app.put("/update_employee", (request, response) => {
   const id = request.body.id;
   const name = request.body.name;
   const surname = request.body.surname;
-  const idcard = request.body.idcard;
   const gender = request.body.gender;
   const birthdate = request.body.birth;
-  const address = request.body.address;
   const mac1 = request.body.mac1;
   const mac2 = request.body.mac2;
   const end = request.body.end;
@@ -504,16 +524,14 @@ app.put("/update_employee", (request, response) => {
   conn.query(`UPDATE EMPLOYEE SET 
                 emp_name = ?, 
                 emp_surname = ?, 
-                emp_idcard = ?, 
                 emp_gender = ?,
                 emp_birthdate = ?, 
-                emp_address = ?, 
                 emp_mac1 = ?, 
                 emp_mac2 = ?,
                 emp_enddate = ?,
                 dept_id = ? 
               WHERE emp_id = ?`,
-    [name, surname, idcard, gender, birthdate, address, mac1, mac2, end, department, id], 
+    [name, surname, gender, birthdate, mac1, mac2, end, department, id], 
     (err, result) => {
       if (err) {
         response.send(err);

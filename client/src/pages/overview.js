@@ -39,8 +39,8 @@ function Overview() {
         });
     }, []);
 
-    console.log(isDisabled)
-    console.log(isUserdisa)
+
+
 
     return (
         <>

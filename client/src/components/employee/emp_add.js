@@ -4,36 +4,31 @@ import axios from 'axios';
 
 function AddCard(props) {
 
-    const ip = props.data[2];
+    const ip = props.data[0];
+    const setCardType = props.data[1];
 
     const [isNotnull, setNotnull] = useState(true);
-
+    const [isId, setId] = useState();
     const [deptInfo, setDeptinfo] = useState([{
         dept_id: ' ',
         dept_name: ' '
     }]);
-
     const [typeInfo, setTypeinfo] = useState([{
         type_id: ' ',
         type_name: ' '
     }]);
 
-    const id = props.data[0];
     const [name, setName] = useState('');
     const [surname, setSur] = useState('');
     const [dept, setDept] = useState(1);
     const [gender, setGender] = useState('ชาย');
     const [birth, setBirth] = useState('');
-    const [idcard, setIdcard] = useState('');
     const [mac1, setMac1] = useState('');
     const [mac2, setMac2] = useState('');
     const [start, setStart] = useState('');
-    const [address, setAddress] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [type, setType] = useState('');
-
-    const setCardType = props.data[1];
 
     useEffect(() => {
 
@@ -48,20 +43,18 @@ function AddCard(props) {
 
     const insertEmployee = () => {
         axios.post("http://"+ ip +":5000/add_employee", { 
-            id: id,
+            id: isId,
             name: name, 
             surname: surname,
             dept: dept,
             gender: gender,
             birth: birth,
-            idcard: idcard,
             mac1: mac1,
             mac2: mac2,
             start: start,
-            address: address
         }, {crossdomain: true})
         .then(axios.post("http://"+ ip +":5000/add_user", { 
-            id: id,
+            id: isId,
             username: username,
             password: password,
             type: type
@@ -72,6 +65,13 @@ function AddCard(props) {
     };
 
     useEffect(() => {
+        const getId = async() => {
+            await axios.get("http://"+ ip +":5000/emp_id", {crossdomain: true})
+            .then(response => {
+                setId(response.data);
+            });
+        };
+
         const getDepart = async() => {
             await axios.get("http://"+ ip +":5000/department", {crossdomain: true})
             .then(response => {
@@ -85,6 +85,7 @@ function AddCard(props) {
                 setTypeinfo(response.data);
             });
         };
+        getId();
         getDepart();
         getType();
     }, [ip]);
@@ -167,19 +168,13 @@ function AddCard(props) {
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>วันเริ่มงาน<a>*</a></label>
-                            <input className='text-box' type='date'onSelect={(event => {setStart(event.target.value)})}/>
+                            <input className='text-box' type='date' onSelect={(event => {setStart(event.target.value)})}/>
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 2</label>
                             <input className='text-box' maxLength='12' onKeyUp={(e => Mac2Colon(e.target))} onChange={(event => {setMac2(event.target.value)})}></input>
                         </div>
                     </div>
-                    {/* <div className='lb-box-long em-info'>
-                        <div>
-                            <label className='lb-header'>ที่อยู่</label>
-                            <input className='text-box emp-address' onChange={(event => {setAddress(event.target.value)})}></input>
-                        </div>
-                    </div> */}
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
