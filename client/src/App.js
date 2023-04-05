@@ -18,7 +18,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <SideBar />
+      <NavBar/>
       <Routes>
         <Route path="/login" element={<Login/>}/>
         <Route path="/" element={<Overview/>}/>

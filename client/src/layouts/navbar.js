@@ -8,9 +8,39 @@ import IpContext from '../ipContext';
 function NavBar() {
 
     const ip = useContext(IpContext);
+    const [isWidth, setWidth] = useState({width: 0});
+    const [isResponsive, setResponsive] = useState(0);
     const [isTypeid, setTypeid] = useState(0)
     const [isUserName, setUsername] = useState('')
     const [isUsertype, setUsertype] = useState('')
+
+    useEffect(() => {
+
+        switch(isWidth.width) {
+            case 10:
+                setResponsive(0);
+                break;
+            case 8:
+                setResponsive(1);
+                break;
+            case 4:
+                setResponsive(2);
+                break;
+            default:
+          }
+
+      }, [isWidth]);
+
+    useEffect(() => {
+
+        function handleResize() {
+            setWidth({width: Math.round(window.innerWidth / 100)});
+        }
+    
+        window.addEventListener("resize", handleResize);
+        handleResize();
+        return () => window.removeEventListener("resize", handleResize);
+      }, []);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -26,25 +56,27 @@ function NavBar() {
         });
     }, []);
 
+    console.log('Nav ' + isResponsive)
+
     return (
         <>  
             {
                 isTypeid === 0 ? '' :
-            [<nav className='navbar'>
+            [<nav className='navbar' key='1'>
                 <div className='nav-container'>
                     <div className='left-box'>
-                        <img src={logo} alt=''></img>
-                        <label className='home-menu'>BBTE Management</label>
+                        {/* <img src={logo} alt=''></img>
+                        <label className='home-menu'>BBTE Management</label> */}
                     </div>
                     <div className='right-box'>
-                        <label>
+                        <label style={isResponsive > 0 ? {display: 'none'} : {display: 'flex'}}>
                             <p>{isUserName}</p>
                             <p>{isUsertype}</p>
                         </label>
                     </div>
                 </div>
             </nav>,
-            <SideBar isTypeid={isTypeid}/>]
+            <SideBar key='2' data={[isTypeid, isResponsive]}/>]
             }
 
             {/* <div className='container'>
