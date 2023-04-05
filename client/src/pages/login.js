@@ -9,7 +9,6 @@ import IpContext from '../ipContext';
 function Login() {
 
     const ip = useContext(IpContext);
-    const [isCan, setCan] = useState(false);
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
 

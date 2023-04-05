@@ -4,7 +4,6 @@ import './assets/style/app.css';
 import './assets/style/layout.css';
 import Login from './pages/login';
 import NavBar from './layouts/navbar';
-import SideBar from './layouts/sidebar';
 import Overview from './pages/overview';
 import Employee from './pages/employee';
 import TimeSheet from './pages/timesheet';

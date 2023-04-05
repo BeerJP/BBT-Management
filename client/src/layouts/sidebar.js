@@ -12,31 +12,34 @@ import dc from '../assets/icon/document.png';
 
 function SideBar(props) {
 
-    const isTypeid = props.data[0]
-    const isResponsive = props.data[1]
+    const isTypeid = props.isTypeid;
+    // const [isOpen, setOpen] = useState(false);
 
     const logout = () => {
         localStorage.removeItem('token');
         window.location = '/login';
     };
 
+    const isOpen = () => {
+        const display = document.getElementById('menubox');
+        if (display.style.display === '' || display.style.display === 'none') {
+            display.style.display = 'block';
+        } else if (display.style.display === 'block') {
+            display.style.display = 'none';
+        }
+    }
 
-    return (
-        <>  
-            {   isTypeid === 0 ? '' 
-                :
-                isTypeid === 1 || isTypeid === 2 ?
+    if (isTypeid === 1 || isTypeid === 2) {
+        return (
+            <>
                 <div className='side-menu'>
                     <div className='logo-box'>
-                        <img className='menu' 
-                            src={menu} 
-                            alt=''
-                            style={isResponsive === 0 ? {display: 'none'} : 
-                            {display: 'flex'}}></img>
-                        <img className='logo' src={logo} alt=''></img>
+                        <div className='menu'>
+                            <img src={menu} alt='' onClick={isOpen}></img>
+                        </div>
                         <label className='home-menu'>BBTE Management</label>
                     </div>
-                    <div className='menu-box'>
+                    <div className='menu-box' id='menubox'>
                         <div>
                             <NavLink to="/" 
                                 className='menu-icon'>
@@ -47,6 +50,47 @@ function SideBar(props) {
                                 className='menu-icon'>
                                 <img src={em} alt=''/>
                                 <p className='menu-text'>พนักงาน</p>
+                            </NavLink>
+                            <NavLink to="/timesheet" 
+                                className='menu-icon'>
+                                <img src={ut} alt=''/>
+                                <p className='menu-text'>ใบบันทึกเวลา</p>
+                            </NavLink>
+                            <NavLink to="/calendar" 
+                                className='menu-icon'>
+                                <img src={ca} alt=''/>
+                                <p className='menu-text'>ปฏิทิน</p>
+                            </NavLink>
+                            <NavLink to="/leave" 
+                                className='menu-icon'>
+                                <img src={dc} alt=''/>
+                                <p className='menu-text'>จัดการใบลา</p>
+                            </NavLink>
+                            <NavLink to="" 
+                                className='menu-icon'>
+                                <img src={so} alt=''/>
+                                <p className='menu-text'
+                                onClick={logout}>ออกจากระบบ</p>
+                            </NavLink>
+                        </div>
+                    </div>
+                </div>
+            </>
+        )
+    } else if (isTypeid === 3) {
+        return (
+            <>
+                <div className='side-menu'>
+                    <div className='logo-box'>
+                        <img className='menu' src={menu} alt=''></img>
+                        <label className='home-menu'>BBTE Management</label>
+                    </div>
+                    <div className='menu-box'>
+                        <div>
+                            <NavLink to="/" 
+                                className='menu-icon'>
+                                <img src={hm} alt=''/>
+                                <p className='menu-text'>หน้าหลัก</p>
                             </NavLink>
                             <NavLink to="/timesheet" 
                                 className='menu-icon'>
@@ -74,74 +118,9 @@ function SideBar(props) {
                         </div>
                     </div>
                 </div>
-                :
-                <div className='side-menu'>
-                    <div>
-                        <NavLink to="/" 
-                            className='menu-icon'>
-                            <img src={hm} alt=''/>
-                            <p className='menu-text'>หน้าหลัก</p>
-                        </NavLink>
-                        <NavLink to="/timesheet" 
-                            className='menu-icon'>
-                            <img src={ut} alt=''/>
-                            <p className='menu-text'>ใบบันทึกเวลา</p>
-                        </NavLink>
-                        <NavLink to="/calendar" 
-                            className='menu-icon'>
-                            <img src={ca} alt=''/>
-                            <p className='menu-text'>ปฏิทิน</p>
-                        </NavLink>
-                        <NavLink to="/leave" 
-                            className='menu-icon'>
-                            <img src={dc} alt=''/>
-                            <p className='menu-text'>จัดการใบลา</p>
-                        </NavLink>
-                    </div>
-                    <div>
-                        <button className='menu-icon' onClick={() => logout()}>Logout</button>
-                    </div>
-                </div>
-            }
-            {/* <div className='side-menu'>
-                <div>
-                    <NavLink to="/" 
-                        state={{id: user[0].emp_id, type: user[0].type_id}}
-                        className='menu-icon'>
-                        <img src={hm} alt=''/>
-                        <p className='menu-text'>หน้าหลัก</p>
-                    </NavLink>
-                    <NavLink to="/employee" 
-                        state={{id: user[0].emp_id, type: user[0].type_id}}
-                        className='menu-icon'>
-                        <img src={em} alt=''/>
-                        <p className='menu-text'>พนักงาน</p>
-                    </NavLink>
-                    <NavLink to="/timesheet" 
-                        state={{id: user[0].emp_id, type: user[0].type_id}}
-                        className='menu-icon'>
-                        <img src={ut} alt=''/>
-                        <p className='menu-text'>ใบบันทึกเวลา</p>
-                    </NavLink>
-                    <NavLink to="/calendar" 
-                        state={{id: user[0].emp_id, type: user[0].type_id}}
-                        className='menu-icon'>
-                        <img src={ca} alt=''/>
-                        <p className='menu-text'>ปฏิทิน</p>
-                    </NavLink>
-                    <NavLink to="/leave" 
-                        state={{id: user[0].emp_id, type: user[0].type_id}}
-                        className='menu-icon'>
-                        <img src={dc} alt=''/>
-                        <p className='menu-text'>จัดการใบลา</p>
-                    </NavLink>
-                </div>
-                <div>
-                    <button className='menu-icon' onClick={() => logout(null)}>Logout</button>
-                </div>
-            </div> */}
-        </>
-    );
+            </>
+        )
+    }
 };
 
 export default SideBar;

@@ -89,7 +89,7 @@ function AdminContent2(props) {
                             },
                         },
                         }}
-                        pageSizeOptions={[5]}
+                        pageSizeOptions={[13]}
                         disableRowSelectionOnClick
                     />
                 </Box>

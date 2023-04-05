@@ -8,39 +8,40 @@ import IpContext from '../ipContext';
 function NavBar() {
 
     const ip = useContext(IpContext);
-    const [isWidth, setWidth] = useState({width: 0});
-    const [isResponsive, setResponsive] = useState(0);
+    // const [isWidth, setWidth] = useState({width: 0});
+    // const [isResponsive, setResponsive] = useState(0);
     const [isTypeid, setTypeid] = useState(0)
     const [isUserName, setUsername] = useState('')
     const [isUsertype, setUsertype] = useState('')
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        switch(isWidth.width) {
-            case 10:
-                setResponsive(0);
-                break;
-            case 8:
-                setResponsive(1);
-                break;
-            case 4:
-                setResponsive(2);
-                break;
-            default:
-          }
+    //     switch(isWidth.width) {
+    //         case 10:
+    //             setResponsive(0);
+    //             break;
+    //         case 8:
+    //             setResponsive(1);
+    //             break;
+    //         case 4:
+    //             setResponsive(2);
+    //             break;
+    //         default:
+    //       }
 
-      }, [isWidth]);
+    //   }, [isWidth]);
 
-    useEffect(() => {
 
-        function handleResize() {
-            setWidth({width: Math.round(window.innerWidth / 100)});
-        }
+    // useEffect(() => {
+
+    //     function handleResize() {
+    //         setWidth({width: Math.round(window.innerWidth)});
+    //     }
     
-        window.addEventListener("resize", handleResize);
-        handleResize();
-        return () => window.removeEventListener("resize", handleResize);
-      }, []);
+    //     window.addEventListener("resize", handleResize);
+    //     handleResize();
+    //     return () => window.removeEventListener("resize", handleResize);
+    //   }, []);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -54,44 +55,30 @@ function NavBar() {
                 setUsertype(response.data.user_type)
             }
         });
-    }, []);
+    }, [ip]);
 
-    console.log('Nav ' + isResponsive)
 
-    return (
-        <>  
-            {
-                isTypeid === 0 ? '' :
-            [<nav className='navbar' key='1'>
-                <div className='nav-container'>
-                    <div className='left-box'>
-                        {/* <img src={logo} alt=''></img>
-                        <label className='home-menu'>BBTE Management</label> */}
+    if (isTypeid !== 0) {
+        return (
+            <>
+                <nav className='navbar' key='1'>
+                    <div className='nav-container'>
+                        <div className='left-box'>
+                            {/* <img src={logo} alt=''></img>
+                            <label className='home-menu'>BBTE Management</label> */}
+                        </div>
+                        <div className='right-box'>
+                            <label>
+                                <p>{isUserName}</p>
+                                <p>{isUsertype}</p>
+                            </label>
+                        </div>
                     </div>
-                    <div className='right-box'>
-                        <label style={isResponsive > 0 ? {display: 'none'} : {display: 'flex'}}>
-                            <p>{isUserName}</p>
-                            <p>{isUsertype}</p>
-                        </label>
-                    </div>
-                </div>
-            </nav>,
-            <SideBar key='2' data={[isTypeid, isResponsive]}/>]
-            }
-
-            {/* <div className='container'>
-            {
-                isTypeid === 0 ? 
-                '' :
-                <div><SideBar isTypeid={isTypeid}/></div> 
-            }
-                <div className='content'>
-                    <div className='main-content' key=''>{children}</div>
-                </div>
-            </div>
-            <footer></footer> */}
-        </>
-    );
+                </nav>
+                <SideBar isTypeid={isTypeid}/>
+            </>
+        )
+    }
 };
 
 export default NavBar;
