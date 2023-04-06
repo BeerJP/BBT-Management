@@ -58,7 +58,7 @@ app.post('/login', function(request, response) {
             user_id: results[0].emp_id, 
             type_id: results[0].type_id,
             user_name: results[0].emp_name + ' ' + results[0].emp_surname,
-            user_type: results[0].type_name}, secret, { expiresIn: '1h' });
+            user_type: results[0].type_name}, secret, { expiresIn: '2h' });
           response.send([results, {token: token}])
         } else {
           response.send(['Incorrect Username and/or Password!'])
@@ -155,12 +155,23 @@ app.post('/employee_info', (request, response) => {
 });
 
 // แสดงข้อมูล Employee table
-app.get('/employee_table', (request, response) => {
-  conn.query(`SELECT EMPLOYEE.emp_id, EMPLOYEE.emp_name, EMPLOYEE.emp_surname, DEPARTMENT.dept_name,
-                DATE_FORMAT(EMPLOYEE.emp_startdate, '%Y-%m-%d') as emp_startdate
+app.get('/employee', (request, response) => {
+  conn.query(`SELECT *,
+                EMPLOYEE.emp_id as id,
+                DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
+                DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
+                DATE_FORMAT(EMPLOYEE.emp_startdate, '%Y-%m-%d') as emp_startdate,
+              CASE
+                WHEN emp_status = '1' THEN 'ปกติ'
+                ELSE 'พ้นสภาพ'
+              END AS emp_status
               FROM EMPLOYEE
               INNER JOIN DEPARTMENT
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+              INNER JOIN USER
+                ON EMPLOYEE.emp_id = USER.emp_id
+              INNER JOIN TYPE
+                ON USER.type_id = TYPE.type_id
               WHERE emp_status > '0'
               GROUP BY EMPLOYEE.emp_id
               ORDER BY EMPLOYEE.emp_id`, 
@@ -315,12 +326,15 @@ app.get('/time', (request, response) => {
 // แสดงจำนวน Time Attendance & Leave Day
 app.get('/timecount', (request, response) => {
   conn.query(`SELECT EMPLOYEE.emp_id AS id, 
+                DEPARTMENT.dept_name,
                 EMPLOYEE.emp_name, 
                 EMPLOYEE.emp_surname, 
                 DATE_FORMAT(DATE_ADD(EMPLOYEE.emp_startdate, INTERVAL 543 YEAR), '%Y-%m-%d') AS emp_startdate,
                 ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.emp_id = EMPLOYEE.emp_id ) AS ta,
                 ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.emp_id = EMPLOYEE.emp_id ) AS ld
                 FROM EMPLOYEE 
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
               WHERE EMPLOYEE.emp_status > '0'
               GROUP BY EMPLOYEE.emp_id`,
   (err, result) => {

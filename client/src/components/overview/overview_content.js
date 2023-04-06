@@ -5,13 +5,13 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { DataGrid } from '@mui/x-data-grid';
 import { PieChart, Pie, Cell } from 'recharts';
-
+import Button from '@mui/material-next/Button';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import Button from '@mui/material-next/Button';
+
 
 import ts from '../../assets/icon/timesheet.png';
 import ld from '../../assets/icon/leave.png';
@@ -36,7 +36,7 @@ function Content(props) {
         emp:0, ta:0, nta:0, lta:0, ld:0, bld:0, hld:0, sld:0, wd:0, hd:0
     });
     const [timeSheet, setTimesheet] = useState([{
-        id: ' ', emp_name: ' ', emp_surname: ' ', emp_startdate: ' ', ta: ' ', ld: ' '
+        id: ' ', emp_name: ' ', emp_surname: ' ', dept_name: ' ', emp_startdate: ' ', ta: ' ', ld: ' '
     }]);
 
     useEffect(() => {
@@ -300,9 +300,9 @@ function Content(props) {
                         </LocalizationProvider>
                     </div>
                     <div className='clear_button'>
-                        <Button variant="contained" size="small" sx={{
-                            borderRadius: 'none',
-                            height: 52,
+                        <Button variant="outlined" size="small" color="error" sx={{
+                            borderRadius: 1,
+                            height: 56,
                             width: 95,
                             marginTop: 1,
                             marginLeft: 0.5
@@ -314,6 +314,11 @@ function Content(props) {
                 <div className='overview_table_box'>
                     <Box sx={{ height: '100%', width: '100%' }}>
                         <DataGrid
+                            sx={{
+                                "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                                    outline: "none !important",
+                                },
+                            }}
                             rows={timeSheet}
                             columns={columns}
                             columnHeaderHeight={80}
