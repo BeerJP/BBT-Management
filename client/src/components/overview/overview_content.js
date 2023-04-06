@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { DataGrid } from '@mui/x-data-grid';
 import { PieChart, Pie, Cell } from 'recharts';
@@ -13,11 +13,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import Button from '@mui/material-next/Button';
 
-
 import ts from '../../assets/icon/timesheet.png';
 import ld from '../../assets/icon/leave.png';
 import al from '../../assets/icon/angle-left.png';
 import ar from '../../assets/icon/angle-right.png';
+import { usePreviousMonthDisabled } from '@mui/x-date-pickers/internals';
 
 
 function Content(props) {
@@ -104,7 +104,7 @@ function Content(props) {
             disableColumnMenu: true
         },
         {
-            field: 'department',
+            field: 'dept_name',
             headerName: 'แผนก',
             width: 190,
             headerAlign: 'center',
@@ -141,6 +141,14 @@ function Content(props) {
             sortable: false
         }
     ];
+
+    const [selectedDate, setSelectedDate] = useState(null);
+    const handleDateChange = (date) => {
+      setSelectedDate(date);
+    };
+
+    const today = dayjs();
+
       
 
     return(
@@ -153,13 +161,20 @@ function Content(props) {
                         justifyContent: 'space-between',    
                         '& > :not(style)': {
                         m: 0.2,
-                        minWidth: 250,
-                        width: 390,
-                        height: 300,
+                        width: {
+                            sm: 250,
+                            md: 360,
+                            lg: 360
+                        },
+                        height: {
+                            sm: 300,
+                            md: 300,
+                            lg: 300
+                        },
                         },
                     }}
                     >
-                        <Paper sx={{ display: 'flex' }}>
+                        <Paper elevation={1} sx={{ display: 'flex' }}>
                             <label className='overview_chart_header'>ข้อมูลวันทำงาน</label>
                             <PieChart width={260} height={300}>
                                 <Pie
@@ -177,18 +192,29 @@ function Content(props) {
                                 ))}
                                 </Pie>
                             </PieChart>
-                            <div className='overview_chart_box'>
-                                <h4>วันทำงาน</h4>
+                            <Box
+                            sx={{
+                                display: {
+                                    sm: 'none',
+                                    md: 'flex'
+                                },
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                width: '100%',
+                                height: '100%',
+                            }}
+                            >
+                                <h4 className='overview_h4'>วันทำงาน</h4>
                                 <label style={{color: '#0088FE'}}>{isOverview.wd + ' วัน'}</label>
-                                <h4>วันหยุด</h4>
+                                <h4 className='overview_h4'>วันหยุด</h4>
                                 <label style={{color: '#FFBB28'}}>{isOverview.hd + ' วัน'}</label>
-                            </div>
+                            </Box>
                         </Paper>
-                        <Paper sx={{ display: 'flex' }}>
+                        <Paper elevation={1} sx={{ display: 'flex' }}>
                             <label className='overview_chart_header'>ข้อมูลใบบันทึกเวลา</label>
                             <PieChart width={260} height={300}>
                                 <Pie
-                                data={isWork}
+                                data={isTime}
                                 cx={120}
                                 cy={150}
                                 innerRadius={0}
@@ -197,23 +223,34 @@ function Content(props) {
                                 paddingAngle={2}
                                 dataKey="value"
                                 >
-                                {isWork.map((entry, index) => (
+                                {isTime.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={timeColors[index % timeColors.length]} />
                                 ))}
                                 </Pie>
                             </PieChart>
-                            <div className='overview_chart_box'>
-                                <h4>ปกติ</h4>
-                                <label style={{color: '#00C49F'}}>{isOverview.wd + ' วัน'}</label>
-                                <h4>สาย</h4>
-                                <label style={{color: '#FF8042'}}>{isOverview.hd + ' วัน'}</label>
-                            </div>
+                            <Box
+                            sx={{
+                                display: {
+                                    sm: 'none',
+                                    md: 'flex'
+                                },
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                width: '100%',
+                                height: '100%',
+                            }}
+                            >
+                                 <h4 className='overview_h4'>ปกติ</h4>
+                                <label style={{color: '#00C49F'}}>{isOverview.nta + ' วัน'}</label>
+                                <h4 className='overview_h4'>สาย</h4>
+                                <label style={{color: '#FF8042'}}>{isOverview.lta + ' วัน'}</label>
+                            </Box>
                         </Paper>
-                        <Paper sx={{ display: 'flex', position: 'relative'}}>
+                        <Paper elevation={1} sx={{ display: 'flex' }}>
                             <label className='overview_chart_header'>ข้อมูลใบลา</label>
                             <PieChart width={260} height={300}>
                                 <Pie
-                                data={data}
+                                data={isLeav}
                                 cx={120}
                                 cy={150}
                                 innerRadius={0}
@@ -222,19 +259,29 @@ function Content(props) {
                                 paddingAngle={2}
                                 dataKey="value"
                                 >
-                                {data.map((entry, index) => (
+                                {isLeav.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={leavColors[index % leavColors.length]} />
                                 ))}
                                 </Pie>
                             </PieChart>
-                            <div className='overview_chart_box_three'>
-                                <h4>ลากิจ</h4>
-                                <label style={{color: '#0088FE'}}>{isOverview.wd + ' วัน'}</label>
-                                <h4>ลาพักร้อน</h4>
-                                <label style={{color: '#FF8042'}}>{isOverview.hd + ' วัน'}</label>
-                                <h4>ลาป่วย</h4>
-                                <label style={{color: '#FF8042'}}>{isOverview.hd + ' วัน'}</label>
-                            </div>
+                            <Box
+                            sx={{
+                                display: {
+                                    sm: 'none',
+                                    md: 'flex'
+                                },
+                                flexDirection: 'column',
+                                width: '100%',
+                                height: '100%',
+                            }}
+                            >
+                                <h4 className='overview_h4'>ลากิจ</h4>
+                                <label style={{color: '#0088FE'}}>{isOverview.bld + ' วัน'}</label>
+                                <h4 className='overview_h4'>ลาพักร้อน</h4>
+                                <label style={{color: '#FF8042'}}>{isOverview.hld + ' วัน'}</label>
+                                <h4 className='overview_h4'>ลาป่วย</h4>
+                                <label style={{color: '#FF8042'}}>{isOverview.sld + ' วัน'}</label>
+                            </Box>
                         </Paper>
                     </Box>
                 </div>
@@ -242,7 +289,13 @@ function Content(props) {
                     <div>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DatePicker']}>
-                                <DatePicker label={'เลือกปี'} views={['year']} />
+                                <DatePicker 
+                                label={'เลือกปี'} 
+                                views={['year']}
+                                disableFuture
+                                value={selectedDate}
+                                onChange={handleDateChange}
+                                />
                             </DemoContainer>
                         </LocalizationProvider>
                     </div>
@@ -254,7 +307,7 @@ function Content(props) {
                             marginTop: 1,
                             marginLeft: 0.5
                         }}>
-                            ล้างข้อมูล
+                        ล้างข้อมูล
                         </Button>
                     </div>
                     </div>
@@ -263,15 +316,15 @@ function Content(props) {
                         <DataGrid
                             rows={timeSheet}
                             columns={columns}
-                            columnHeaderHeight={93}
+                            columnHeaderHeight={80}
                             initialState={{
                             pagination: {
                                 paginationModel: {
-                                pageSize: 6,
+                                pageSize: 10,
                                 },
                             },
                             }}
-                            pageSizeOptions={[6]}
+                            pageSizeOptions={[10]}
                             disableRowSelectionOnClick
                         />
                     </Box>

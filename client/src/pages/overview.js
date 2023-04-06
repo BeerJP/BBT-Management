@@ -3,7 +3,6 @@ import axios from 'axios';
 import '../assets/style/overview.css';
 // import AdminContent1 from '../components/overview/ad_content1';
 // import AdminContent2 from '../components/overview/ad_content2';
-// import UserContent from '../components/overview/us_content';
 import Content from '../components/overview/overview_content';
 import IpContext from '../ipContext';
 

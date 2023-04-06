@@ -1,3 +1,40 @@
+.employee_container {
+    display: flex;
+    flex-direction: column;
+    min-width: 800px;
+    max-width: 1200px;
+    /* min-height: 850px;
+    max-height: 850px; */
+    width: 95%;
+    height: 840px;
+    margin: 10px auto 10px auto;
+}
+
+.employee_article {
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
+/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
+
 .em-body-left {
     width: 95%;
     height: 100%;
