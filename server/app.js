@@ -124,7 +124,14 @@ app.post('/overview_user', (request, response) => {
 
 // แสดงข้อมูล Department
 app.get('/department', (request, response) => {
-  conn.query("SELECT * FROM DEPARTMENT GROUP BY dept_id", (err, result) => {
+  conn.query("SELECT dept_name as label, dept_id as id FROM DEPARTMENT GROUP BY dept_id", (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล User Type
+app.get('/type', (request, response) => {
+  conn.query("SELECT type_name as label, type_id as id  FROM TYPE GROUP BY type_id", (err, result) => {
     response.send(result);
   });
 });
@@ -194,12 +201,6 @@ app.get('/emp_id', (request, response) => {
   });
 });
 
-// แสดงข้อมูล User Type
-app.get('/type', (request, response) => {
-  conn.query("SELECT * FROM TYPE GROUP BY type_id", (err, result) => {
-    response.send(result);
-  });
-});
 
 // แสดงข้อมูล Leave Day สรุปแบบเจาะจง
 app.post('/leave_emp_sum', (request, response) => {
@@ -532,7 +533,6 @@ app.put("/update_employee", (request, response) => {
   const birthdate = request.body.birth;
   const mac1 = request.body.mac1;
   const mac2 = request.body.mac2;
-  const end = request.body.end;
   const department = request.body.dept;
 
   conn.query(`UPDATE EMPLOYEE SET 
@@ -542,10 +542,9 @@ app.put("/update_employee", (request, response) => {
                 emp_birthdate = ?, 
                 emp_mac1 = ?, 
                 emp_mac2 = ?,
-                emp_enddate = ?,
                 dept_id = ? 
               WHERE emp_id = ?`,
-    [name, surname, gender, birthdate, mac1, mac2, end, department, id], 
+    [name, surname, gender, birthdate, mac1, mac2, department, id], 
     (err, result) => {
       if (err) {
         response.send(err);
