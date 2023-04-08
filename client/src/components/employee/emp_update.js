@@ -103,7 +103,7 @@ function EditCard(props) {
             type: isType 
         }, {crossdomain: true}))
         .then(
-            setCardType('infomation')
+            setCardType('infomation'), props.data[4](true)
         )
     };
 

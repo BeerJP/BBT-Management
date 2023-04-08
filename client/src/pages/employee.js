@@ -34,8 +34,6 @@ function Employee() {
             <>
                 <div className='container'>
                     <Content ip={ip}/>
-                    {/* <div className='box-content' key='1'><AdminContent1 data={ip}/></div>
-                    <div className='box-content' key='2'><AdminContent2 data={ip}/></div>  */}
                 </div>
             </>
         )

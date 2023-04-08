@@ -6,17 +6,12 @@ function AddCard(props) {
 
     const ip = props.data[0];
     const setCardType = props.data[1];
+    const selectEmp = props.data[3];
 
     const [isNotnull, setNotnull] = useState(true);
     const [isId, setId] = useState();
-    const [deptInfo, setDeptinfo] = useState([{
-        dept_id: ' ',
-        dept_name: ' '
-    }]);
-    const [typeInfo, setTypeinfo] = useState([{
-        type_id: ' ',
-        type_name: ' '
-    }]);
+    const [deptInfo, setDeptinfo] = useState([{ label: ' ', id: ' ' }]);
+    const [typeInfo, setTypeinfo] = useState([{ label: ' ', id: ' ' }]);
 
     const [name, setName] = useState('');
     const [surname, setSur] = useState('');
@@ -29,17 +24,6 @@ function AddCard(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [type, setType] = useState('');
-
-    useEffect(() => {
-
-        if (name.length === 0 || surname.length === 0 || birth === '' || start === '' || mac1.length !== 17 ||
-            username.length === 0 || password.length === 0 || type === '') {
-            setNotnull(false);
-        } else {
-            setNotnull(true);
-        }
-
-    }, [birth, mac1, name, password, start, surname, type, username]);
 
     const insertEmployee = () => {
         axios.post("http://"+ ip +":5000/add_employee", { 
@@ -60,7 +44,7 @@ function AddCard(props) {
             type: type
         }, {crossdomain: true}))
         .then(
-            setCardType('infomation')
+            setCardType('infomation'), props.data[2](true), selectEmp(isId)
         );
     };
 
@@ -121,6 +105,22 @@ function AddCard(props) {
         input.value = value;
     };
 
+    function validation(user, pass) {
+        console.log(user, pass)       
+        setNotnull(true); 
+    }
+
+    useEffect(() => {
+
+        if (name.length === 0 || surname.length === 0 || birth === '' || start === '' || mac1.length !== 17 ||
+            username.length === 0 || password.length === 0 || type === '') {
+            setNotnull(false);
+        } else {
+            validation(username, password)
+        }
+
+    }, [birth, mac1, name, password, start, surname, type, username]);
+
     return (
         <>
             <div className='box-body em-body-left'>
@@ -148,8 +148,8 @@ function AddCard(props) {
                             <label className='lb-header'>แผนก</label>
                             <select className='text-box select-box' name="department" id="dept" onClick={(event => {setDept(event.target.value)})}>
                                 {
-                                    deptInfo.map((item, index) => (
-                                        <option key={index} value={item.dept_id}>{item.dept_name}</option>
+                                    deptInfo.map((item) => (
+                                        <option key={item.id} value={item.id}>{item.label}</option>
                                     ))
                                 }
                             </select>
@@ -179,16 +179,18 @@ function AddCard(props) {
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>Username<a>*</a></label>
-                            <input className='text-box' onChange={(event => {setUsername(event.target.value)})}></input>
+                            <label className='lb-header' id='username'>Username<a>*</a></label>
+                            <input className='text-box' placeholder='"A-Z a-z 0-9" 4-8 ตัว' 
+                            minlength='4' maxlength='8'
+                            onChange={(event => {setUsername(event.target.value)})}></input>
                         </div>
                         <div>
                             <label className='lb-header'>User Type<a>*</a></label>
                             <select className='text-box select-box' name="usertype" id="type" onClick={(event => {setType(event.target.value)})}>
                                 <option disabled selected>กรุณาเลือกประเภทของผู้ใช้</option>
                                 {
-                                    typeInfo.map((item, index) => (
-                                        <option key={item.type_id} value={item.type_id}>{item.type_name}</option>
+                                    typeInfo.map((item) => (
+                                        <option key={item.id} value={item.id}>{item.label}</option>
                                     ))
                                 }
                             </select>
@@ -196,8 +198,10 @@ function AddCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>Password<a>*</a></label>
-                            <input className='text-box' onChange={(event => {setPassword(event.target.value)})}></input>
+                            <label className='lb-header' id='password'>Password<a>*</a></label>
+                            <input className='text-box' placeholder='"A-Z a-z 0-9" 4-8 ตัว' 
+                            minlength='4' maxlength='8'
+                            onChange={(event => {setPassword(event.target.value)})}></input>
                         </div>
                         <div>
                             <button onClick={insertEmployee} 

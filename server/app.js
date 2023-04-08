@@ -162,23 +162,15 @@ app.post('/employee_info', (request, response) => {
 });
 
 // แสดงข้อมูล Employee table
-app.get('/employee', (request, response) => {
-  conn.query(`SELECT *,
+app.get('/employee_table', (request, response) => {
+  conn.query(`SELECT
                 EMPLOYEE.emp_id as id,
-                DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
-                DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
-                DATE_FORMAT(EMPLOYEE.emp_startdate, '%Y-%m-%d') as emp_startdate,
-              CASE
-                WHEN emp_status = '1' THEN 'ปกติ'
-                ELSE 'พ้นสภาพ'
-              END AS emp_status
+                EMPLOYEE.emp_name,
+                EMPLOYEE.emp_surname,
+                DEPARTMENT.dept_name
               FROM EMPLOYEE
               INNER JOIN DEPARTMENT
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
-              INNER JOIN USER
-                ON EMPLOYEE.emp_id = USER.emp_id
-              INNER JOIN TYPE
-                ON USER.type_id = TYPE.type_id
               WHERE emp_status > '0'
               GROUP BY EMPLOYEE.emp_id
               ORDER BY EMPLOYEE.emp_id`, 
@@ -186,6 +178,30 @@ app.get('/employee', (request, response) => {
     response.send(result);
   });
 });
+// app.get('/employee', (request, response) => {
+//   conn.query(`SELECT *,
+//                 EMPLOYEE.emp_id as id,
+//                 DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
+//                 DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
+//                 DATE_FORMAT(EMPLOYEE.emp_startdate, '%Y-%m-%d') as emp_startdate,
+//               CASE
+//                 WHEN emp_status = '1' THEN 'ปกติ'
+//                 ELSE 'พ้นสภาพ'
+//               END AS emp_status
+//               FROM EMPLOYEE
+//               INNER JOIN DEPARTMENT
+//                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+//               INNER JOIN USER
+//                 ON EMPLOYEE.emp_id = USER.emp_id
+//               INNER JOIN TYPE
+//                 ON USER.type_id = TYPE.type_id
+//               WHERE emp_status > '0'
+//               GROUP BY EMPLOYEE.emp_id
+//               ORDER BY EMPLOYEE.emp_id`, 
+//   (err, result) => {
+//     response.send(result);
+//   });
+// });
 
 // แสดงข้อมูล User
 app.get('/user', (request, response) => {
