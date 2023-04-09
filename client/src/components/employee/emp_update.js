@@ -8,6 +8,10 @@ function EditCard(props) {
     const id = props.data[1];
     const setCardType = props.data[3];
 
+    const [isNotnull, setNotnull] = useState(true);
+    const [isUservalid, setUservalid] = useState(true);
+    const [isPassvalid, setPassvalid] = useState(true);
+
     const [isEmp, setEmp] = useState({
         emp_id: ' ',
         emp_name: ' ',
@@ -27,23 +31,17 @@ function EditCard(props) {
         type_name: ' ',
         emp_age: ' '
     })
-    const [deptInfo, setDeptinfo] = useState([{
-        dept_id: ' ',
-        dept_name: ' '
-    }]);
-    const [typeInfo, setTypeinfo] = useState([{
-        type_id: ' ',
-        type_name: ' '
-    }]);
+    const [deptInfo, setDeptinfo] = useState([{ label: ' ', id: ' ' }]);
+    const [typeInfo, setTypeinfo] = useState([{ label: ' ', id: ' ' }]);
 
     const [isName, setName] = useState(isEmp.emp_name);
     const [isSurname, setSurname] = useState(isEmp.emp_surname);
     const [isDept, setDept] = useState(isEmp.dept_id);
     const [isGender, setGender] = useState(isEmp.emp_gender);
     const [isBirth, setBirth] = useState(isEmp.emp_birthdate);
+    const [isStart, setStart] = useState(isEmp.emp_mac1);
     const [isMac1, setMac1] = useState(isEmp.emp_mac1);
     const [isMac2, setMac2] = useState(isEmp.emp_mac2);
-    const [isEnd, setEnd] = useState(isEmp.emp_enddate);
     const [isUsername, setUsername] = useState(isEmp.user_name);
     const [isPassword, setPassword] = useState(isEmp.user_password);
     const [isType, setType] = useState(isEmp.type_id);
@@ -54,9 +52,9 @@ function EditCard(props) {
         setDept(isEmp.dept_id)
         setGender(isEmp.emp_gender)
         setBirth(isEmp.emp_birthdate)
+        setStart(isEmp.emp_startdate)
         setMac1(isEmp.emp_mac1)
         setMac2(isEmp.emp_mac2)
-        setEnd(isEmp.emp_enddate)
         setUsername(isEmp.user_name)
         setPassword(isEmp.user_password)
         setType(isEmp.type_id)
@@ -94,7 +92,7 @@ function EditCard(props) {
             birth: isBirth,
             mac1: isMac1,
             mac2: isMac2,
-            end: isEnd,
+            start: isStart,
         }, {crossdomain: true})
         .then(axios.put("http://"+ ip +":5000/update_user", { 
             id: id,
@@ -107,7 +105,32 @@ function EditCard(props) {
         )
     };
 
+    useEffect(() => {
 
+        if (/^[a-zA-Z]+$/.test(isUsername)) {
+            setUservalid(false)
+        } else {
+            setUservalid(true)
+        }
+
+        if (/^[0-9]+$/.test(isPassword)) {
+            setPassvalid(false)
+        } else {
+            setPassvalid(true)
+        }
+
+    }, [isPassword, isUsername]);
+
+    useEffect(() => {
+
+        if (isName.length === 0 || isSurname.length === 0 || isBirth === '' || isMac1.length !== 17 ||
+            isUsername.length < 4 || isPassword.length < 4 || isType === '' || isUservalid  || isPassvalid) {
+            setNotnull(false);
+        } else {
+            setNotnull(true); 
+        }
+
+    }, [isBirth, isMac1, isName, isPassvalid, isPassword, isSurname, isType, isUsername, isUservalid]);
 
     return (
         <>
@@ -140,8 +163,8 @@ function EditCard(props) {
                             <select className='text-box select-box' name='department' 
                             id='dept' onClick={(event => {setDept(event.target.value)})}>
                                 {
-                                    deptInfo.map((item, index) => (
-                                        <option key={index} value={item.dept_id}>{item.dept_name}</option>
+                                    deptInfo.map((item) => (
+                                        <option key={item.id} value={item.id}>{item.label}</option>
                                     ))
                                 }
                             </select>
@@ -161,9 +184,8 @@ function EditCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>วันสิ้นสุดงาน</label>
-                            <input className='text-box' type='date' onChange={(event => {setEnd(event.target.value)})} 
-                            id='end' defaultValue={isEmp.emp_enddate}></input>
+                            <label className='lb-header'>วันเริ่มงาน</label>
+                            <label className='text-box'>{isEmp.emp_startdate}</label>
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 2</label>
@@ -176,7 +198,9 @@ function EditCard(props) {
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>Username</label>
-                            <input className='text-box' key={isEmp.user_name} onChange={(event => {setUsername(event.target.value)})} 
+                            <input className='text-box'
+                            maxLength='8'
+                            key={isEmp.user_name} onChange={(event => {setUsername(event.target.value)})} 
                             id='user' defaultValue={isEmp.user_name}></input>
                         </div>
                         <div>
@@ -184,8 +208,8 @@ function EditCard(props) {
                             <select className='text-box select-box' name="usertype" 
                             id="type" onClick={(event => {setType(event.target.value)})}>
                                 {
-                                    typeInfo.map((item, index) => (
-                                        <option key={item.type_id} value={item.type_id}>{item.type_name}</option>
+                                    typeInfo.map((item) => (
+                                        <option key={item.id} value={item.id}>{item.label}</option>
                                     ))
                                 }
                             </select>
@@ -194,10 +218,15 @@ function EditCard(props) {
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>Password</label>
-                            <input className='text-box' id='pass' onChange={(event => {setPassword(event.target.value)})}></input>
+                            <input className='text-box'
+                            maxLength='8'
+                            onChange={(event => {setPassword(event.target.value)})}></input>
                         </div>
                         <div>
-                            <button className='update' onClick={updateEmployee}>บันทึก</button>
+                            <button onClick={updateEmployee}
+                                style={isNotnull ? {pointerEvents: 'auto', background: '#1D8348'} : {pointerEvents: 'none'}}>
+                                บันทึก
+                            </button>
                         </div>
                     </div>
                 </div>

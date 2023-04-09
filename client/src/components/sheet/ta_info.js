@@ -5,178 +5,154 @@ import axios from 'axios';
 // import ar from '../../assets/icon/angle-right.png';
 import tc from '../../assets/icon/check.png';
 
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import { DataGrid } from '@mui/x-data-grid';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
 
 function TimeSheetInfo(props) {
 
+    const ip = props.ip;
+    const selectEmp = props.select;
 
-    const [isSheet, setSheet] = useState(props.data[0]);
-    const [isIp, setIp] = useState(props.data[1]);
-    const [isId, setId] = useState(props.data[2]);
+    const [open, setOpen] = useState(false);
+    const [isUpdate, setUpdate] = useState(false);
+    const [isDate, setDate] = useState('');
+    const [isIn, setIn] = useState('');
+    const [isOut, setOut] = useState('');
+    const [isWork, setWork] = useState('');
+
+    const [isTimesheet, setTimesheet] = useState([{ 
+        time_in: '', time_out: '', work_id: '', emp_id: '', work_date: '', work_status: '', id: '', th_date: ''
+    }]);
 
     useEffect(() => {
-
-        setSheet(props.data[0]);
-        setIp(props.data[1]);
-        setId(props.data[2]);
-
-    }, [props.data]);
-
-
-    const [isEdit, setEdit] = useState(false);
-    const [isOrigin, setOrigin] = useState([]);
-    const [isUpdate, setUpdate] = useState([]);
-    const [isTime, setTime] = useState([]);
-
-    const edit = () => {
-        
-        setEdit(!isEdit)
-        const timeIn = document.querySelectorAll("[id='inputIn']");
-        const timeOut = document.querySelectorAll("[id='inputOut']");
-        for (var i = 0; i < timeIn.length; i++) {
-            timeIn[i].disabled = isEdit;
-            timeOut[i].disabled = isEdit;
+        setTimesheet([])
+        const getSelect = () => {
+            axios.post("http://"+ ip +":5000/timesheet", { id: selectEmp }, {crossdomain: true})
+            .then(response => {
+                setTimesheet(response.data);
+            });
         };
 
-    };
+        getSelect();
 
+    }, [ip, selectEmp, isUpdate]);
 
-    useEffect(() => {
-
-        if (isEdit) {
-            const date = document.querySelectorAll("[id='inputDate']");
-            const day = [...date].map(input => input.value);
-            const timeIn = document.querySelectorAll("[id='inputIn']");
-            const tIn = [...timeIn].map(input => input.value);
-            const timeOut = document.querySelectorAll("[id='inputOut']");
-            const tOut = [...timeOut].map(input => input.value);
-
-            const timeOrigin = day.map((array, item) => [array, tIn[item], tOut[item]]);
-            setOrigin(timeOrigin);
-        } else {
-            const date = document.querySelectorAll("[id='inputDate']");
-            const day = [...date].map(input => input.value);
-            const timeIn = document.querySelectorAll("[id='inputIn']");
-            const tIn = [...timeIn].map(input => input.value);
-            const timeOut = document.querySelectorAll("[id='inputOut']");
-            const tOut = [...timeOut].map(input => input.value);
-
-            const timeUpdate = day.map((array, item) => [array, tIn[item], tOut[item]]);
-            setUpdate(timeUpdate);
-        };
-
-    }, [isEdit]);
-
-
-    useEffect(() => {
-
-        const time = isOrigin.map((array, item) => {
-            if (JSON.stringify(array) !== JSON.stringify(isUpdate[item])){
-                return isUpdate[item]
-            }
-        }).filter(notUndefined => notUndefined !== undefined);
-        setTime(time);
-
-    }, [isUpdate]);
-
-
-    useEffect(() => {
-
-        if (isTime.length > 0){
-            setClose(false)
+    const columns = [
+        { field: 'th_date', headerName: 'วันที่',  width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
+        { field: 'time_in', headerName: 'เวลาเข้างาน', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        { field: 'time_out', headerName: 'เวลาออกงาน', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        {
+            field: 'edit',
+            headerAlign: 'center',
+            align: 'center',
+            headerName: '',
+            width: 90,
+            sortable: false,
+            disableClickEventBubbling: true,
+            disableColumnMenu: true,
+            
+            renderCell: (params) => {
+                const onClick = (e) => {
+                  const currentRow = params.row;
+                  setDate(currentRow.th_date)
+                  setIn(currentRow.time_in)
+                  setOut(currentRow.time_out)
+                  setWork(currentRow.work_id)
+                  setOpen(true)
+                };
+                
+                return (
+                  <Stack direction="row" spacing={2}>
+                    <Button variant="outlined" color="warning" size="small" onClick={onClick}>แก้ไข</Button>
+                  </Stack>
+                );
+            },
         }
+    ];
 
-    }, [isTime]);
 
+    function editTime() {
+        
+        axios.put("http://"+ ip +":5000/update_time", { 
+            id: selectEmp,
+            date: isWork,
+            in: isIn,
+            out: isOut,
+        }, {crossdomain: true})
+        
+        setOpen(false)
+        setUpdate(!isUpdate)
+    }
 
-    const updateTime = () => {
-
-        for (let i = 0; i < isTime.length ; i++) {
-            axios.put("http://"+ isIp +":5000/update_time", { 
-                date: isTime[i][0],
-                in: isTime[i][1],
-                out: isTime[i][2],
-                id: isId,
-            }, {crossdomain: true})
-        };
-        setTime([])
-        setClose(true)
-
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        height: 200,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
     };
-
-
-    const [isClose, setClose] = useState(true);
-
 
     return (
         <>
-            {/* <div className='box-body ov-header-combo ta-info'>
-                <div><img src={al} alt=''/></div>
-                <p className='ov-select-txt'>มกราคม - 2566</p>
-                <div><img src={ar} alt=''/></div>
-            </div> */}
-
-            <div id="myModal" className="modal" style={isClose ? {display: 'none'} : {display: 'block'}}>
-                <div className="modal-content">
-                    <label>มีรายการแก้ไขจำนวน {isTime.length} รายการ</label>
+            <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center'}}>
+                        รหัสพนักงาน {selectEmp} วันที่ {isDate}
+                    </Typography>
                     <div>
-                        <button onClick={updateTime}>ยืนยัน</button>
-                        <button onClick={() => setClose(true)}>ยกเลิก</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div className='box-body ta-body'>
-                <div className='ta-box-content'>
-                    <div className='ta-header'>
-                        <p className='center'>วันที่</p>
-                        <p className='center'>เวลาเข้า</p>
-                        <p className='center'>เวลาออก</p>
-                        <div>
-                            {
-                                isEdit == false ? 
-                                <div className='ta-img-bx' 
-                                    style={isSheet[0] == null ? {pointerEvents: 'none'} 
-                                    : {pointerEvents: 'auto'} } 
-                                    onClick={edit}>
-                                    <img src={tc} alt=''/>
-                                </div>
-                                :
-                                <div className='ta-img-bx' style={{background : 'red'}}onClick={edit}>
-                                    <img src={tc} alt=''/>
-                                </div>
-                            }
+                        <div className="center">
+                            <label>เวลาเข้า&nbsp;</label>
+                            <input id='inputIn' type='time' onChange={(e) =>setIn(e.target.value)} defaultValue={isIn}></input>
+                        </div>
+                        <div className="center">
+                            <label>เวลาออก</label>
+                            <input id='inputIn' type='time' onChange={(e) =>setOut(e.target.value)} defaultValue={isOut}></input>
                         </div>
                     </div>
-                    <div className='ta-content'>
-                        {
-                            // emp.map((item, index) => (
-                            //     <div className='ta-content-time' key={index}>
-                            //         <p className="center">{item.work_date}</p>
-                            //         <p className="center">{item.time_in.substring(0, 5)}</p>
-                            //         <p className="center">{item.time_out.substring(0, 5)}</p>
-                            //         <div>
-                            //             <div className='ta-img-bx' onClick={() => console.log(index)}>
-                            //                 <img src={et} alt=''/>
-                            //             </div>
-                            //         </div>
-                            //     </div>
-                            // ))
-                            isSheet.map((item, index) => (
-                                <div className='ta-content-time' key={index}>
-                                    <li className="center" id='inputDate' value={item.work_id}>{item.th_date}</li>
-                                    <div className="center">
-                                        <input id='inputIn' type='time' defaultValue={item.time_in} disabled></input>
-                                    </div>
-                                    <div className="center">
-                                        <input id='inputOut' type='time' defaultValue={item.time_out} disabled></input>
-                                    </div>
-                                    <p className="center">-</p>
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-            </div>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 , textAlign: 'center'}} >
+                        <Button variant="outlined" color="success" onClick={editTime} size="normal">บันทึก</Button>
+                    </Typography>
+                </Box>
+            </Modal>
+            <Paper elevation={0} sx={{ display: 'flex' }}>
+                <Box sx={{ height: 840, width: '100%', }}>
+                    <DataGrid
+                    sx={{
+                        "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                            outline: "none !important",
+                        },
+                    }}
+                    rows={isTimesheet}
+                    columns={columns}
+                    columnHeaderHeight={80}
+                    initialState={{
+                        pagination: {
+                            paginationModel: {
+                            pageSize: 50,
+                            },
+                        },
+                    }}
+                    pageSizeOptions={[50]}
+                    disableRowSelectionOnClick
+                    />
+                </Box>
+            </Paper>
         </>
     );
 };

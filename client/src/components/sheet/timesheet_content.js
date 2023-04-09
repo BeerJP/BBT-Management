@@ -1,10 +1,12 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
-import EmployeeCard from './emp_card';
+import TimeSheetInfo from './ta_info';
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { DataGrid } from '@mui/x-data-grid';
+
+
 
 function Content(props) {
 
@@ -26,7 +28,6 @@ function Content(props) {
 
     }, [ip, isEmpid]);
 
-
     const columns = [
         { field: 'id',  headerName: 'รหัส',  width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         { field: 'emp_name', headerName: 'ชื่อ', width: 190, headerAlign: 'center', align: 'center', disableColumnMenu: true },
@@ -42,28 +43,29 @@ function Content(props) {
         })
     };
 
-    return (
+
+    return(
         <>
-            <div className='employee_container'>
-                <div className='employee_article'>
-                    <Box
-                    sx={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        justifyContent: 'space-between',
-                        '& > :not(style)': {
-                        m: 0.2,
-                        width: { sm: 590, lg: 590
-                        },
-                        height: { sm: 840, lg: 840
-                        },
-                        margin:'auto',
-                        marginBottom: 1
-                        },
-                    }}
-                    >
+            <div className='timesheet_container'>
+                <div className='timesheet_article'>
+                        <Box
+                        sx={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'space-between',
+                            '& > :not(style)': {
+                            m: 0.2,
+                            width: { sm: 590, lg: 590
+                            },
+                            height: { sm: 840, lg: 840
+                            },
+                            margin:'auto',
+                            marginBottom: 1
+                            },
+                        }}
+                        >
                         <Paper elevation={1} sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <EmployeeCard ip={ip} select={[isEmpid, setEmpid]} />
+                            <TimeSheetInfo ip={ip} select={isEmpid} />
                         </Paper>
                         <Paper elevation={1} sx={{ display: 'flex' }}>
                             <Box sx={{ height: '100%', width: '100%', }}>

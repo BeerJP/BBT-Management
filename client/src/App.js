@@ -20,12 +20,11 @@ function App() {
       <NavBar/>
       <Routes>
         <Route path="/login" element={<Login/>}/>
-        <Route path="/employee" element={<Employee/>}/>
-        {/* <Route path="/" element={<Overview/>}/>
+        <Route path="/" element={<Overview/>}/>
         <Route path="/employee" element={<Employee/>}/>
         <Route path="/timesheet" element={<TimeSheet/>}/>
         <Route path="/calendar" element={<Calendar/>}/>
-        <Route path="/leave" element={<Leave/>}/> */}
+        <Route path="/leave" element={<Leave/>}/>
       </Routes>
     </BrowserRouter>
   );

@@ -1,9 +1,10 @@
 import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../assets/style/timesheet.css';
-import TimeSheetInfo from '../components/sheet/ta_info';
-import TimeSheetTable from '../components/sheet/ta_table';
-import UserTimeSheet from '../components/sheet/us_timesheet';
+// import TimeSheetInfo from '../components/sheet/ta_info';
+// import TimeSheetTable from '../components/sheet/ta_table';
+// import UserTimeSheet from '../components/sheet/us_timesheet';
+import Content from '../components/sheet/timesheet_content';
 import IpContext from '../ipContext';
 
 
@@ -12,9 +13,6 @@ function TimeSheet() {
     const ip = useContext(IpContext);
     const [isUserid, setUserid] = useState(0)
     const [isTypeid, setTypeid] = useState(0)
-
-    const [timeSheet, setTimesheet] = useState([]);
-    const [isEmp, setEmp] = useState('');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -31,40 +29,23 @@ function TimeSheet() {
                 window.location = '/login';
             }
         });
-    }, []);
+    }, [ip]);
 
-    useEffect(() => {
-        
-        setTimesheet([])
 
-        const getSelect = () => {
-            axios.post("http://"+ ip +":5000/timesheet", { id: isEmp }, {crossdomain: true})
-            .then(response => {
-                setTimesheet(response.data);
-            });
-        };
-
-        getSelect();
-
-    }, [ip, isEmp]);
-
-    return (
-        <>
-            {
-                isTypeid === 1 || isTypeid === 2 ?  
-                [<div className='box-content' key='1'><TimeSheetInfo data={[timeSheet, ip, isEmp]}/></div>,
-                <div className='box-content' key='2'><TimeSheetTable data={[setEmp, ip]}/></div>]
-                :
-                <div className='box-content' key='3'><UserTimeSheet data={[ip, isUserid]}/></div>
-            }
-            {/* <div className='box-content'>
-                <TimeSheetInfo data={[timeSheet, ip, isEmp]}/>
-            </div>
-            <div className='box-content' >
-                <TimeSheetTable data={[setEmp, ip]}/>
-            </div> */}
-        </>
-    );
+    if (isTypeid === 1 || isTypeid === 2) {
+        return (
+            <>
+                <div className='container'>
+                    <Content ip={ip} isTypeid={isTypeid}/>
+                </div>
+            </>
+        )
+    } else if (isTypeid === 3) {
+        return (
+            <>
+            </>
+        )
+    }
 }
 
 export default TimeSheet;

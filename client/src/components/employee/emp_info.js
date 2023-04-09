@@ -67,19 +67,12 @@ function InfoCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>สถานะ</label>
-                            <label className='text-box'>{isEmp.emp_status}</label>
-                        </div>
-                    </div>
-                    <div className='lb-box-long em-info'>
-                        <div>
                             <label className='lb-header'>วันเริ่มงาน</label>
                             <label className='text-box'>{isEmp.emp_startdate}</label>
                         </div>
-                        <div>
-                            <label className='lb-header'>วันสิ้นสุดงาน</label>
-                            <label className='text-box'>{isEmp.emp_enddate}</label>
-                        </div>
+                    </div>
+                    <div className='lb-box-long em-info'>
+
                     </div>
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>

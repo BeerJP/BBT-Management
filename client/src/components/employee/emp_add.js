@@ -9,6 +9,8 @@ function AddCard(props) {
     const selectEmp = props.data[3];
 
     const [isNotnull, setNotnull] = useState(true);
+    const [isUservalid, setUservalid] = useState(true);
+    const [isPassvalid, setPassvalid] = useState(true);
     const [isId, setId] = useState();
     const [deptInfo, setDeptinfo] = useState([{ label: ' ', id: ' ' }]);
     const [typeInfo, setTypeinfo] = useState([{ label: ' ', id: ' ' }]);
@@ -105,21 +107,33 @@ function AddCard(props) {
         input.value = value;
     };
 
-    function validation(user, pass) {
-        console.log(user, pass)       
-        setNotnull(true); 
-    }
 
     useEffect(() => {
 
         if (name.length === 0 || surname.length === 0 || birth === '' || start === '' || mac1.length !== 17 ||
-            username.length === 0 || password.length === 0 || type === '') {
+            username.length < 4 || password.length < 4 || type === '' || isUservalid  || isPassvalid) {
             setNotnull(false);
         } else {
-            validation(username, password)
+            setNotnull(true); 
         }
 
-    }, [birth, mac1, name, password, start, surname, type, username]);
+    }, [birth, isPassvalid, isUservalid, mac1, name, password, start, surname, type, username]);
+
+    useEffect(() => {
+
+        if (/^[a-zA-Z]+$/.test(username)) {
+            setUservalid(false)
+        } else {
+            setUservalid(true)
+        }
+
+        if (/^[0-9]+$/.test(password)) {
+            setPassvalid(false)
+        } else {
+            setPassvalid(true)
+        }
+
+    }, [password, username]);
 
     return (
         <>
@@ -179,9 +193,9 @@ function AddCard(props) {
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header' id='username'>Username<a>*</a></label>
-                            <input className='text-box' placeholder='"A-Z a-z 0-9" 4-8 ตัว' 
-                            minlength='4' maxlength='8'
+                            <label className='lb-header'>Username<a>*</a></label>
+                            <input className='text-box'
+                            maxLength='8'
                             onChange={(event => {setUsername(event.target.value)})}></input>
                         </div>
                         <div>
@@ -198,10 +212,11 @@ function AddCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header' id='password'>Password<a>*</a></label>
-                            <input className='text-box' placeholder='"A-Z a-z 0-9" 4-8 ตัว' 
-                            minlength='4' maxlength='8'
-                            onChange={(event => {setPassword(event.target.value)})}></input>
+                            <label className='lb-header'>Password<a>*</a></label>
+                            <input className='text-box'
+                            maxLength='8'
+                            onChange={(event => {setPassword(event.target.value)})}
+                            on></input>
                         </div>
                         <div>
                             <button onClick={insertEmployee} 

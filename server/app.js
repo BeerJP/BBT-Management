@@ -363,10 +363,12 @@ app.get('/timecount', (request, response) => {
 // แสดงข้อมูล Time Attendance แบบเจาะจง
 app.post('/timesheet', (request, response) => {
   const empId = request.body.id;
-  conn.query(`SELECT *, DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
-              DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
-              TIME_FORMAT(TIME_ATTENDANCE.time_in, '%H:%i') as time_in,
-              TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i') as time_out
+  conn.query(`SELECT *,
+                WORKDAY.work_id as id,
+                DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
+                DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+                TIME_FORMAT(TIME_ATTENDANCE.time_in, '%H:%i') as time_in,
+                TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i') as time_out
               FROM TIME_ATTENDANCE 
               INNER JOIN WORKDAY 
               ON TIME_ATTENDANCE.work_id = WORKDAY.work_id 
@@ -550,6 +552,7 @@ app.put("/update_employee", (request, response) => {
   const mac1 = request.body.mac1;
   const mac2 = request.body.mac2;
   const department = request.body.dept;
+  const start = request.body.dept;
 
   conn.query(`UPDATE EMPLOYEE SET 
                 emp_name = ?, 
@@ -558,9 +561,10 @@ app.put("/update_employee", (request, response) => {
                 emp_birthdate = ?, 
                 emp_mac1 = ?, 
                 emp_mac2 = ?,
-                dept_id = ? 
+                dept_id = ?,
+                emp_startdate = ?
               WHERE emp_id = ?`,
-    [name, surname, gender, birthdate, mac1, mac2, department, id], 
+    [name, surname, gender, birthdate, mac1, mac2, department, start, id], 
     (err, result) => {
       if (err) {
         response.send(err);

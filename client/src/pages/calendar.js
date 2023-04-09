@@ -1,18 +1,16 @@
 import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../assets/style/calendar.css';
-import CalendarInfo from '../components/calendar/ca_date';
-import CalendarTable from '../components/calendar/ca_table';
+// import CalendarInfo from '../components/calendar/ca_date';
+// import CalendarTable from '../components/calendar/ca_table';
+import Content from '../components/calendar/calendar_content';
 import IpContext from '../ipContext';
 
 
 function Calendar() {
 
     const ip = useContext(IpContext);
-    const [isUserid, setUserid] = useState(0)
     const [isTypeid, setTypeid] = useState(0)
-
-    const [isUpdate, setUpdate] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -21,7 +19,6 @@ function Calendar() {
         }, {crossdomain: true})
         .then(response => {
             if (response.data.user_id) {
-                setUserid(response.data.user_id)
                 setTypeid(response.data.type_id)
             } 
             else {
@@ -29,19 +26,22 @@ function Calendar() {
                 window.location = '/login';
             }
         });
-    }, []);
+    }, [ip]);
 
-    return (
-        <>
-            {
-                isTypeid === 1 || isTypeid === 2 ?  
-                [<div className='box-content' key='1'><CalendarInfo data={[ip, isUpdate]}/></div>,
-                <div className='box-content' key='2'><CalendarTable data={[ip, isUpdate, setUpdate]}/></div>]
-                :
-                <div className='box-content' key='3'><CalendarInfo data={[ip, isUpdate]}/></div>
-            }
-        </>
-    );
+    if (isTypeid === 1 || isTypeid === 2) {
+        return (
+            <>
+                <div className='container'>
+                    <Content ip={ip}/>
+                </div>
+            </>
+        )
+    } else if (isTypeid === 3) {
+        return (
+            <>
+            </>
+        )
+    }
 };
 
 export default Calendar;
