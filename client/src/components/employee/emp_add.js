@@ -1,5 +1,8 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 
 
 function AddCard(props) {
@@ -137,8 +140,8 @@ function AddCard(props) {
 
     return (
         <>
-            <div className='box-body em-body-left'>
-                <div className='box-body em-article'>
+            <div className='em-body-left'>
+                <div className='em-article'>
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>ชื่อ<a>*</a></label>
@@ -189,7 +192,13 @@ function AddCard(props) {
                             <input className='text-box' maxLength='12' onKeyUp={(e => Mac2Colon(e.target))} onChange={(event => {setMac2(event.target.value)})}></input>
                         </div>
                     </div>
-                    <div className='lb-box-long em-info'></div>
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                                ข้อมูลสำหรับเข้าสู่ระบบ
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>

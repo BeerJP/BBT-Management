@@ -31,10 +31,11 @@ app.use(cors({
 
 
 // -------------------- เข้าสู่ระบบ --------------------
-
-app.post('/login', function(request, response) {
-  const username = request.body.username;
-	const password = request.body.password;
+app.get('/login', function(request, response) {
+  // const username = request.body.username;
+	// const password = request.body.password;
+  const username = 'jakkapan';
+	const password = '0000';
 
   conn.query(`SELECT *,
                 DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
@@ -66,6 +67,31 @@ app.post('/login', function(request, response) {
       });
     });
 });
+
+// app.get('/login', function(request, response) {
+//   // const username = request.body.username;
+// 	// const password = request.body.password;
+//   const username = 'jakkapan';
+// 	const password = '0000';
+
+
+//   conn.query(`SELECT *,
+//                 DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
+//                 DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), emp_birthdate)), '%Y') + 0 as emp_age,
+//                 DATE_FORMAT(emp_startdate, '%Y-%m-%d') as emp_startdate
+//               FROM EMPLOYEE
+//               INNER JOIN DEPARTMENT
+//                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+//               INNER JOIN USER
+//                 ON EMPLOYEE.emp_id = USER.emp_id
+//               INNER JOIN TYPE
+//                 ON USER.type_id = TYPE.type_id
+//               WHERE USER.user_name = ?
+//               GROUP BY EMPLOYEE.emp_id`, [username], 
+//     (err, result) => {
+//       response.send(result);
+//     });
+// });
 
 // -------------------- ตรวจสอบสถานะการเข้าสู่ระบบ --------------------
 
@@ -322,7 +348,8 @@ app.post('/workday_emp', (request, response) => {
 
 // แสดงข้อมูล Holiday
 app.get('/holiday', (request, response) => {
-  conn.query(`SELECT *, 
+  conn.query(`SELECT *,
+              WORKDAY.work_id as id,
               DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
               DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date
               FROM HOLIDAY

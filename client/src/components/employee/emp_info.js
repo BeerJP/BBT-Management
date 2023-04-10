@@ -1,4 +1,7 @@
 import { React, useState, useEffect } from 'react';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 
 
 function InfoCard(props) {
@@ -33,8 +36,8 @@ function InfoCard(props) {
 
     return (
         <>
-            <div className='box-body em-body-left'>
-                <div className='box-body em-article'>
+            <div className='em-body-left'>
+                <div className='em-article'>
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>ชื่อ - นามสกุล</label>
@@ -71,9 +74,13 @@ function InfoCard(props) {
                             <label className='text-box'>{isEmp.emp_startdate}</label>
                         </div>
                     </div>
-                    <div className='lb-box-long em-info'>
-
-                    </div>
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                                ข้อมูลสำหรับเข้าสู่ระบบ
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>

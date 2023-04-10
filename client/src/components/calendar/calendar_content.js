@@ -1,43 +1,73 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
+import CalendarInfo from './ca_date';
 
+import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { DataGrid } from '@mui/x-data-grid';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 function Content(props) {
 
     const ip = props.ip;
 
-    // useEffect(() => {
+    const [workDay, setWorkday] = useState([{ id: '', work_id: '', work_date: '', work_status: '' }]);
+    const [holiDay, setHoliday] = useState([{ id: '', work_id: '', work_date: '', work_status: '' }]);
 
-    //     const getEmp = async() => {
+    useEffect(() => {
 
-    //         await axios.get("http://"+ ip +":5000/employee_table", {crossdomain: true})
-    //         .then(response => {
-    //             setEmployee(response.data)
-    //         });
-    //     }
+        const getHoliday = async() => {
+            await axios.get("http://"+ ip +":5000/holiday", {crossdomain: true})
+            .then(response => {
+                setHoliday(response.data);
+            });
+        };
+    
+        const getWorkday = async() => {
+            await axios.get("http://"+ ip +":5000/workday", {crossdomain: true})
+            .then(response => {
+                setWorkday(response.data);
+            });
+        };
 
-    //     getEmp();
+        getWorkday();
+        getHoliday();
+    }, [ip]);
 
-    // }, [ip, isEmpid]);
-
-
-    // const columns = [
-    //     { field: 'id',  headerName: 'รหัส',  width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-    //     { field: 'emp_name', headerName: 'ชื่อ', width: 190, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-    //     { field: 'emp_surname', headerName: 'นามสกุล', width: 190, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-    //     { field: 'dept_name', headerName: 'แผนก', width: 190, headerAlign: 'center', align: 'center', disableColumnMenu: true }
-    // ];
-
-    // const handleCellClick = (params) => {
-    //     isEmployee.map((item) => {
-    //         if (item.id === params.row.id) {
-    //             setEmpid(item.id)
-    //         }
-    //     })
-    // };
+    const columns = [
+        { field: 'th_date', headerName: 'วันที่', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
+        { field: 'holi_name', headerName: 'วันหยุด', width: 300, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        {
+            field: 'edit',
+            headerAlign: 'center',
+            align: 'center',
+            headerName: '',
+            width: 100,
+            sortable: false,
+            disableClickEventBubbling: true,
+            disableColumnMenu: true,
+            
+            renderCell: (params) => {
+                const onClick = (e) => {
+                  const currentRow = params.row;
+                //   setDate(currentRow.th_date)
+                //   setIn(currentRow.time_in)
+                //   setOut(currentRow.time_out)
+                //   setWork(currentRow.work_id)
+                //   setOpen(true)
+                };
+                
+                return (
+                  <Stack direction="row" spacing={2}>
+                    <Button variant="outlined" color="warning" size="small" onClick={onClick}>แก้ไข</Button>
+                  </Stack>
+                );
+            },
+        }
+    ];
 
     return (
         <>
@@ -60,10 +90,30 @@ function Content(props) {
                     }}
                     >
                         <Paper elevation={1} sx={{ display: 'flex', flexDirection: 'column' }}>
-       
+                            <CalendarInfo ip={ip}/>
                         </Paper>
                         <Paper elevation={1} sx={{ display: 'flex' }}>
-     
+                            <Box sx={{ height: '100%', width: '100%', }}>
+                                <DataGrid
+                                sx={{
+                                    "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                                        outline: "none !important",
+                                    },
+                                }}
+                                rows={holiDay}
+                                columns={columns}
+                                columnHeaderHeight={80}
+                                initialState={{
+                                    pagination: {
+                                        paginationModel: {
+                                        pageSize: 10,
+                                        },
+                                    },
+                                }}
+                                pageSizeOptions={[10]}
+                                disableRowSelectionOnClick
+                                />
+                            </Box>
                         </Paper>
                     </Box>
                 </div>

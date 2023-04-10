@@ -1,5 +1,8 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 
 
 function EditCard(props) {
@@ -105,6 +108,36 @@ function EditCard(props) {
         )
     };
 
+    function Mac1Colon(input) {
+
+        var value = input.value
+        if (value.length === 12) {
+            value = value.slice(0,   2) + ":" + 
+                    value.slice(2,   4) + ":" + 
+                    value.slice(4,   6) + ":" + 
+                    value.slice(6,   8) + ":" + 
+                    value.slice(8,  10) + ":" + 
+                    value.slice(10, 12)
+        };
+        setMac1(value)
+        input.value = value;
+    };
+
+    function Mac2Colon(input) {
+
+        var value = input.value
+        if (value.length === 12) {
+            value = value.slice(0,   2) + ":" + 
+                    value.slice(2,   4) + ":" + 
+                    value.slice(4,   6) + ":" + 
+                    value.slice(6,   8) + ":" + 
+                    value.slice(8,  10) + ":" + 
+                    value.slice(10, 12)
+        };
+        setMac2(value)
+        input.value = value;
+    };
+
     useEffect(() => {
 
         if (/^[a-zA-Z]+$/.test(isUsername)) {
@@ -134,8 +167,8 @@ function EditCard(props) {
 
     return (
         <>
-             <div className='box-body em-body-left'>
-                <div className='box-body em-article'>
+             <div className='em-body-left'>
+                <div className='em-article'>
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>ชื่อ</label>
@@ -178,7 +211,7 @@ function EditCard(props) {
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 1</label>
-                            <input className='text-box' key={isEmp.emp_mac1} onChange={(event => {setMac1(event.target.value)})} 
+                            <input className='text-box' maxLength='12' key={isEmp.emp_mac1} onKeyUp={(e => Mac1Colon(e.target))} onChange={(event => {setMac1(event.target.value)})} 
                             id='mac' defaultValue={isEmp.emp_mac1}></input>
                         </div>
                     </div>
@@ -189,11 +222,17 @@ function EditCard(props) {
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 2</label>
-                            <input className='text-box' key={isEmp.emp_mac2} onChange={(event => {setMac2(event.target.value)})} 
+                            <input className='text-box' maxLength='12' key={isEmp.emp_mac2} onKeyUp={(e => Mac2Colon(e.target))} onChange={(event => {setMac2(event.target.value)})} 
                             id='mac' defaultValue={isEmp.emp_mac2}></input>
                         </div>
                     </div>
-                    <div className='lb-box-long em-info'></div>
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                                ข้อมูลสำหรับเข้าสู่ระบบ
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
                     <div className='lb-box-long em-info'></div>
                     <div className='lb-box-long em-info'>
                         <div>

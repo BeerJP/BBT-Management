@@ -7,8 +7,8 @@ import calen from '../../assets/icon/calendar-2.png';
 
 function CalendarDate(props) {
 
-    const ip = props.data[0];
-    const isUpdate = props.data[1];
+    const ip = props.ip;
+    // const isUpdate = props.data[1];
 
     const [holiDay, setHoliday] = useState([]);
 
@@ -22,7 +22,7 @@ function CalendarDate(props) {
         };
         getHoliday();
 
-    }, [ip, isUpdate]);
+    }, [ip]);
 
     const ca = new Date();
     const monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -68,12 +68,13 @@ function CalendarDate(props) {
         const color = hd.map(function(id) {
             if (hb.includes(id)){
                 document.getElementById(id).style.background = "#F1948A"
+                document.getElementById(id).style.cursor = "pointer"
             } else {
                 document.getElementById(id).style.background = "white"
             }
         })
 
-    }, [count, holiDay, isUpdate]);
+    }, [count, holiDay]);
 
 
     return (
@@ -110,7 +111,10 @@ function CalendarDate(props) {
                         ))}
                         {
                             inMonth.map((day) => (
-                                <li className="this-month" key={day} id={dateId + '' + day.toString().padStart(2, '0')}>{day}</li>   
+                                <li className="this-month" 
+                                key={day} id={dateId + '' + day.toString().padStart(2, '0')}
+                                onClick={(e) => console.log(e.target.id)}
+                                >{day}</li>   
                         ))}
                         {
                             next.map((nday) => (
