@@ -4,13 +4,19 @@ import right from '../../assets/icon/angle-right.png';
 import left from '../../assets/icon/angle-left.png';
 import calen from '../../assets/icon/calendar-2.png';
 
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Card from '@mui/material/Card';
+
+
 
 function CalendarDate(props) {
 
     const ip = props.ip;
-    // const isUpdate = props.data[1];
 
-    const [holiDay, setHoliday] = useState([]);
+    const [isHoliday, setHoliday] = useState([]);
+    const [isList, setList] = useState();
 
     useEffect(() => {
 
@@ -42,8 +48,6 @@ function CalendarDate(props) {
     const dateId = year + '' + (monthName.indexOf(month.substring(0, 3)) + 1).toString().padStart(2, '0');
     const thMonth = new Date(ca.getFullYear(), ca.getMonth() + count).toLocaleString('th-TH', {month: 'long'});
 
-
-
     const inMonth =[], previous = [], next = [];
 
     for (var d = 0; d < dayInMonth; d++){
@@ -63,31 +67,40 @@ function CalendarDate(props) {
 
         const hc = document.querySelectorAll("[class='this-month']");
         const hd = [...hc].map(input => input.id);
-        const hb = [...holiDay].map(input => input.work_id);
+        const hb = [...isHoliday].map(input => input.work_id);
+
+        var list = [];
 
         const color = hd.map(function(id) {
             if (hb.includes(id)){
                 document.getElementById(id).style.background = "#F1948A"
-                document.getElementById(id).style.cursor = "pointer"
+
+                var result = isHoliday.find(obj => {
+                    return obj.work_id === id
+                })
+
+                list.push(result)
+                
+
             } else {
                 document.getElementById(id).style.background = "white"
             }
         })
 
-    }, [count, holiDay]);
+        setList(list)
 
+    }, [count, isHoliday]);
 
     return (
         <>  
-            <div className='box-body'>
-                <div className='ca-box-header'>
-                    <img src={calen} alt=''/>
-                    <label>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         ตารางทำงาน
-                    </label>
-                </div>
-            </div>
-            <div className='box-body ca-body-date'>
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <div className='ca-body-date'>
                 <div className="calendar">
                     <div className="ca-menu">
                         <button onClick={minus}><img src={left} alt=""/></button>
@@ -113,7 +126,6 @@ function CalendarDate(props) {
                             inMonth.map((day) => (
                                 <li className="this-month" 
                                 key={day} id={dateId + '' + day.toString().padStart(2, '0')}
-                                onClick={(e) => console.log(e.target.id)}
                                 >{day}</li>   
                         ))}
                         {
@@ -124,24 +136,16 @@ function CalendarDate(props) {
                     </div>
                 </div>
             </div>
-            {/* <div className='box-body ca-body-bottom'>
-                <div className='ca-box-content'>
-                    <div className='ca-header'>
-                        <p className='ca-name'>วันหยุด</p>
-                        <p className='ca-date'>วันที่</p>
-                    </div>
-                    <div className='ca-content'>
-                        {
-                            emp.map((item, index) => (
-                                <div className='ca-content-info' key={index}>
-                                    <p className="ca-name">{item.date}</p>
-                                    <p className="ca-date">{item.timeIn}</p>
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-            </div> */}
+            <Card sx={{ height: '90%' }}>
+                {/* <ul className='list-holiday'>
+                    {
+                        isList === undefined ? '':
+                        isList.map((item) => (
+                            <li>{}</li>
+                        ))
+                    }
+                </ul>  */}
+            </Card>
         </>
     );
 };

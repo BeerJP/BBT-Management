@@ -10,7 +10,7 @@ function NavBar() {
     const ip = useContext(IpContext);
     // const [isWidth, setWidth] = useState({width: 0});
     // const [isResponsive, setResponsive] = useState(0);
-    const [isTypeid, setTypeid] = useState(0)
+    const [isTypeid, setTypeid] = useState(1)
     const [isUserName, setUsername] = useState('')
     const [isUsertype, setUsertype] = useState('')
 
@@ -19,7 +19,7 @@ function NavBar() {
     //     switch(isWidth.width) {
     //         case 10:
     //             setResponsive(0);
-    //             break;
+    //             break; 
     //         case 8:
     //             setResponsive(1);
     //             break;

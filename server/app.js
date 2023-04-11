@@ -1,7 +1,7 @@
 const express = require('express');
-const session = require('express-session');
+// const session = require('express-session');
 const bodyParser = require('body-parser');
-const path = require('path');
+// const path = require('path');
 const mysql = require("mysql");
 const cors = require("cors");
 const bcrypt = require('bcrypt');
@@ -31,11 +31,9 @@ app.use(cors({
 
 
 // -------------------- เข้าสู่ระบบ --------------------
-app.get('/login', function(request, response) {
-  // const username = request.body.username;
-	// const password = request.body.password;
-  const username = 'jakkapan';
-	const password = '0000';
+app.post('/login', function(request, response) {
+  const username = request.body.username;
+	const password = request.body.password;
 
   conn.query(`SELECT *,
                 DATE_FORMAT(emp_birthdate, '%Y-%m-%d') as emp_birthdate,
@@ -52,7 +50,6 @@ app.get('/login', function(request, response) {
               GROUP BY EMPLOYEE.emp_id`, [username], 
     function(error, results, fields) {
       if (error) { response.send(error) }
-      if (results.length == 0) { response.send(['Incorrect Username and/or Password!']) }
       bcrypt.compare(password, results[0].user_password, function(err, result) {
         if (result) {
           var token = jwt.sign({ 

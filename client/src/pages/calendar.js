@@ -10,7 +10,7 @@ import IpContext from '../ipContext';
 function Calendar() {
 
     const ip = useContext(IpContext);
-    const [isTypeid, setTypeid] = useState(0)
+    const [isTypeid, setTypeid] = useState(1)
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -22,8 +22,8 @@ function Calendar() {
                 setTypeid(response.data.type_id)
             } 
             else {
-                localStorage.removeItem('token')
-                window.location = '/login';
+                // localStorage.removeItem('token')
+                // window.location = '/login';
             }
         });
     }, [ip]);

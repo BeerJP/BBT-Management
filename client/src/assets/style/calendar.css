@@ -17,9 +17,18 @@
 
 
 
-
-
-
+ul.list-holiday {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 90%;
+}
+  
+ul.list-holiday li{
+    font-size: 0.9rem;
+    width: 40%;
+    margin-bottom: 5px;
+}
 
 
 
@@ -64,7 +73,7 @@
 .calendar .ca-content ul.weekdays { margin-bottom: 10px; height: 50px; width: 80%;}
 .calendar .ca-content ul.day-grid { margin-bottom: 10px; width: 80%;}
 .calendar .ca-content ul.day-grid li { border: 1px solid #EAEAEA; color: lightgray; border-radius: 10px; height: 50px; }
-.calendar .ca-content ul.day-grid .this-month { border: 1px solid #ADE6F0; color: black; visibility: visible;}
+.calendar .ca-content ul.day-grid .this-month { border: 1px solid #ADE6F0; color: black; }
 .calendar .ca-content ul.day-grid .this-month:nth-child(7n + 1) { border: 1px solid #F08080; cursor: default; }
 .calendar .ca-content ul.day-grid .this-month:nth-child(7n + 1):hover { background: none; }
 

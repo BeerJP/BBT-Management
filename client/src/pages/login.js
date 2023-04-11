@@ -40,6 +40,9 @@ function Login() {
         });
     }, [ip]);
 
+    console.log(username)
+    console.log(password)
+
     return (
         <>
             <div className="login-container">
