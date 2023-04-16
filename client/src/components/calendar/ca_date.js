@@ -14,6 +14,7 @@ import Card from '@mui/material/Card';
 function CalendarDate(props) {
 
     const ip = props.ip;
+    const update = props.update;
 
     const [isHoliday, setHoliday] = useState([]);
     const [isList, setList] = useState();
@@ -28,7 +29,7 @@ function CalendarDate(props) {
         };
         getHoliday();
 
-    }, [ip]);
+    }, [ip, update]);
 
     const ca = new Date();
     const monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -81,7 +82,6 @@ function CalendarDate(props) {
 
                 list.push(result)
                 
-
             } else {
                 document.getElementById(id).style.background = "white"
             }
@@ -90,6 +90,7 @@ function CalendarDate(props) {
         setList(list)
 
     }, [count, isHoliday]);
+
 
     return (
         <>  
@@ -137,14 +138,14 @@ function CalendarDate(props) {
                 </div>
             </div>
             <Card sx={{ height: '90%' }}>
-                {/* <ul className='list-holiday'>
+                <ul className='list-holiday'>
                     {
                         isList === undefined ? '':
                         isList.map((item) => (
-                            <li>{}</li>
+                            <li>{item.work_id.substring(6) + ' ' + item.holi_name}</li>
                         ))
                     }
-                </ul>  */}
+                </ul> 
             </Card>
         </>
     );

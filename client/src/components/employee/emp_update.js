@@ -152,16 +152,32 @@ function EditCard(props) {
             setPassvalid(true)
         }
 
+        console.log('work')
+
     }, [isPassword, isUsername]);
 
     useEffect(() => {
 
-        if (isName.length === 0 || isSurname.length === 0 || isBirth === '' || isMac1.length !== 17 ||
+        if  (isName === null || isSurname === null || isBirth === null || isMac1 === null ||
+        isUsername === null || isPassword === null || isType === null || isUservalid  || isPassvalid) {
+            setNotnull(false);
+        }
+        else if (isName.length === 0 || isSurname.length === 0 || isBirth === '' || isMac1.length !== 17 ||
             isUsername.length < 4 || isPassword.length < 4 || isType === '' || isUservalid  || isPassvalid) {
             setNotnull(false);
         } else {
             setNotnull(true); 
         }
+
+        console.log(isName)
+        console.log(isSurname)
+        console.log(isBirth)
+        console.log(isMac1)
+        console.log(isUsername)
+        console.log(isPassword)
+        console.log(isType)
+        console.log(isUservalid)
+        console.log(isPassvalid)
 
     }, [isBirth, isMac1, isName, isPassvalid, isPassword, isSurname, isType, isUsername, isUservalid]);
 

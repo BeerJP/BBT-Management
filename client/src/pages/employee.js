@@ -10,7 +10,7 @@ import IpContext from '../ipContext';
 function Employee() {
 
     const ip = useContext(IpContext);
-    const [isTypeid, setTypeid] = useState(0)
+    const [isTypeid, setTypeid] = useState(1)
 
     useEffect(() => {
 
@@ -22,8 +22,8 @@ function Employee() {
             if (response.data.user_id) {
                 setTypeid(response.data.type_id)
             } else {
-                localStorage.removeItem('token')
-                window.location.href ='/login'
+                // localStorage.removeItem('token')
+                // window.location.href ='/login'
             }
         });
 

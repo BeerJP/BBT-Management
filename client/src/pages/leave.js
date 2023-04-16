@@ -3,16 +3,16 @@ import axios from 'axios';
 import '../assets/style/leave.css';
 import LeaveTable from '../components/leave/leave_table';
 import LeaveSetting from '../components/leave/leave_setting';
+import Content from '../components/leave/leave_content';
 import IpContext from '../ipContext';
+
 
 
 function Leave() {
 
     const ip = useContext(IpContext);
     const [isUserid, setUserid] = useState(0)
-    const [isTypeid, setTypeid] = useState(0)
-
-    const [isUpdate, setUpdate] = useState(false);
+    const [isTypeid, setTypeid] = useState(1)
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -21,29 +21,29 @@ function Leave() {
         }, {crossdomain: true})
         .then(response => {
             if (response.data.user_id) {
-                setUserid(response.data.user_id)
                 setTypeid(response.data.type_id)
             } 
             else {
-                localStorage.removeItem('token')
-                window.location = '/login';
+                // localStorage.removeItem('token')
+                // window.location = '/login';
             }
         });
-    }, []);
+    }, [ip]);
 
-
-    return (
-        <>
-            {
-                isTypeid === 1 || isTypeid === 2 ?  
-                [<div className='box-content' key='1'><LeaveTable data={[ip, isUpdate, setUpdate]}/></div>,
-                <div className='box-content' key='2'><LeaveSetting data={[ip, isUpdate, setUpdate, isUserid]}/></div>] 
-                :
-                <div className='box-content' key='3'><LeaveSetting data={[ip, isUpdate, setUpdate, isUserid]}/></div>
-            }
-
-        </>
-    );
+    if (isTypeid === 1 || isTypeid === 2) {
+        return (
+            <>
+                <div className='container'>
+                    <Content ip={ip}/>
+                </div>
+            </>
+        )
+    } else if (isTypeid === 3) {
+        return (
+            <>
+            </>
+        )
+    }
 };
 
 export default Leave;
