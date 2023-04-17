@@ -7,7 +7,6 @@ import Content from '../components/leave/leave_content';
 import IpContext from '../ipContext';
 
 
-
 function Leave() {
 
     const ip = useContext(IpContext);
@@ -30,7 +29,7 @@ function Leave() {
         });
     }, [ip]);
 
-    if (isTypeid === 1 || isTypeid === 2) {
+    if (isTypeid === 1) {
         return (
             <>
                 <div className='container'>

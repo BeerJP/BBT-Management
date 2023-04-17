@@ -67,7 +67,7 @@ function Content(props) {
             default:
                 setLeaverow(isLeaveday);
           }
-    }, [isTypeselect])
+    }, [isLeaveapp, isLeaveday, isLeavepen, isTypeselect])
 
     const leave_columns = [
         { field: 'th_date', headerName: 'วันที่', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: false },
@@ -85,7 +85,7 @@ function Content(props) {
             disableColumnMenu: true,
             renderHeader: (params) => (
                 <Stack direction="row" spacing={2}>
-                    <select className='text-box select-box' name="type" id="combotype" onChange={(event => {setTypeselect(event.target.value)})}>
+                    <select className='le-text-box le-select-box' name="type" id="combotype" onChange={(event => {setTypeselect(event.target.value)})}>
                         <option value="1">ทั้งหมด</option>
                         <option value="2">รอตรวจสอบ</option>
                         <option value="3">ตรวจสอบแล้ว</option>
@@ -160,6 +160,19 @@ function Content(props) {
         getLeave()
     };
 
+    async function getApprove(id, date, approve) {
+        await setOpen(false);
+        await setSelectleve();
+        await axios.put("http://" + ip + ":5000/update_leave",
+            {
+                id: id,
+                date: date,
+                state: approve
+            }).then(
+                setUpdate(!isUpdate)
+            );
+    }
+
     const style = {
         position: 'absolute',
         top: '50%',
@@ -192,20 +205,20 @@ function Content(props) {
                                 <div className="le-modal-box">
                                     <h4>ข้อมูลใบลา</h4>
                                     <div>
-                                        <label className='le-labelname'>ประเภท</label>
+                                        <label className='le-labelname-type'>ประเภท</label>
                                         <label>: {isSelectleve.leave_type}</label>
                                     </div>
                                     <div>
-                                        <label className='le-labelname'>เหตุผล</label>
+                                        <label className='le-labelname-type'>เหตุผล</label>
                                         <label>: {isSelectleve.leave_description}</label>
                                     </div>
                                     <div>
-                                        <label className='le-labelname'>รูปแบบ</label>
+                                        <label className='le-labelname-type'>รูปแบบ</label>
                                         <label>: ปกติ</label>
                                     </div>
                                     <div>
-                                        <label className='le-labelname'>สถานะ</label>
-                                        <label>: รอการอนุมัติ</label>
+                                        <label className='le-labelname-type'>สถานะ</label>
+                                        <label>: {isSelectleve.leave_appove}</label>
                                     </div>
                                 </div>
                                 <div className="le-modal-box">
@@ -224,10 +237,20 @@ function Content(props) {
                                     </div>
                                 </div>
                             </div>
-                            <Typography id="modal-modal-description" sx={{ mt: 2 , textAlign: 'center'}} >
-                                <Button variant="outlined" color="success" size="normal" sx={{mr: 2, width: 90}}>อนุมัติ</Button>
-                                <Button variant="outlined" color="error" size="normal" sx={{ml: 2, width: 90}}>ไม่อนุมัติ</Button>
-                            </Typography>
+                            {
+                                isSelectleve.leave_appove === 'รอตรวจสอบ' ? 
+                                <Typography id="modal-modal-description" sx={{ mt: 2 , textAlign: 'center'}} >
+                                    <Button variant="outlined" color="success" size="normal" sx={{mr: 2, width: 90}}
+                                    onClick={() => getApprove(isSelectleve.emp_id, isSelectleve.leave_date, 1)}>อนุมัติ</Button>
+                                    <Button variant="outlined" color="error" size="normal" sx={{ml: 2, width: 90}}
+                                    onClick={() => getApprove(isSelectleve.emp_id, isSelectleve.leave_date, 2)}>ไม่อนุมัติ</Button>
+                                </Typography>
+                                :
+                                <Typography id="modal-modal-description" sx={{ mt: 2 , textAlign: 'center'}} >
+                                    <Button variant="outlined" color="error" size="normal" sx={{width: 90}}
+                                    onClick={() => getApprove(isSelectleve.emp_id, isSelectleve.leave_date, 0)}>ยกเลิก</Button>
+                                </Typography>
+                            }
                         </div>
                     }
                 </Box>

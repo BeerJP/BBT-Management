@@ -12,12 +12,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
-
-import ts from '../../assets/icon/timesheet.png';
-import ld from '../../assets/icon/leave.png';
-import al from '../../assets/icon/angle-left.png';
-import ar from '../../assets/icon/angle-right.png';
-import { usePreviousMonthDisabled } from '@mui/x-date-pickers/internals';
+// import ts from '../../assets/icon/timesheet.png';
+// import ld from '../../assets/icon/leave.png';
+// import al from '../../assets/icon/angle-left.png';
+// import ar from '../../assets/icon/angle-right.png';
+// import { usePreviousMonthDisabled } from '@mui/x-date-pickers/internals';
 
 
 function Content(props) {

@@ -58,7 +58,7 @@ function Content(props) {
             setChecked(true);
             setHolidate(result.work_id)
         }
-        
+
     }, [isSelect, workDay])
 
     const columns = [
@@ -108,8 +108,6 @@ function Content(props) {
         setOpen(false)
     };
 
-
-
     const cancelHoliday = (work_id) => {
         axios.post("http://"+ ip +":5000/cancel_holiday", { 
             date: work_id,
@@ -118,7 +116,7 @@ function Content(props) {
             state: '1', 
             date: work_id 
         }, {crossdomain: true}))
-        setHoliday([{ id: '', work_id: '', work_date: '', work_status: '' }]);
+        setHoliday([]);
         setUpdate(!isUpdate)
     };
 

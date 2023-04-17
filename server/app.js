@@ -459,9 +459,7 @@ app.post('/workday_emp', (request, response) => {
                 WHERE workday.work_date = leave_day.leave_date
                 AND employee.emp_id = ?
               )
-              AND work_date > DATE_FORMAT(CURDATE(), '%Y-%m-%d') 
-              AND work_status = '1'
-              LIMIT 60`, [id],
+              AND work_status = '1'`, [id],
   (err, result) => {
     response.send(result);
   });
@@ -516,11 +514,37 @@ app.post('/timesheet', (request, response) => {
                 DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
                 DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
                 TIME_FORMAT(TIME_ATTENDANCE.time_in, '%H:%i') as time_in,
-                TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i') as time_out
+                TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i') as time_out,
+              CASE
+                WHEN time_in > '08:45:00' THEN 'สาย'
+                ELSE 'ปกติ'
+              END AS time_state
               FROM TIME_ATTENDANCE 
               INNER JOIN WORKDAY 
               ON TIME_ATTENDANCE.work_id = WORKDAY.work_id 
               WHERE emp_id = ?
+              ORDER BY work_date`,
+  [empId], (err, result) => {
+    response.send(result);
+  });
+});
+
+app.post('/timesheet_current', (request, response) => {
+  const empId = request.body.id;
+  conn.query(`SELECT *,
+                WORKDAY.work_id as id,
+                DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
+                DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+                TIME_FORMAT(TIME_ATTENDANCE.time_in, '%H:%i') as time_in,
+                TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i') as time_out,
+              CASE
+                WHEN time_in > '08:45:00' THEN 'สาย'
+                ELSE 'ปกติ'
+              END AS time_state
+              FROM TIME_ATTENDANCE 
+              INNER JOIN WORKDAY 
+              ON TIME_ATTENDANCE.work_id = WORKDAY.work_id 
+              WHERE emp_id = ? AND MONTH(CURDATE()) = MONTH(WORKDAY.work_date)
               ORDER BY work_date`,
   [empId], (err, result) => {
     response.send(result);

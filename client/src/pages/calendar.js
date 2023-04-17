@@ -20,7 +20,7 @@ function Calendar() {
         .then(response => {
             if (response.data.user_id) {
                 setTypeid(response.data.type_id)
-            } 
+            }
             else {
                 // localStorage.removeItem('token')
                 // window.location = '/login';

@@ -2,7 +2,6 @@ import { React, useState, useEffect } from 'react';
 import axios from 'axios';
 import right from '../../assets/icon/angle-right.png';
 import left from '../../assets/icon/angle-left.png';
-import calen from '../../assets/icon/calendar-2.png';
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,7 +19,6 @@ function CalendarDate(props) {
     const [isList, setList] = useState();
 
     useEffect(() => {
-
         const getHoliday = () => {
             axios.get("http://"+ ip +":5000/holiday", {crossdomain: true})
             .then(response => {
@@ -28,7 +26,6 @@ function CalendarDate(props) {
             });
         };
         getHoliday();
-
     }, [ip, update]);
 
     const ca = new Date();
@@ -142,7 +139,7 @@ function CalendarDate(props) {
                     {
                         isList === undefined ? '':
                         isList.map((item) => (
-                            <li>{item.work_id.substring(6) + ' ' + item.holi_name}</li>
+                            <li key={item.work_id}>{item.work_id.substring(6) + ' ' + item.holi_name}</li>
                         ))
                     }
                 </ul> 

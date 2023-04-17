@@ -40,18 +40,79 @@
     width: 150px;
 }
 
-/* @media (max-width: 850px) {
+.ov-select-box {
+    border: 1px solid lightgray;
+    padding: 5px;
+    padding-left: 10px;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    background: white;
+}
 
-    .overview_chart_box {
-        display: none;
-    }
-    
-    .overview_chart_box_three {
-        display: none;
-    }
+.ov-select-box-leave {
+    border: 1px solid lightgray;
+    padding: 5px;
+    padding-left: 10px;
+    border-radius: 10px;
+    height: 41px;
+    width: 238px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    background: white;
+}
 
-} */
+.ov-info {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
 
+.ov-info div {
+    display: flex;
+    height: 30px;
+    width: 100%;
+    position: relative;
+}
+
+.ov-info div .lb-header {
+    font-size: 0.8rem;
+    /* font-weight: bold; */
+    position: absolute;
+    left: 10px;
+    top: -10px;
+    padding: 0 2px;
+    z-index: 1;
+    background: white;
+}
+
+.ov-info div .lb-header a {
+    font-size: 1rem;
+    color: red;
+    position: absolute;
+    padding: 0 2px;
+    margin-left: 2px;
+    z-index: 1;
+    background: white;
+}
+
+.ov-info div .text-box {
+    font-size: 1rem;
+    color: #424949;
+    border: 1px solid lightgray;
+    padding: 5px;
+    padding-left: 10px;
+    border-radius: 10px;
+    height: 100%;
+    width: 220px;
+    display: flex;
+    align-items: center;
+    background: white;
+}
 
 
 
