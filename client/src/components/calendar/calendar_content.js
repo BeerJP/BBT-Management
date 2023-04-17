@@ -22,12 +22,8 @@ function Content(props) {
     const [isHoliname, setHoliname] = useState('');
     const [isHolidate, setHolidate] = useState('');
     const [isSelect, setSelect] = useState('');
-    const [workDay, setWorkday] = useState([{ id: '', work_id: '', work_date: '', work_status: '' }]);
-    const [holiDay, setHoliday] = useState([{ id: '', work_id: '', work_date: '', work_status: '' }]);
-
-    useEffect(() => {
-        console.log('test')
-    }, [open])
+    const [workDay, setWorkday] = useState([]);
+    const [holiDay, setHoliday] = useState([]);
 
     useEffect(() => {
 

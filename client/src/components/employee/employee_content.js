@@ -9,7 +9,7 @@ import { DataGrid } from '@mui/x-data-grid';
 function Content(props) {
 
     const ip = props.ip;
-    const [isEmployee, setEmployee] = useState([{ id: ' ', emp_name: ' ', emp_surname: ' ', dept_name: ' ' }]);
+    const [isEmployee, setEmployee] = useState([]);
     const [isEmpid, setEmpid] = useState('');
 
     useEffect(() => {
@@ -85,7 +85,6 @@ function Content(props) {
                                     },
                                 }}
                                 pageSizeOptions={[10]}
-                                disableRowSelectionOnClick
                                 />
                             </Box>
                         </Paper>

@@ -15,7 +15,51 @@
 }
 
 
+.text-box {
+    border: 1px solid lightgray;
+    padding: 5px;
+    padding-left: 10px;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    background: white;
+}
 
+.select-box {
+    background: white;
+}
+
+.le-modal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.le-modal-box {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.le-modal-box h4 {
+    text-align: center;
+}
+
+.le-modal-box div {
+    display: flex;
+    flex-direction: row;
+}
+
+.le-modal-box div .le-labelname {
+    width: 100px;
+}
+
+.le-modal-box div label {
+    margin-bottom: 15px;
+}
 
 
 

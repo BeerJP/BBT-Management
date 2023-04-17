@@ -242,36 +242,62 @@ app.get('/emp_id', (request, response) => {
 
 
 // แสดงข้อมูล Leave Day สรุปแบบเจาะจง
-app.post('/leave_emp_sum', (request, response) => {
-  const id = request.body.id;
+// app.post('/leave_emp_sum', (request, response) => {
+//   const id = request.body.id;
 
-  conn.query(`SELECT COUNT(*) AS ld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE WHERE emp_id = ? AND leave_type = 'ลากิจ' ) AS bld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE WHERE emp_id = ? AND leave_type = 'ลาพักร้อน' ) AS hld,
-              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE WHERE emp_id = ? AND leave_type = 'ลาป่วย' ) AS sld
-              FROM LEAVE_DAY
-              WHERE emp_id = ?`,
-  [id, id, id, id],
-  (err, result) => {
-    response.send(result);
-  });
-});
+//   conn.query(`SELECT COUNT(*) AS ld,
+//               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE WHERE emp_id = ? AND leave_type = 'ลากิจ' ) AS bld,
+//               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE WHERE emp_id = ? AND leave_type = 'ลาพักร้อน' ) AS hld,
+//               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE WHERE emp_id = ? AND leave_type = 'ลาป่วย' ) AS sld
+//               FROM LEAVE_DAY
+//               WHERE emp_id = ?`,
+//   [id, id, id, id],
+//   (err, result) => {
+//     response.send(result);
+//   });
+// });
 
 // แสดงข้อมูล Leave Day แบบเจาะจง
-app.post('/leave_emp', (request, response) => {
+// app.post('/leave_emp', (request, response) => {
 
-  const id = request.body.id;
+//   const id = request.body.id;
 
-  conn.query(`SELECT *, leave_appove,
+//   conn.query(`SELECT *, leave_appove,
+//               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
+//               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+//               CASE
+//                 WHEN leave_appove = '0' THEN 'รอการอนุมัติ'
+//                 WHEN leave_appove = '1' THEN 'อนุมัติ'
+//                 ELSE 'ไม่อนุมัติ'
+//               END AS leave_appove
+//               FROM LEAVE_DAY WHERE emp_id = ?
+//               ORDER BY leave_date`, [id],
+//   (err, result) => {
+//     response.send(result);
+//   });
+// });
+
+
+// แสดงข้อมูล Leave Day ทั้งหมด
+app.get('/leave', (request, response) => {
+  conn.query(`SELECT
+              CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              EMPLOYEE.dept_id, DEPARTMENT.dept_name,
               CASE
-                WHEN leave_appove = '0' THEN 'รอการอนุมัติ'
+                WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
                 WHEN leave_appove = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
               END AS leave_appove
-              FROM LEAVE_DAY WHERE emp_id = ?
-              ORDER BY leave_date`, [id],
+              FROM LEAVE_DAY 
+              INNER JOIN EMPLOYEE
+                ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+              GROUP BY id
+              ORDER BY leave_date`, 
   (err, result) => {
     response.send(result);
   });
@@ -279,11 +305,22 @@ app.post('/leave_emp', (request, response) => {
 
 // แสดงข้อมูล Leave Day ยังไม่อนุมัติ
 app.get('/leavepending', (request, response) => {
-  conn.query(`SELECT *, 
+  conn.query(`SELECT
+              CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
-              DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date
-              FROM LEAVE_DAY 
+              DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              EMPLOYEE.dept_id, DEPARTMENT.dept_name,
+              CASE
+                WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
+              END AS leave_appove
+              FROM LEAVE_DAY
+              INNER JOIN EMPLOYEE
+                ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
               WHERE leave_appove = '0'
+              GROUP BY id
               ORDER BY leave_date`, 
   (err, result) => {
     response.send(result);
@@ -292,15 +329,102 @@ app.get('/leavepending', (request, response) => {
 
 // แสดงข้อมูล Leave Day อนุมัติแล้ว
 app.get('/leaveapprove', (request, response) => {
-  conn.query(`SELECT *,  leave_appove, 
+  conn.query(`SELECT
+              CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              EMPLOYEE.dept_id, DEPARTMENT.dept_name,
               CASE
                 WHEN leave_appove = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
               END AS leave_appove
-              FROM LEAVE_DAY WHERE leave_appove > '0'
+              FROM LEAVE_DAY 
+              INNER JOIN EMPLOYEE
+                ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+              WHERE leave_appove > '0'
+              GROUP BY id
               ORDER BY leave_date`, 
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล Leave Day ทั้งหมดแบบเจาะจง
+app.post('/leave_emp', (request, response) => {
+  const id = request.body.id;
+  conn.query(`SELECT
+              CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
+              DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
+              DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              EMPLOYEE.dept_id, DEPARTMENT.dept_name,
+              CASE
+                WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
+                WHEN leave_appove = '1' THEN 'อนุมัติ'
+                ELSE 'ไม่อนุมัติ'
+              END AS leave_appove
+              FROM LEAVE_DAY
+              INNER JOIN EMPLOYEE
+                ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+              WHERE LEAVE_DAY.emp_id = ?
+              GROUP BY id
+              ORDER BY leave_date`, [id],
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล Leave Day ยังไม่อนุมัติแบบเจาะจง
+app.post('/leavepending_emp', (request, response) => {
+  const id = request.body.id;
+  conn.query(`SELECT
+              CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
+              DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
+              DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              EMPLOYEE.dept_id, DEPARTMENT.dept_name,
+              CASE
+                WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
+              END AS leave_appove
+              FROM LEAVE_DAY
+              INNER JOIN EMPLOYEE
+                ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+              WHERE leave_appove = '0' AND LEAVE_DAY.emp_id = ?
+              GROUP BY id
+              ORDER BY leave_date`, [id],
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล Leave Day อนุมัติแล้วแบบเจาะจง
+app.post('/leaveapprove_emp', (request, response) => {
+  const id = request.body.id;
+  conn.query(`SELECT
+              CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
+              DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
+              DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              EMPLOYEE.dept_id, DEPARTMENT.dept_name,
+              CASE
+                WHEN leave_appove = '1' THEN 'อนุมัติ'
+                ELSE 'ไม่อนุมัติ'
+              END AS leave_appove
+              FROM LEAVE_DAY
+              INNER JOIN EMPLOYEE
+                ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
+              INNER JOIN DEPARTMENT
+                ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
+              WHERE leave_appove > '0' AND LEAVE_DAY.emp_id = ?
+              GROUP BY id
+              ORDER BY leave_date`, [id],
   (err, result) => {
     response.send(result);
   });

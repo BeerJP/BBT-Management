@@ -116,11 +116,11 @@ function TimeSheetInfo(props) {
                         รหัสพนักงาน {selectEmp} วันที่ {isDate}
                     </Typography>
                     <div>
-                        <div className="center">
+                        <div className="ta-center">
                             <label>เวลาเข้า&nbsp;</label>
                             <input id='inputIn' type='time' onChange={(e) =>setIn(e.target.value)} defaultValue={isIn}></input>
                         </div>
-                        <div className="center">
+                        <div className="ta-center">
                             <label>เวลาออก</label>
                             <input id='inputIn' type='time' onChange={(e) =>setOut(e.target.value)} defaultValue={isOut}></input>
                         </div>
