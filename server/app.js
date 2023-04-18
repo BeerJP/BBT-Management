@@ -430,6 +430,44 @@ app.post('/leaveapprove_emp', (request, response) => {
   });
 });
 
+// แสดงข้อมูล Leave Day สรุปประจำวัน
+app.post('/leave_date', (request, response) => {
+  const date = request.body.date;
+  const dept = request.body.dept;
+  conn.query(`SELECT COUNT(*) AS SD,
+                ( SELECT COUNT(*) FROM LEAVE_DAY INNER JOIN EMPLOYEE ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND EMPLOYEE.dept_id != ? ) AS AD
+              FROM LEAVE_DAY INNER JOIN EMPLOYEE ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND EMPLOYEE.dept_id = ?
+              WHERE LEAVE_DAY.leave_date = ? AND LEAVE_DAY.leave_appove > '0'`, 
+              [dept, dept, date],
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล Leave Day สรุปของพนักงานประจำปี
+app.post('/leave_year', (request, response) => {
+  const id = request.body.id;
+  conn.query(`SELECT COUNT(*) AS LE,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? 
+                AND YEAR(CURDATE()) = YEAR(leave_date) 
+                AND leave_type = 'ลากิจ'
+                AND leave_appove > '0' ) AS bld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? 
+                AND YEAR(CURDATE()) = YEAR(leave_date) 
+                AND leave_type = 'ลาพักร้อน'
+                AND leave_appove > '0' ) AS hld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? 
+                AND YEAR(CURDATE()) = YEAR(leave_date) 
+                AND leave_type = 'ลาป่วย'
+                AND leave_appove > '0' ) AS sld
+            FROM LEAVE_DAY
+            WHERE emp_id = ?`, 
+              [id, id, id, id],
+  (err, result) => {
+    response.send(result);
+  });
+});
+
 // แสดงข้อมูล Work Day สำหรับปฏิทิน
 app.get('/workday', (request, response) => {
   conn.query(`SELECT *, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date,

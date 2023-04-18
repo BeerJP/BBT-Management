@@ -24,6 +24,7 @@ function Content(props) {
     const [isEmployee, setEmployee] = useState([]);
 
     const [isSelectleve, setSelectleve] = useState();
+    const [isEmpleave, setEmpleave] = useState();
 
     useEffect(() => {
         const getLeave = async() => {
@@ -51,7 +52,6 @@ function Content(props) {
                 setEmployee(response.data)
             });
         }
-
         getEmp();
         getLeave();
     }, [ip, isUpdate]);
@@ -67,7 +67,16 @@ function Content(props) {
             default:
                 setLeaverow(isLeaveday);
           }
-    }, [isLeaveapp, isLeaveday, isLeavepen, isTypeselect])
+    }, [isLeaveapp, isLeaveday, isLeavepen, isTypeselect]);
+
+    useEffect(() => {
+        if (isSelectleve !== undefined) {
+            axios.post("http://"+ ip +":5000/leave_date", { date: isSelectleve.leave_date, dept: isSelectleve.dept_id }, {crossdomain: true})
+            .then(response => {
+                setEmpleave(response.data[0])
+            });
+        }
+    }, [isSelectleve]);
 
     const leave_columns = [
         { field: 'th_date', headerName: 'วันที่', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: false },
@@ -196,7 +205,7 @@ function Content(props) {
             >
                 <Box sx={style}>
                     {
-                        isSelectleve === undefined ? '' :
+                        isSelectleve === undefined || isEmpleave === undefined ? '' :
                         <div>
                             <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center'}}>
                                 รหัสพนักงาน {isSelectleve.emp_id} วันที่ {isSelectleve.th_date}
@@ -225,15 +234,15 @@ function Content(props) {
                                     <h4>จำนวนพนักงานที่ลา</h4>
                                     <div>
                                         <label className='le-labelname'>แผนกเดียวกัน</label>
-                                        <label>: 0</label>
+                                        <label>: {isEmpleave.SD}</label>
                                     </div>
                                     <div>
                                         <label className='le-labelname'>แผนกอื่น</label>
-                                        <label>: 0</label>
+                                        <label>: {isEmpleave.AD}</label>
                                     </div>
                                     <div>
                                         <label className='le-labelname'>รวมทั้งหมด</label>
-                                        <label>: 0</label>
+                                        <label>: {isEmpleave.SD + isEmpleave.AD}</label>
                                     </div>
                                 </div>
                             </div>

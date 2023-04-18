@@ -64,8 +64,6 @@ function NavBar() {
                 <nav className='navbar' key='1'>
                     <div className='nav-container'>
                         <div className='left-box'>
-                            {/* <img src={logo} alt=''></img>
-                            <label className='home-menu'>BBTE Management</label> */}
                         </div>
                         <div className='right-box'>
                             <label>

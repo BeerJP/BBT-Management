@@ -1,7 +1,7 @@
 .calendar_container {
     display: flex;
     flex-direction: column;
-    min-width: 800px;
+    min-width: 350px;
     max-width: 1200px;
     /* min-height: 850px;
     max-height: 850px; */
@@ -122,6 +122,12 @@ ul.list-holiday li{
 .calendar .ca-content ul.day-grid .this-month { border: 1px solid #ADE6F0; color: black; }
 .calendar .ca-content ul.day-grid .this-month:nth-child(7n + 1) { border: 1px solid #F08080; cursor: default; }
 .calendar .ca-content ul.day-grid .this-month:nth-child(7n + 1):hover { background: none; }
+
+@media only screen and (max-width: 390px) {
+    .calendar .ca-content ul.day-grid li {
+        height: 25px;
+    }
+}
 
 .ca-body-bottom {
     background: white;

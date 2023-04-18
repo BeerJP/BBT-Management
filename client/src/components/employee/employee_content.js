@@ -28,10 +28,10 @@ function Content(props) {
 
 
     const columns = [
-        { field: 'id',  headerName: 'รหัส',  width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-        { field: 'emp_name', headerName: 'ชื่อ', width: 190, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-        { field: 'emp_surname', headerName: 'นามสกุล', width: 190, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-        { field: 'dept_name', headerName: 'แผนก', width: 190, headerAlign: 'center', align: 'center', disableColumnMenu: true }
+        { field: 'id',  headerName: 'รหัส',  width: 120, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        { field: 'emp_name', headerName: 'ชื่อ', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        { field: 'emp_surname', headerName: 'นามสกุล', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        { field: 'dept_name', headerName: 'แผนก', width: 120, headerAlign: 'center', align: 'center', disableColumnMenu: true }
     ];
 
     const handleCellClick = (params) => {

@@ -25,17 +25,16 @@ function Content(props) {
         <>
             <div className='overview_container'>
                 <div className='overview_article'>
-                <Box
+                    <Box
                     sx={{
                         display: 'flex',
                         flexWrap: 'wrap',
+                        flexDirection: { xs: 'column', sm: 'column', lg: 'row' },
                         justifyContent: 'space-between',
                         '& > :not(style)': {
                         m: 0.2,
-                        width: { sm: 590, lg: 590
-                        },
-                        height: { sm: 840, lg: 840
-                        },
+                        width: { xs: 370, sm: 590, lg: 590 },
+                        height: { sm: 840, lg: 840 },
                         margin:'auto',
                         marginBottom: 1
                         },
@@ -56,12 +55,14 @@ function Content(props) {
                                     </Typography>
                                 </Toolbar>
                             </AppBar>
+                            <div className='ov-user-content'>
                             {
                                 isCard === 'time' ?
                                 <UserSheetInfo ip={ip} emp={emp} />
                                 :
                                 <UserLeaveInfo ip={ip} emp={emp} />
                             }
+                            </div>
                         </Paper>
                     </Box>
                 </div>

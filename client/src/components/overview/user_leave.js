@@ -25,30 +25,34 @@ function UserLeaveInfo(props) {
     const [isLeaveday, setLeaveday] = useState([]);
     const [isChecked, setChecked] = useState(true);
     const [workDay, setWorkday] = useState([]);
+    const [isYearleave, setYearleave] = useState();
 
     const [isDescription, setDescription] = useState('');
     const [isDate, setDate] = useState('');
     const [isType, setType] = useState('ลากิจ');
 
     useEffect(() => {
- 
         const getLeaveemp = async() => {
             await axios.post("http://"+ ip +":5000/leave_emp", {id: emp}, {crossdomain: true})
             .then(response => {
                 setLeaveday(response.data);
             });
         };
-
         const getWorkday = async() => {
             await axios.post("http://"+ ip +":5000/workday_emp", {id: emp}, {crossdomain: true})
             .then(response => {
                 setWorkday(response.data);
             });
         };
-
+        const getYearleave = async() => {
+            await axios.post("http://"+ ip +":5000/leave_year", {id: emp}, {crossdomain: true})
+            .then(response => {
+                setYearleave(response.data[0]);
+            });
+        };
         getLeaveemp();
         getWorkday();
-
+        getYearleave();
     }, [emp, ip, isUpdate]);
 
     const columns = [
@@ -85,7 +89,6 @@ function UserLeaveInfo(props) {
     ];
 
     useEffect(() => {
-    
         var result = workDay.find(obj => {
             return obj.work_date === isDate
         })
@@ -97,23 +100,20 @@ function UserLeaveInfo(props) {
             setChecked(true);
             setDate(result.work_date)
         }
-
     }, [isDate, workDay])
 
     const insertLeave = () => {
-        // axios.post("http://"+ ip +":5000/add_leave", { 
-        //     type: leaveType,
-        //     date: leaveDate,
-        //     description: leaveName,
-        //     id: id,
-        // }, {crossdomain: true})
-        // setUpdate(!isUpdate)
-        // document.getElementById('type').options[0].selected=true;
-        // document.getElementById('date').options[0].selected=true;
-        // document.getElementById('desc').value = '';
-        // setLeavetype('');
-        // setLeavename('');
-        // setLeavedate('');
+        axios.post("http://"+ ip +":5000/add_leave", { 
+            type: isType,
+            date: isDate,
+            description: isDescription,
+            id: emp,
+        }, {crossdomain: true})
+        setLeaveadd(false)
+        setUpdate(!isUpdate)
+        setDescription('');
+        setDate('');
+        setType('ลากิจ');
     };
 
     const deleteLeave = (id, date) => {
@@ -130,17 +130,23 @@ function UserLeaveInfo(props) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 500,
-        height: 300,
+        width:  {
+            xs: 300,
+            sm: 500,
+            md: 500,
+            lg: 500
+        },
+        height:   {
+            xs: 500,
+            sm: 300,
+            md: 300,
+            lg: 300
+        },
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
         p: 4,
     };
-
-    console.log(isDate)
-    console.log(isDescription)
-    console.log(isType)
 
     return (
         <>
@@ -154,17 +160,17 @@ function UserLeaveInfo(props) {
                     <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center'}}>
                         เพิ่มข้อมูลใบลา
                     </Typography>
-                    <div className="le-modal">
-                        <div className="le-modal-box">
+                    <div className="ov-modal">
+                        <div className="ov-modal-box">
                             <div className='lb-box-long ov-info'>
                                 <div>
-                                    <label className='lb-header'>เหตุผลการลา<a>*</a></label>
+                                    <label className='lb-header'>เหตุผลการลา</label>
                                     <input className='text-box' onChange={(event => {setDescription(event.target.value)})}></input>
                                 </div>
                             </div>
                             <div className='lb-box-long ov-info'>
                                 <div>
-                                    <label className='lb-header'>ประเภทการลา<a>*</a></label>
+                                    <label className='lb-header'>ประเภทการลา</label>
                                     <select className='ov-select-box-leave' name="gender" id="gen" onClick={(event => {setType(event.target.value)})}>
                                         <option value={"ลากิจ"}>ลากิจ</option>
                                         <option value={"ลาพักร้อน"}>ลาพักร้อน</option>
@@ -180,24 +186,28 @@ function UserLeaveInfo(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="le-modal-box">
-                            <h4>สิทธิการลาคงเหลือ</h4>
-                            <div>
-                                <label className='le-labelname'>ลากิจ</label>
-                                <label>: 0</label>
+                        {
+                            isYearleave === undefined ? ''
+                            :
+                            <div className="ov-modal-box">
+                                <h4>สิทธิการลาคงเหลือ</h4>
+                                <div>
+                                    <label className='ov-labelname'>ลากิจ</label>
+                                    <label>: {6 - isYearleave.bld}</label>
+                                </div>
+                                <div>
+                                    <label className='ov-labelname'>ลาพักร้อน</label>
+                                    <label>: {6 - isYearleave.hld}</label>
+                                </div>
+                                <div>
+                                    <label className='ov-labelname'>ลาป่วย</label>
+                                    <label>: {30 - isYearleave.sld}</label>
+                                </div>
                             </div>
-                            <div>
-                                <label className='le-labelname'>ลาพักร้อน</label>
-                                <label>: 0</label>
-                            </div>
-                            <div>
-                                <label className='le-labelname'>ลาป่วย</label>
-                                <label>: 0</label>
-                            </div>
-                        </div>
+                        }
                     </div>
                     <Typography id="modal-modal-description" sx={{ mt: 2 , textAlign: 'center'}} >
-                        <Button variant="outlined" color="success" size="large"
+                        <Button variant="outlined" color={isChecked ? "success" : "error"} size="large"
                         style={isChecked ? {pointerEvents: 'auto'} : {pointerEvents: 'none'}}
                         onClick={insertLeave}
                         >บันทึก</Button>
@@ -217,7 +227,7 @@ function UserLeaveInfo(props) {
                             <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center'}}>
                                 วันที่ {isSelectleve.th_date}
                             </Typography>
-                            <div className="le-modal">
+                            <div className="ov-modal">
                                 <div className="le-modal-box">
                                     <h4>ข้อมูลใบลา</h4>
                                     <div>
