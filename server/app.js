@@ -290,7 +290,10 @@ app.get('/leave', (request, response) => {
                 WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
                 WHEN leave_appove = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
-              END AS leave_appove
+              END AS leave_appove,
+              WHEN leave_status = '1' THEN 'ปกติ'
+                ELSE 'หักเงิน'
+              END AS leave_status
               FROM LEAVE_DAY 
               INNER JOIN EMPLOYEE
                 ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
@@ -365,7 +368,11 @@ app.post('/leave_emp', (request, response) => {
                 WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
                 WHEN leave_appove = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
-              END AS leave_appove
+              END AS leave_appove,
+              CASE
+                WHEN leave_status = '1' THEN 'ปกติ'
+                ELSE 'หักเงิน'
+              END AS leave_status
               FROM LEAVE_DAY
               INNER JOIN EMPLOYEE
                 ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
@@ -473,7 +480,7 @@ app.get('/workday', (request, response) => {
   conn.query(`SELECT *, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date,
               DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date
               FROM WORKDAY
-              WHERE work_date > DATE_FORMAT(CURDATE(), '%Y-%m-%d') 
+              WHERE work_date > DATE_FORMAT(CURDATE(), '%Y-%m-%d')
               AND work_status = '1'
               LIMIT 60`, (err, result) => {
     response.send(result);
@@ -597,19 +604,17 @@ app.post("/add_employee", (request, response) => {
   const id = request.body.id;
   const name = request.body.name;
   const surname = request.body.surname;
-  const department = request.body.dept;
   const gender = request.body.gender;
   const birthdate = request.body.birth;
-  const idcard = request.body.idcard;
   const mac1 = request.body.mac1;
   const mac2 = request.body.mac2;
   const startdate = request.body.start;
-  const address = request.body.address;
+  const department = request.body.dept;
 
   conn.query(
-    `INSERT INTO EMPLOYEE (emp_id, emp_name, emp_surname, emp_idcard, emp_gender, emp_birthdate, emp_address, 
-    emp_startdate, emp_mac1, emp_mac2, dept_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [id, name, surname, idcard, gender, birthdate, address, startdate, mac1, mac2, department], 
+    `INSERT INTO EMPLOYEE (emp_id, emp_name, emp_surname, emp_gender, emp_birthdate, emp_startdate, emp_mac1, emp_mac2, dept_id) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [id, name, surname, gender, birthdate, startdate, mac1, mac2, department], 
     (err, result) => {
       if (err) {
         response.send(err);

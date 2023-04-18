@@ -28,6 +28,7 @@ function UserLeaveInfo(props) {
     const [isYearleave, setYearleave] = useState();
 
     const [isDescription, setDescription] = useState('');
+    const [isStatus, setStatus] = useState('');
     const [isDate, setDate] = useState('');
     const [isType, setType] = useState('ลากิจ');
 
@@ -89,6 +90,32 @@ function UserLeaveInfo(props) {
     ];
 
     useEffect(() => {
+        if (isYearleave !== undefined) {
+            if (isType === 'ลากิจ') {
+                if(6 - isYearleave.bld > 0) {
+                    setStatus(1)
+                } else {
+                    setStatus(0)
+                }
+            } else if (isType === 'ลาพักร้อน') {
+                if(6 - isYearleave.hld > 0) {
+                    setStatus(1)
+                } else {
+                    setStatus(0)
+                }
+            } else if (isType === 'ลาป่วย') {
+                if(30 - isYearleave.sld > 0) {
+                    setStatus(1)
+                } else {
+                    setStatus(0)
+                }
+            }
+        }
+    }, [isType, isYearleave])
+
+    console.log(isStatus)
+
+    useEffect(() => {
         var result = workDay.find(obj => {
             return obj.work_date === isDate
         })
@@ -107,12 +134,14 @@ function UserLeaveInfo(props) {
             type: isType,
             date: isDate,
             description: isDescription,
+            status: isStatus,
             id: emp,
         }, {crossdomain: true})
         setLeaveadd(false)
         setUpdate(!isUpdate)
         setDescription('');
         setDate('');
+        setStatus('');
         setType('ลากิจ');
     };
 

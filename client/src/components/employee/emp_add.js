@@ -30,17 +30,30 @@ function AddCard(props) {
     const [password, setPassword] = useState('');
     const [type, setType] = useState('');
 
+    console.log(isId)
+    console.log(name)
+    console.log(surname)
+    console.log(dept)
+    console.log(gender)
+    console.log(birth)
+    console.log(mac1)
+    console.log(mac2)
+    console.log(start)
+    console.log(username)
+    console.log(password)
+    console.log(type)
+
     const insertEmployee = () => {
         axios.post("http://"+ ip +":5000/add_employee", { 
             id: isId,
             name: name, 
             surname: surname,
-            dept: dept,
             gender: gender,
             birth: birth,
             mac1: mac1,
             mac2: mac2,
             start: start,
+            dept: dept,
         }, {crossdomain: true})
         .then(axios.post("http://"+ ip +":5000/add_user", { 
             id: isId,
@@ -57,7 +70,7 @@ function AddCard(props) {
         const getId = async() => {
             await axios.get("http://"+ ip +":5000/emp_id", {crossdomain: true})
             .then(response => {
-                setId(response.data);
+                setId(response.data[0].emp_id + 1);
             });
         };
 
@@ -138,6 +151,7 @@ function AddCard(props) {
 
     }, [password, username]);
 
+
     return (
         <>
             <div className='em-body-left'>
@@ -175,7 +189,7 @@ function AddCard(props) {
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>วันเกิด<a>*</a></label>
-                            <input className='text-box' type='date' max='2004-12-31' onSelect={(event => {setBirth(event.target.value)})}></input>
+                            <input className='text-box' type='date' max='2004-12-31' onChange={(event => {setBirth(event.target.value)})}></input>
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 1<a>*</a></label>
@@ -185,7 +199,7 @@ function AddCard(props) {
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>วันเริ่มงาน<a>*</a></label>
-                            <input className='text-box' type='date' onSelect={(event => {setStart(event.target.value)})}/>
+                            <input className='text-box' type='date' onChange={(event => {setStart(event.target.value)})}/>
                         </div>
                         <div>
                             <label className='lb-header'>MAC Address 2</label>
