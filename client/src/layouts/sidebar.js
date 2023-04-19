@@ -7,6 +7,7 @@ import em from '../assets/icon/users-alt.png';
 import ut from '../assets/icon/user-time.png';
 import ca from '../assets/icon/calendar.png';
 import dc from '../assets/icon/document.png';
+import sr from '../assets/icon/seo-report.png';
 
 
 function SideBar(props) {
@@ -63,6 +64,11 @@ function SideBar(props) {
                                 className='menu-icon'>
                                 <img src={dc} alt=''/>
                                 <p className='menu-text'>จัดการใบลา</p>
+                            </NavLink>
+                            <NavLink to="/report" 
+                                className='menu-icon'>
+                                <img src={sr} alt=''/>
+                                <p className='menu-text'>รายงาน</p>
                             </NavLink>
                             <NavLink to="" 
                                 className='menu-icon'>

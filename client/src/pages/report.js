@@ -1,6 +1,9 @@
 import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import '../assets/style/report.css';
+import Content from '../components/report/report_content';
 import IpContext from '../ipContext';
+
 
 function Report() {
 
@@ -29,7 +32,7 @@ function Report() {
         return (
             <>
                 <div className='container'>
-
+                    <Content ip={ip}/>
                 </div>
             </>
         )
