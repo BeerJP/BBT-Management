@@ -284,7 +284,7 @@ function Content(props) {
                         </Paper>
                     </Box>
                 </div>
-                <div className='year_picker'>
+                {/* <div className='year_picker'>
                     <div>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DatePicker']}>
@@ -309,9 +309,9 @@ function Content(props) {
                         ล้างข้อมูล
                         </Button>
                     </div>
-                    </div>
+                </div> */}
                 <div className='overview_table_box'>
-                    <Box sx={{ height: '100%', width: '100%' }}>
+                    <Box sx={{ height: 540, width: '100%' }}>
                         <DataGrid
                             sx={{
                                 "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {

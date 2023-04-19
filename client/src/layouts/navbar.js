@@ -8,11 +8,13 @@ import IpContext from '../ipContext';
 function NavBar() {
 
     const ip = useContext(IpContext);
-    // const [isWidth, setWidth] = useState({width: 0});
-    // const [isResponsive, setResponsive] = useState(0);
-    const [isTypeid, setTypeid] = useState(1)
+
+    const [isTypeid, setTypeid] = useState(0)
     const [isUserName, setUsername] = useState('')
     const [isUsertype, setUsertype] = useState('')
+
+    // const [isWidth, setWidth] = useState({width: 0});
+    // const [isResponsive, setResponsive] = useState(0);
 
     // useEffect(() => {
 
@@ -50,9 +52,11 @@ function NavBar() {
         })
         .then(response => {
             if (response.data.user_id) {
-                setTypeid(response.data.type_id)
-                setUsername(response.data.user_name)
-                setUsertype(response.data.user_type)
+                setTypeid(response.data.type_id);
+                setUsername(response.data.user_name);
+                setUsertype(response.data.user_type);
+            } else {
+                setTypeid(0);
             }
         });
     }, [ip]);

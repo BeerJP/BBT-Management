@@ -284,14 +284,15 @@ app.get('/leave', (request, response) => {
               CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
-              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_approve, LEAVE_DAY.emp_id,
               EMPLOYEE.dept_id, DEPARTMENT.dept_name,
               CASE
-                WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
-                WHEN leave_appove = '1' THEN 'อนุมัติ'
+                WHEN leave_approve = '0' THEN 'รอตรวจสอบ'
+                WHEN leave_approve = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
-              END AS leave_appove,
-              WHEN leave_status = '1' THEN 'ปกติ'
+              END AS leave_approve,
+              CASE
+                WHEN leave_status = '1' THEN 'ปกติ'
                 ELSE 'หักเงิน'
               END AS leave_status
               FROM LEAVE_DAY 
@@ -312,17 +313,21 @@ app.get('/leavepending', (request, response) => {
               CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
-              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_approve, LEAVE_DAY.emp_id,
               EMPLOYEE.dept_id, DEPARTMENT.dept_name,
               CASE
-                WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
-              END AS leave_appove
+                WHEN leave_approve = '0' THEN 'รอตรวจสอบ'
+              END AS leave_approve,
+              CASE
+                WHEN leave_status = '1' THEN 'ปกติ'
+                ELSE 'หักเงิน'
+              END AS leave_status
               FROM LEAVE_DAY
               INNER JOIN EMPLOYEE
                 ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
               INNER JOIN DEPARTMENT
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
-              WHERE leave_appove = '0'
+              WHERE leave_approve = '0'
               GROUP BY id
               ORDER BY leave_date`, 
   (err, result) => {
@@ -336,18 +341,22 @@ app.get('/leaveapprove', (request, response) => {
               CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
-              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_approve, LEAVE_DAY.emp_id,
               EMPLOYEE.dept_id, DEPARTMENT.dept_name,
               CASE
-                WHEN leave_appove = '1' THEN 'อนุมัติ'
+                WHEN leave_approve = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
-              END AS leave_appove
+              END AS leave_approve,
+              CASE
+                WHEN leave_status = '1' THEN 'ปกติ'
+                ELSE 'หักเงิน'
+              END AS leave_status
               FROM LEAVE_DAY 
               INNER JOIN EMPLOYEE
                 ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
               INNER JOIN DEPARTMENT
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
-              WHERE leave_appove > '0'
+              WHERE leave_approve > '0'
               GROUP BY id
               ORDER BY leave_date`, 
   (err, result) => {
@@ -362,13 +371,13 @@ app.post('/leave_emp', (request, response) => {
               CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
-              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_approve, LEAVE_DAY.emp_id,
               EMPLOYEE.dept_id, DEPARTMENT.dept_name,
               CASE
-                WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
-                WHEN leave_appove = '1' THEN 'อนุมัติ'
+                WHEN leave_approve = '0' THEN 'รอตรวจสอบ'
+                WHEN leave_approve = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
-              END AS leave_appove,
+              END AS leave_approve,
               CASE
                 WHEN leave_status = '1' THEN 'ปกติ'
                 ELSE 'หักเงิน'
@@ -380,7 +389,7 @@ app.post('/leave_emp', (request, response) => {
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
               WHERE LEAVE_DAY.emp_id = ?
               GROUP BY id
-              ORDER BY leave_date`, [id],
+              ORDER BY leave_date`, [1001],
   (err, result) => {
     response.send(result);
   });
@@ -393,17 +402,17 @@ app.post('/leavepending_emp', (request, response) => {
               CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
-              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_approve, LEAVE_DAY.emp_id,
               EMPLOYEE.dept_id, DEPARTMENT.dept_name,
               CASE
-                WHEN leave_appove = '0' THEN 'รอตรวจสอบ'
-              END AS leave_appove
+                WHEN leave_approve = '0' THEN 'รอตรวจสอบ'
+              END AS leave_approve
               FROM LEAVE_DAY
               INNER JOIN EMPLOYEE
                 ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
               INNER JOIN DEPARTMENT
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
-              WHERE leave_appove = '0' AND LEAVE_DAY.emp_id = ?
+              WHERE leave_approve = '0' AND LEAVE_DAY.emp_id = ?
               GROUP BY id
               ORDER BY leave_date`, [id],
   (err, result) => {
@@ -418,18 +427,18 @@ app.post('/leaveapprove_emp', (request, response) => {
               CONCAT(LEAVE_DAY.emp_id, '-', leave_date) as id,
               DATE_FORMAT(leave_date, '%Y-%m-%d') as leave_date,
               DATE_FORMAT(DATE_ADD(leave_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
-              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_appove, LEAVE_DAY.emp_id,
+              LEAVE_DAY.leave_type, LEAVE_DAY.leave_description, LEAVE_DAY.leave_approve, LEAVE_DAY.emp_id,
               EMPLOYEE.dept_id, DEPARTMENT.dept_name,
               CASE
-                WHEN leave_appove = '1' THEN 'อนุมัติ'
+                WHEN leave_approve = '1' THEN 'อนุมัติ'
                 ELSE 'ไม่อนุมัติ'
-              END AS leave_appove
+              END AS leave_approve
               FROM LEAVE_DAY
               INNER JOIN EMPLOYEE
                 ON LEAVE_DAY.emp_id = EMPLOYEE.emp_id
               INNER JOIN DEPARTMENT
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
-              WHERE leave_appove > '0' AND LEAVE_DAY.emp_id = ?
+              WHERE leave_approve > '0' AND LEAVE_DAY.emp_id = ?
               GROUP BY id
               ORDER BY leave_date`, [id],
   (err, result) => {
@@ -444,7 +453,7 @@ app.post('/leave_date', (request, response) => {
   conn.query(`SELECT COUNT(*) AS SD,
                 ( SELECT COUNT(*) FROM LEAVE_DAY INNER JOIN EMPLOYEE ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND EMPLOYEE.dept_id != ? ) AS AD
               FROM LEAVE_DAY INNER JOIN EMPLOYEE ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND EMPLOYEE.dept_id = ?
-              WHERE LEAVE_DAY.leave_date = ? AND LEAVE_DAY.leave_appove > '0'`, 
+              WHERE LEAVE_DAY.leave_date = ? AND LEAVE_DAY.leave_approve > '0'`, 
               [dept, dept, date],
   (err, result) => {
     response.send(result);
@@ -458,15 +467,15 @@ app.post('/leave_year', (request, response) => {
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? 
                 AND YEAR(CURDATE()) = YEAR(leave_date) 
                 AND leave_type = 'ลากิจ'
-                AND leave_appove > '0' ) AS bld,
+                AND leave_approve > '0' ) AS bld,
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? 
                 AND YEAR(CURDATE()) = YEAR(leave_date) 
                 AND leave_type = 'ลาพักร้อน'
-                AND leave_appove > '0' ) AS hld,
+                AND leave_approve > '0' ) AS hld,
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE emp_id = ? 
                 AND YEAR(CURDATE()) = YEAR(leave_date) 
                 AND leave_type = 'ลาป่วย'
-                AND leave_appove > '0' ) AS sld
+                AND leave_approve > '0' ) AS sld
             FROM LEAVE_DAY
             WHERE emp_id = ?`, 
               [id, id, id, id],
@@ -539,7 +548,7 @@ app.get('/timecount', (request, response) => {
                 EMPLOYEE.emp_surname, 
                 DATE_FORMAT(DATE_ADD(EMPLOYEE.emp_startdate, INTERVAL 543 YEAR), '%Y-%m-%d') AS emp_startdate,
                 ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.emp_id = EMPLOYEE.emp_id ) AS ta,
-                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.emp_id = EMPLOYEE.emp_id ) AS ld
+                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.emp_id = EMPLOYEE.emp_id AND LEAVE_DAY.leave_approve > '0' ) AS ld
                 FROM EMPLOYEE 
               INNER JOIN DEPARTMENT
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
@@ -681,11 +690,12 @@ app.post("/add_leave", (request, response) => {
   const type = request.body.type;
   const date = request.body.date;
   const description = request.body.description;
+  const status = request.body.status;
   const employee = request.body.id;
 
   conn.query(
-    "INSERT INTO LEAVE_DAY (leave_type, leave_date, leave_description, emp_id) VALUES (?, ?, ?, ?)",
-    [type, date, description, employee], 
+    "INSERT INTO LEAVE_DAY (leave_type, leave_date, leave_description, leave_status, emp_id) VALUES (?, ?, ?, ?, ?)",
+    [type, date, description, status, employee], 
     (err, result) => {
       if (err) {
         response.send(err);

@@ -9,6 +9,7 @@ import Employee from './pages/employee';
 import TimeSheet from './pages/timesheet';
 import Calendar from './pages/calendar';
 import Leave from './pages/leave';
+import Report from './pages/report';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/timesheet" element={<TimeSheet/>}/>
         <Route path="/calendar" element={<Calendar/>}/>
         <Route path="/leave" element={<Leave/>}/>
+        <Route path="/report" element={<Report/>}/>
       </Routes>
     </BrowserRouter>
   );

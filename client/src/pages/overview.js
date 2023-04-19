@@ -9,8 +9,8 @@ import IpContext from '../ipContext';
 function Overview() {
 
     const ip = useContext(IpContext);
-    const [isTypeid, setTypeid] = useState(3)
-    const [isUserid, setUserid] = useState(1001)
+    const [isTypeid, setTypeid] = useState('')
+    const [isUserid, setUserid] = useState('')
 
     useEffect(() => {
 
@@ -23,8 +23,10 @@ function Overview() {
                 setUserid(response.data.user_id)
                 setTypeid(response.data.type_id)
             } else {
-                // localStorage.removeItem('token')
-                // window.location.href ='/login'
+                setTypeid('')
+                setUserid('')
+                localStorage.removeItem('token')
+                window.location.href ='/login'
             }
         });
 
@@ -38,7 +40,7 @@ function Overview() {
                 </div>
             </>
         )
-    } else if (isTypeid === 3) {
+    } else if (isTypeid === 2) {
         return (
             <>
                 <div className='container'>

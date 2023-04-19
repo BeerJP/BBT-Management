@@ -12,10 +12,24 @@ function UserSheetInfo(props) {
     const ip = props.ip;
     const emp = props.emp;
 
+    const [isWidth, setWidth] = useState({width: 0});
+
     const [isTimesheet, setTimesheet] = useState([]);
     const [isAlltime, setAlltime] = useState([]);
     const [isCurrent, setCurrent] = useState([]);
     const [isTimesort, setTimesort] = useState(1);
+
+    useEffect(() => {
+
+        function handleResize() {
+            setWidth({width: Math.round(window.innerWidth)});
+        }
+    
+        window.addEventListener("resize", handleResize);
+        handleResize();
+        return () => window.removeEventListener("resize", handleResize);
+    
+      }, []);
 
     useEffect(() => {
         setTimesheet([])
@@ -46,10 +60,10 @@ function UserSheetInfo(props) {
         }
     }, [isTimesort])
 
-    const columns_1 = [
+    const columns = [
         { field: 'th_date', headerName: 'วันที่', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
-        { field: 'time_in', headerName: 'เวลาเข้างาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-        { field: 'time_out', headerName: 'เวลาออกงาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        { field: 'time_in', headerName: 'เวลาเข้างาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'time_out', headerName: 'เวลาออกงาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
         {
             field: 'time_state',
             headerAlign: 'center',
@@ -70,16 +84,16 @@ function UserSheetInfo(props) {
         }
     ];
 
-    const columns_2 = [
-        { field: 'th_date', headerName: 'วันที่', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
-        { field: 'time_in', headerName: 'เวลาเข้างาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-        { field: 'time_out', headerName: 'เวลาออกงาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+    const columns_m = [
+        { field: 'th_date', headerName: 'วันที่', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: false },
+        { field: 'time_in', headerName: 'เวลาเข้า', width: 75, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'time_out', headerName: 'เวลาออก', width: 75, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
         {
             field: 'time_state',
             headerAlign: 'center',
             align: 'center',
             headerName: '',
-            width: 150,
+            width: 100,
             sortable: false,
             disableClickEventBubbling: true,
             disableColumnMenu: true,
@@ -98,25 +112,49 @@ function UserSheetInfo(props) {
         <>
             <Paper elevation={0} sx={{ display: 'flex' }}>
                 <Box sx={{ height: 776, width: '100%', }}>
-                    <DataGrid
-                    sx={{
-                        "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
-                            outline: "none !important",
-                        },
-                    }}
-                    rows={isTimesheet}
-                    columns={columns_1}
-                    columnHeaderHeight={80}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                            pageSize: 50,
+                    {
+                        isWidth.width > 400 ?
+                        <DataGrid
+                        sx={{
+                            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                                outline: "none !important",
                             },
-                        },
-                    }}
-                    pageSizeOptions={[50]}
-                    disableRowSelectionOnClick
-                    />
+                        }}
+                        rows={isTimesheet}
+                        columns={columns}
+                        columnHeaderHeight={80}
+                        initialState={{
+                            pagination: {
+                                paginationModel: {
+                                pageSize: 50,
+                                },
+                            },
+                        }}
+                        pageSizeOptions={[50]}
+                        disableRowSelectionOnClick
+                        />
+                        :
+                        <DataGrid
+                        sx={{
+                            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                                outline: "none !important",
+                            },
+                        }}
+                        rows={isTimesheet}
+                        columns={columns_m}
+                        columnHeaderHeight={80}
+                        initialState={{
+                            pagination: {
+                                paginationModel: {
+                                pageSize: 50,
+                                },
+                            },
+                        }}
+                        pageSizeOptions={[50]}
+                        disableRowSelectionOnClick
+                        />
+                    }
+    
                 </Box>
             </Paper>
         </>

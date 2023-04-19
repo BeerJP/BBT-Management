@@ -11,8 +11,7 @@ import IpContext from '../ipContext';
 function TimeSheet() {
 
     const ip = useContext(IpContext);
-    const [isUserid, setUserid] = useState(0)
-    const [isTypeid, setTypeid] = useState(1)
+    const [isTypeid, setTypeid] = useState('')
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -21,18 +20,18 @@ function TimeSheet() {
         }, {crossdomain: true})
         .then(response => {
             if (response.data.user_id) {
-                setUserid(response.data.user_id)
                 setTypeid(response.data.type_id)
             } 
             else {
-                // localStorage.removeItem('token')
-                // window.location = '/login';
+                setTypeid(0)
+                localStorage.removeItem('token')
+                window.location.href ='/login'
             }
         });
     }, [ip]);
 
 
-    if (isTypeid === 1 || isTypeid === 2) {
+    if (isTypeid === 1) {
         return (
             <>
                 <div className='container'>
@@ -40,9 +39,12 @@ function TimeSheet() {
                 </div>
             </>
         )
-    } else if (isTypeid === 3) {
+    } else if (isTypeid === 0) {
         return (
             <>
+                {
+                    window.location.href ='/'
+                }
             </>
         )
     }

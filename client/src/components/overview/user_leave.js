@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { DataGrid } from '@mui/x-data-grid';
@@ -16,6 +17,8 @@ function UserLeaveInfo(props) {
 
     const ip = props.ip;
     const emp = props.emp;
+
+    const [isWidth, setWidth] = useState({width: 0});
 
     const [isUpdate, setUpdate] = useState(false);
     const [isLeaveset, setLeaveset] = useState(false);
@@ -31,6 +34,18 @@ function UserLeaveInfo(props) {
     const [isStatus, setStatus] = useState('');
     const [isDate, setDate] = useState('');
     const [isType, setType] = useState('ลากิจ');
+
+    useEffect(() => {
+
+        function handleResize() {
+            setWidth({width: Math.round(window.innerWidth)});
+        }
+    
+        window.addEventListener("resize", handleResize);
+        handleResize();
+        return () => window.removeEventListener("resize", handleResize);
+    
+      }, []);
 
     useEffect(() => {
         const getLeaveemp = async() => {
@@ -59,7 +74,7 @@ function UserLeaveInfo(props) {
     const columns = [
         { field: 'th_date', headerName: 'วันที่', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
         { field: 'leave_type', headerName: 'ประเภท', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-        { field: 'leave_appove', headerName: 'สถานะ', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        { field: 'leave_approve', headerName: 'สถานะ', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         {
             field: 'edit',
             headerAlign: 'center',
@@ -89,6 +104,39 @@ function UserLeaveInfo(props) {
         }
     ];
 
+    const columns_m = [
+        { field: 'th_date', headerName: 'วันที่', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: false },
+        { field: 'leave_type', headerName: 'ประเภท', width: 85, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        { field: 'leave_approve', headerName: 'สถานะ', width: 100, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        {
+            field: 'edit',
+            headerAlign: 'center',
+            align: 'center',
+            headerName: '',
+            width: 70,
+            sortable: false,
+            disableClickEventBubbling: true,
+            disableColumnMenu: true,
+            renderHeader: (params) => (
+                <Stack direction="row" spacing={2}>
+                    <IconButton onClick={() => setLeaveadd(true)}><AddCircleOutlineIcon /></IconButton>
+                </Stack>
+            ),
+            renderCell: (params) => {
+                const onClick = (e) => {
+                    const currentRow = params.row;
+                    setLeaveset(true)
+                    setSelectleve(currentRow)
+                };
+                return (
+                  <Stack direction="row" spacing={2}>
+                    <IconButton variant="outlined" color="warning" size="small" onClick={onClick}><MoreHorizIcon /></IconButton>
+                  </Stack>
+                );
+            },
+        }
+    ];
+
     useEffect(() => {
         if (isYearleave !== undefined) {
             if (isType === 'ลากิจ') {
@@ -111,9 +159,7 @@ function UserLeaveInfo(props) {
                 }
             }
         }
-    }, [isType, isYearleave])
-
-    console.log(isStatus)
+    }, [isType, isYearleave, isDate])
 
     useEffect(() => {
         var result = workDay.find(obj => {
@@ -216,7 +262,22 @@ function UserLeaveInfo(props) {
                             </div>
                         </div>
                         {
-                            isYearleave === undefined ? ''
+                            isYearleave === undefined ? 
+                            <div className="ov-modal-box">
+                                <h4>สิทธิการลาคงเหลือ</h4>
+                                <div>
+                                    <label className='ov-labelname'>ลากิจ</label>
+                                    <label>: 6</label>
+                                </div>
+                                <div>
+                                    <label className='ov-labelname'>ลาพักร้อน</label>
+                                    <label>: 6</label>
+                                </div>
+                                <div>
+                                    <label className='ov-labelname'>ลาป่วย</label>
+                                    <label>: 30</label>
+                                </div>
+                            </div>
                             :
                             <div className="ov-modal-box">
                                 <h4>สิทธิการลาคงเหลือ</h4>
@@ -269,11 +330,11 @@ function UserLeaveInfo(props) {
                                     </div>
                                     <div>
                                         <label className='le-labelname-type'>รูปแบบ</label>
-                                        <label>:&nbsp;&nbsp;ปกติ</label>
+                                        <label>:&nbsp;&nbsp;{isSelectleve.leave_status}</label>
                                     </div>
                                     <div>
                                         <label className='le-labelname-type'>สถานะ</label>
-                                        <label>:&nbsp;&nbsp;{isSelectleve.leave_appove}</label>
+                                        <label>:&nbsp;&nbsp;{isSelectleve.leave_approve}</label>
                                     </div>
                                 </div>
                             </div>
@@ -287,6 +348,8 @@ function UserLeaveInfo(props) {
             </Modal>
             <Paper elevation={0} sx={{ display: 'flex' }}>
                 <Box sx={{ height: 776, width: '100%', }}>
+                {
+                    isWidth.width > 400 ? 
                     <DataGrid
                     sx={{
                         "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
@@ -306,6 +369,27 @@ function UserLeaveInfo(props) {
                     pageSizeOptions={[50]}
                     disableRowSelectionOnClick
                     />
+                    :
+                    <DataGrid
+                    sx={{
+                        "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                            outline: "none !important",
+                        },
+                    }}
+                    rows={isLeaveday}
+                    columns={columns_m}
+                    columnHeaderHeight={80}
+                    initialState={{
+                        pagination: {
+                            paginationModel: {
+                            pageSize: 50,
+                            },
+                        },
+                    }}
+                    pageSizeOptions={[50]}
+                    disableRowSelectionOnClick
+                    />
+                }
                 </Box>
             </Paper>
         </>

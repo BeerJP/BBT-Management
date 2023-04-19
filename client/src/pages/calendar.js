@@ -10,7 +10,7 @@ import IpContext from '../ipContext';
 function Calendar() {
 
     const ip = useContext(IpContext);
-    const [isTypeid, setTypeid] = useState(1)
+    const [isTypeid, setTypeid] = useState('')
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -22,13 +22,14 @@ function Calendar() {
                 setTypeid(response.data.type_id)
             }
             else {
-                // localStorage.removeItem('token')
-                // window.location = '/login';
+                setTypeid(0)
+                localStorage.removeItem('token')
+                window.location.href ='/login'
             }
         });
     }, [ip]);
 
-    if (isTypeid === 1 || isTypeid === 2) {
+    if (isTypeid === 1) {
         return (
             <>
                 <div className='container'>
@@ -36,9 +37,12 @@ function Calendar() {
                 </div>
             </>
         )
-    } else if (isTypeid === 3) {
+    } else if (isTypeid === 0) {
         return (
             <>
+                {
+                    window.location.href ='/'
+                }
             </>
         )
     }

@@ -81,7 +81,7 @@ function Content(props) {
     const leave_columns = [
         { field: 'th_date', headerName: 'วันที่', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: false },
         { field: 'emp_id', headerName: 'รหัสพนักงาน', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },
-        { field: 'leave_appove', headerName: 'สถานะ', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        { field: 'leave_approve', headerName: 'สถานะ', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         { field: 'leave_type', headerName: 'ประเภท', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         {
             field: 'edit',
@@ -223,11 +223,11 @@ function Content(props) {
                                     </div>
                                     <div>
                                         <label className='le-labelname-type'>รูปแบบ</label>
-                                        <label>: ปกติ</label>
+                                        <label>: {isSelectleve.leave_status}</label>
                                     </div>
                                     <div>
                                         <label className='le-labelname-type'>สถานะ</label>
-                                        <label>: {isSelectleve.leave_appove}</label>
+                                        <label>: {isSelectleve.leave_approve}</label>
                                     </div>
                                 </div>
                                 <div className="le-modal-box">
@@ -247,7 +247,7 @@ function Content(props) {
                                 </div>
                             </div>
                             {
-                                isSelectleve.leave_appove === 'รอตรวจสอบ' ? 
+                                isSelectleve.leave_approve === 'รอตรวจสอบ' ? 
                                 <Typography id="modal-modal-description" sx={{ mt: 2 , textAlign: 'center'}} >
                                     <Button variant="outlined" color="success" size="normal" sx={{mr: 2, width: 90}}
                                     onClick={() => getApprove(isSelectleve.emp_id, isSelectleve.leave_date, 1)}>อนุมัติ</Button>

@@ -10,8 +10,7 @@ import IpContext from '../ipContext';
 function Leave() {
 
     const ip = useContext(IpContext);
-    const [isUserid, setUserid] = useState(0)
-    const [isTypeid, setTypeid] = useState(1)
+    const [isTypeid, setTypeid] = useState('')
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -23,8 +22,9 @@ function Leave() {
                 setTypeid(response.data.type_id)
             } 
             else {
-                // localStorage.removeItem('token')
-                // window.location = '/login';
+                setTypeid(0)
+                localStorage.removeItem('token')
+                window.location.href ='/login'
             }
         });
     }, [ip]);
@@ -37,9 +37,12 @@ function Leave() {
                 </div>
             </>
         )
-    } else if (isTypeid === 3) {
+    } else if (isTypeid === 0) {
         return (
             <>
+                {
+                    window.location.href ='/'
+                }
             </>
         )
     }

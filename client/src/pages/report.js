@@ -1,13 +1,8 @@
 import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import '../assets/style/employee.css';
-// import EmployeeCard from '../components/employee/emp_card';
-// import EmployeeTable from '../components/employee/emp_table';
-import Content from '../components/employee/employee_content';
 import IpContext from '../ipContext';
 
-
-function Employee() {
+function Report() {
 
     const ip = useContext(IpContext);
     const [isTypeid, setTypeid] = useState('')
@@ -34,7 +29,7 @@ function Employee() {
         return (
             <>
                 <div className='container'>
-                    <Content ip={ip}/>
+
                 </div>
             </>
         )
@@ -49,4 +44,4 @@ function Employee() {
     }
 };
 
-export default Employee;
+export default Report;
