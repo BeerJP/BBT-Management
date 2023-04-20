@@ -14,38 +14,36 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 function Content(props) {
 
     const ip = props.ip;
 
-    const [isOpen, setOpen] = useState(false);
-
-    const [isReporttype, setReporttype] = useState('');
-    const [isReportrows, setReportrows] = useState('');
-    const [isReportyear, setReportyear] = useState('');
-    const [isReportmont, setReportmont] = useState('');
-    const [isReportdate, setReportdate] = useState('');
-    const [isReportemps, setReportemps] = useState('');
-    const [isReportdept, setReportdept] = useState('');
+    const [isReportyear, setReportyear] = useState(0);
+    const [isReportmont, setReportmont] = useState(0);
+    const [isReportdept, setReportdept] = useState(0);
 
     const [isReportview, setReportview] = useState('');
 
-    const [age, setAge] = useState('');
+    const deptChange = (event) => {
+        setReportdept(event.target.value);
+    };
 
-    const handleChange = (event) => {
-        setAge(event.target.value);
-      };
+    const yearChange = (event) => {
+        setReportyear(event.target.value);
+    };
 
+    const montChange = (event) => {
+        setReportmont(event.target.value);
+    };
 
-    function setClose() {
-        setOpen(false)
-        setReporttype('')
-        setReportrows('')
+    function setDefault() {
         setReportyear('')
         setReportmont('')
-        setReportdate('')
-        setReportemps('')
         setReportdept('')
         setReportview('')
     }
@@ -55,8 +53,8 @@ function Content(props) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 600,
-        height: 500,
+        width: 400,
+        height: 350,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -65,7 +63,7 @@ function Content(props) {
 
     return(
         <>  
-            <Modal
+            {/* <Modal
             open={isOpen}
             onClose={() => setClose()}
             aria-labelledby="modal-modal-title"
@@ -74,38 +72,83 @@ function Content(props) {
                 <Box sx={style}>
                     <Box sx={{ minWidth: 120 }}>
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                            <InputLabel id="demo-simple-select-label" sx={{ background: 'white' }}>รายงาน&nbsp;</InputLabel>
                             <Select
                             sx={{ mb: 3 }}
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={age}
+                            value={isReporttype}
                             label="Age"
-                            onChange={handleChange}
+                            onChange={typeChange}
                             >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                                <MenuItem value={1}>ทั้งหมด</MenuItem>
+                                <MenuItem value={2}>รายงานสรุป</MenuItem>
+                                <MenuItem value={3}>รายการย่อย</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                            <InputLabel id="demo-simple-select-label" sx={{ background: 'white' }}>แผนก&nbsp;</InputLabel>
                             <Select
                             sx={{ mb: 3 }}
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={age}
+                            value={isReportdept}
                             label="Age"
-                            onChange={handleChange}
+                            onChange={deptChange}
                             >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                                <MenuItem value={1}>ทั้งหมด</MenuItem>
+                                <MenuItem value={2}>ออฟฟิศ 1</MenuItem>
+                                <MenuItem value={3}>ออฟฟิศ 2</MenuItem>
+                                <MenuItem value={4}>สโตร์ & ขนส่ง</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label" sx={{ background: 'white' }}>ขอบเขต&nbsp;</InputLabel>
+                            <Select
+                            sx={{ mb: 3 }}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={isReportrows}
+                            label="Age"
+                            onChange={rowsChange}
+                            >
+                                <MenuItem value={1}>ทั้งหมด</MenuItem>
+                                <MenuItem value={2}>โดยปี</MenuItem>
+                                <MenuItem value={3}>โดยเดือน</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
+                    {
+                        isReportrows === 2 ? 
+                        <Box sx={{ minWidth: 120, display: 'flex', justifyContent: 'space-between' }}>
+                            <LocalizationProvider dateAdapter={AdapterMoment}>
+                                <DatePicker sx={{width: 185}} views={['year']}/>
+                            </LocalizationProvider>
+                            <label className='date-picker-label'>-</label>
+                            <LocalizationProvider dateAdapter={AdapterMoment}>
+                                <DatePicker sx={{width: 185}} views={['year']}/>
+                            </LocalizationProvider>
+                        </Box>
+                        :
+                        isReportrows === 3 ? 
+                        <Box sx={{ minWidth: 120, display: 'flex', justifyContent: 'space-between' }}>
+                            <LocalizationProvider dateAdapter={AdapterMoment}>
+                                <DatePicker sx={{width: 185}} views={['year', 'month']}/>
+                            </LocalizationProvider>
+                            <label className='date-picker-label'>-</label>
+                            <LocalizationProvider dateAdapter={AdapterMoment}>
+                                <DatePicker sx={{width: 185}} views={['year', 'month']}/>
+                            </LocalizationProvider>
+                        </Box>
+                        : ''
+                    }
+                    <Typography sx={{ mt: 3, textAlign: 'center' }} >
+                        <Button variant="outlined" color="success" size="normal" sx={{ borderRadius: 'none' }}>
+                            ตกลง
+                        </Button>
+                    </Typography>
                 </Box>
-            </Modal>
+            </Modal> */}
             <div className='report_container'>
                 <div className='report_article'>
                     <Box
@@ -119,14 +162,62 @@ function Content(props) {
                         },
                     }}
                     >
-                        <Paper elevation={1} sx={{ display: 'flex'}}>
+                        <Paper elevation={0} sx={{ display: 'flex'}}>
                             <AppBar position='static' color='inherit'>
                                 <Toolbar>
-                                    <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}></Typography>
-                                    <Typography id='modal-modal-description' sx={{ textAlign: 'center'}} onClick={() => setOpen(true)}>
-                                        <Button variant='outlined' color='inherit' size='normal' sx={{ mr: 1, width: 160 }} endIcon={<SearchIcon />}>
-                                            เลือกรายการ
-                                        </Button>
+                                    <Typography variant='h7' component='div' sx={{ flexGrow: 1 }}>
+                                        รายงานสรุปการทำงาน
+                                    </Typography>
+                                    <Typography id='modal-modal-description' sx={{ textAlign: 'center', display: 'flex', alignItems: 'center' }}>
+                                        <FormControl sx={{ width: 140 }} size="small">
+                                            <InputLabel sx={{ background: 'white' }}>&nbsp;&nbsp;&nbsp;ปี</InputLabel>
+                                            <Select
+                                            sx={{ mr: 1 }}
+                                            value={isReportyear}
+                                            label="Type"
+                                            onChange={yearChange}
+                                            >
+                                                <MenuItem value={0}>ทั้งหมด</MenuItem>
+                                                <MenuItem value={2566}>2566</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl sx={{ width: 140 }} size="small">
+                                            <InputLabel sx={{ background: 'white' }}>&nbsp;เดือน</InputLabel>
+                                            <Select
+                                            sx={{ mr: 1 }}
+                                            value={isReportmont}
+                                            label="Type"
+                                            onChange={montChange}
+                                            >
+                                                <MenuItem value={0}>ทั้งหมด</MenuItem>
+                                                <MenuItem value={1}>มกราคม</MenuItem>
+                                                <MenuItem value={2}>กุมพาพันธ์</MenuItem>
+                                                <MenuItem value={3}>มีนาคม</MenuItem>
+                                                <MenuItem value={4}>เมษายน</MenuItem>
+                                                <MenuItem value={5}>พฤษภาคม</MenuItem>
+                                                <MenuItem value={6}>มิถุนายน</MenuItem>
+                                                <MenuItem value={7}>กรกฏาคม</MenuItem>
+                                                <MenuItem value={8}>สิงหาคม</MenuItem>
+                                                <MenuItem value={9}>กันยายน</MenuItem>
+                                                <MenuItem value={10}>ตุลาคม</MenuItem>
+                                                <MenuItem value={11}>พฤษจิกายน</MenuItem>
+                                                <MenuItem value={12}>ธันวาคม</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl sx={{ width: 150 }} size="small">
+                                            <InputLabel sx={{ background: 'white' }}>แผนก&nbsp;</InputLabel>
+                                            <Select
+                                            sx={{ mr: 1 }}
+                                            value={isReportdept}
+                                            label="Type"
+                                            onChange={deptChange}
+                                            >
+                                                <MenuItem value={0}>ทั้งหมด</MenuItem>
+                                                <MenuItem value={1}>ออฟฟิศ 1</MenuItem>
+                                                <MenuItem value={2}>ออฟฟิศ 2</MenuItem>
+                                                <MenuItem value={3}>สโตร์ & ขนส่ง</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Typography>
                                 </Toolbar>
                             </AppBar>
@@ -144,7 +235,7 @@ function Content(props) {
                         height: {
                             sm: 1000,
                             md: 630,
-                            lg: 830
+                            lg: 820
                         },
                         },
                         // '&::-webkit-scrollbar': {
@@ -158,7 +249,6 @@ function Content(props) {
                                 :
                                 <Paper elevation={1} sx={{ display: 'flex'}}><h4>รายงานวันที่ {isReportview.start} - {isReportview.end}</h4></Paper>
                             }
-                            
                         </Paper>
                     </Box>
                 </div>

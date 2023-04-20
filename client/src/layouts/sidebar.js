@@ -33,8 +33,8 @@ function SideBar(props) {
             <>
                 <div className='side-menu'>
                     <div className='logo-box'>
-                        <div className='menu'>
-                            <img src={menu} alt='' onClick={isOpen}></img>
+                        <div className='menu' onClick={isOpen}>
+                            <img src={menu} alt=''></img>
                         </div>
                         <label className='home-menu'>BBTE Management</label>
                     </div>
