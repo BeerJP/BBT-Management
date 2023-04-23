@@ -1,69 +1,8 @@
--- phpMyAdmin SQL Dump
--- version 5.2.0
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Apr 23, 2023 at 05:39 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `rsw_management`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `department`
---
-
-CREATE TABLE `department` (
-  `dept_id` int(1) NOT NULL,
-  `dept_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `department`
---
-
 INSERT INTO `department` (`dept_id`, `dept_name`) VALUES
 (1, 'ออฟฟิศ 1'),
 (2, 'ออฟฟิศ 2'),
 (3, 'สโตร์ & ขนส่ง');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `employee`
---
-
-CREATE TABLE `employee` (
-  `emp_id` int(4) NOT NULL,
-  `emp_name` varchar(50) NOT NULL,
-  `emp_surname` varchar(50) NOT NULL,
-  `emp_gender` varchar(5) NOT NULL,
-  `emp_birthdate` date NOT NULL,
-  `emp_status` tinyint(1) NOT NULL DEFAULT 1,
-  `emp_startdate` date NOT NULL,
-  `emp_enddate` date DEFAULT NULL,
-  `emp_mac1` varchar(17) NOT NULL,
-  `emp_mac2` varchar(17) DEFAULT NULL,
-  `dept_id` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `employee`
---
 
 INSERT INTO `employee` (`emp_id`, `emp_name`, `emp_surname`, `emp_gender`, `emp_birthdate`, `emp_status`, `emp_startdate`, `emp_enddate`, `emp_mac1`, `emp_mac2`, `dept_id`) VALUES
 (1000, 'Admin', ' ', 'ชาย', '1995-05-23', 0, '2013-06-01', '2013-06-01', '00:00:00:00:00:00', '00:00:00:00:00:00', 1),
@@ -71,35 +10,6 @@ INSERT INTO `employee` (`emp_id`, `emp_name`, `emp_surname`, `emp_gender`, `emp_
 (1002, 'อลงกรณ์', 'อนุโยธา', 'ชาย', '1984-11-17', 1, '2013-06-01', NULL, '00:00:00:00:00:00', '00:00:00:00:00:00', 3),
 (1003, 'เดชพงษ์', 'เป็นวงศ์', 'ชาย', '1986-04-06', 1, '2013-06-01', NULL, '00:00:00:00:00:00', '00:00:00:00:00:00', 3);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `holiday`
---
-
-CREATE TABLE `holiday` (
-  `holi_name` varchar(255) NOT NULL,
-  `work_id` varchar(8) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `leave_day`
---
-
-CREATE TABLE `leave_day` (
-  `leave_type` varchar(10) NOT NULL,
-  `leave_date` date NOT NULL,
-  `leave_description` varchar(255) NOT NULL,
-  `leave_status` tinyint(1) NOT NULL,
-  `leave_approve` int(1) NOT NULL,
-  `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `leave_day`
---
 
 INSERT INTO `leave_day` (`leave_type`, `leave_date`, `leave_description`, `leave_status`, `leave_approve`, `emp_id`) VALUES
 ('ลากิจ', '2023-01-21', 'ไปต่างจังหวัด', 1, 1, 1001),
@@ -113,22 +23,6 @@ INSERT INTO `leave_day` (`leave_type`, `leave_date`, `leave_description`, `leave
 ('ลาพักร้อน', '2023-03-03', 'ไปต่างจังหวัด', 1, 1, 1001),
 ('ลาพักร้อน', '2023-03-04', 'ไปต่างจังหวัด', 1, 1, 1001);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `time_attendance`
---
-
-CREATE TABLE `time_attendance` (
-  `time_in` time NOT NULL,
-  `time_out` time DEFAULT NULL,
-  `work_id` varchar(8) NOT NULL,
-  `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `time_attendance`
---
 
 INSERT INTO `time_attendance` (`time_in`, `time_out`, `work_id`, `emp_id`) VALUES
 ('08:38:00', '17:00:00', '25660103', 1001),
@@ -338,41 +232,11 @@ INSERT INTO `time_attendance` (`time_in`, `time_out`, `work_id`, `emp_id`) VALUE
 ('07:59:00', '17:00:00', '25660330', 1003),
 ('07:58:00', '17:00:00', '25660331', 1003);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `type`
---
-
-CREATE TABLE `type` (
-  `type_id` int(1) NOT NULL,
-  `type_name` varchar(12) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `type`
---
 
 INSERT INTO `type` (`type_id`, `type_name`) VALUES
 (1, 'ผู้ดูแล'),
 (2, 'ผู้ใช้งาน');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `user`
---
-
-CREATE TABLE `user` (
-  `user_name` varchar(12) NOT NULL,
-  `user_password` varchar(255) NOT NULL,
-  `type_id` int(1) NOT NULL,
-  `emp_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `user`
---
 
 INSERT INTO `user` (`user_name`, `user_password`, `type_id`, `emp_id`) VALUES
 ('admin', '$2b$10$VlyE8kAq0gLYWhDfEYRZN.vO/4YmhqMuX6oq6s8NmAa2sCMFuzk26', 1, 1000),
@@ -380,21 +244,6 @@ INSERT INTO `user` (`user_name`, `user_password`, `type_id`, `emp_id`) VALUES
 ('toto', '000', 1, 1002),
 ('dech', '000', 2, 1003);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `workday`
---
-
-CREATE TABLE `workday` (
-  `work_id` varchar(8) NOT NULL,
-  `work_date` date NOT NULL,
-  `work_status` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `workday`
---
 
 INSERT INTO `workday` (`work_id`, `work_date`, `work_status`) VALUES
 ('25660102', '2023-01-02', 1),
@@ -709,58 +558,3 @@ INSERT INTO `workday` (`work_id`, `work_date`, `work_status`) VALUES
 ('25661228', '2023-12-28', 1),
 ('25661229', '2023-12-29', 1),
 ('25661230', '2023-12-30', 1);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `department`
---
-ALTER TABLE `department`
-  ADD PRIMARY KEY (`dept_id`);
-
---
--- Indexes for table `employee`
---
-ALTER TABLE `employee`
-  ADD PRIMARY KEY (`emp_id`);
-
---
--- Indexes for table `type`
---
-ALTER TABLE `type`
-  ADD PRIMARY KEY (`type_id`);
-
---
--- Indexes for table `workday`
---
-ALTER TABLE `workday`
-  ADD PRIMARY KEY (`work_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `department`
---
-ALTER TABLE `department`
-  MODIFY `dept_id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `employee`
---
-ALTER TABLE `employee`
-  MODIFY `emp_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1004;
-
---
--- AUTO_INCREMENT for table `type`
---
-ALTER TABLE `type`
-  MODIFY `type_id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

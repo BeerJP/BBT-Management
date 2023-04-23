@@ -389,7 +389,7 @@ app.post('/leave_emp', (request, response) => {
                 ON EMPLOYEE.dept_id = DEPARTMENT.dept_id
               WHERE LEAVE_DAY.emp_id = ?
               GROUP BY id
-              ORDER BY leave_date`, [1001],
+              ORDER BY leave_date`, [id],
   (err, result) => {
     response.send(result);
   });
@@ -451,10 +451,13 @@ app.post('/leave_date', (request, response) => {
   const date = request.body.date;
   const dept = request.body.dept;
   conn.query(`SELECT COUNT(*) AS SD,
-                ( SELECT COUNT(*) FROM LEAVE_DAY INNER JOIN EMPLOYEE ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND EMPLOYEE.dept_id != ? ) AS AD
+                ( SELECT COUNT(*) FROM LEAVE_DAY INNER JOIN EMPLOYEE 
+                  ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND EMPLOYEE.dept_id != ?
+                  WHERE LEAVE_DAY.leave_date = ? AND LEAVE_DAY.leave_approve > '0'
+                ) AS AD
               FROM LEAVE_DAY INNER JOIN EMPLOYEE ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND EMPLOYEE.dept_id = ?
               WHERE LEAVE_DAY.leave_date = ? AND LEAVE_DAY.leave_approve > '0'`, 
-              [dept, dept, date],
+              [dept, date, dept, date],
   (err, result) => {
     response.send(result);
   });
@@ -597,10 +600,91 @@ app.post('/timesheet_current', (request, response) => {
               END AS time_state
               FROM TIME_ATTENDANCE 
               INNER JOIN WORKDAY 
-              ON TIME_ATTENDANCE.work_id = WORKDAY.work_id 
+                ON TIME_ATTENDANCE.work_id = WORKDAY.work_id 
               WHERE emp_id = ? AND MONTH(CURDATE()) = MONTH(WORKDAY.work_date)
               ORDER BY work_date`,
   [empId], (err, result) => {
+    response.send(result);
+  });
+});
+
+// แสดงข้อมูล Report
+app.get('/report_date', (request, response) => {
+  conn.query(`SELECT work_id, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date, DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id ) AS ta,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id AND time_in <= '08:45:00' ) AS nta,
+              ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id AND time_in > '08:45:00' ) AS lta,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date ) AS ld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลากิจ' ) AS bld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาพักร้อน' ) AS hld,
+              ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาป่วย' ) AS sld
+            FROM WORKDAY WHERE work_status = '1' AND work_date <= CURDATE()
+            GROUP BY WORKDAY.work_id`,
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+app.post('/report_emp', (request, response) => {
+  const id = request.body.id;
+  const date = request.body.date;
+  conn.query(`SELECT EMPLOYEE.emp_id, CONCAT(EMPLOYEE.emp_name, ' ', EMPLOYEE.emp_surname) as name, 
+              TIME_FORMAT(TIME_ATTENDANCE.time_in, '%H:%i') as time_in, 
+              TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i') as time_out, 
+              CASE 
+                  WHEN TIME_ATTENDANCE.time_in > '08:45:00' THEN 'สาย' 
+                  WHEN LEAVE_DAY.leave_type = 'ลากิจ' THEN 'ลากิจ' 
+                  WHEN LEAVE_DAY.leave_type = 'ลาพักร้อน' THEN 'ลาพักร้อน' 
+                  WHEN LEAVE_DAY.leave_type = 'ลาป่วย' THEN 'ลาป่วย' 
+                  ELSE 'ปกติ' 
+              END AS time_state 
+              FROM EMPLOYEE 
+              LEFT JOIN TIME_ATTENDANCE ON EMPLOYEE.emp_id = TIME_ATTENDANCE.emp_id AND TIME_ATTENDANCE.work_id = ?
+              LEFT JOIN LEAVE_DAY ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND LEAVE_DAY.leave_date = ?
+              WHERE (TIME_ATTENDANCE.work_id IS NULL OR TIME_ATTENDANCE.work_id = ?) AND (LEAVE_DAY.leave_date IS NULL OR LEAVE_DAY.leave_date = ?)
+              AND EMPLOYEE.emp_id > '1000'`, 
+  [id, date, id, date], (err, result) => {
+    response.send(result);
+  });
+});
+
+app.get('/report', (request, response) => {
+  conn.query(`SELECT WORKDAY.work_id,
+                DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
+                DATE_FORMAT(DATE_ADD(WORKDAY.work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+                COUNT(TIME_ATTENDANCE.work_id) AS ta,
+                COUNT(CASE WHEN TIME_ATTENDANCE.time_in <= '08:45:00' THEN 1 END) AS nta,
+                COUNT(CASE WHEN TIME_ATTENDANCE.time_in > '08:45:00' THEN 1 END) AS lta,
+                COUNT(LEAVE_DAY.leave_date) AS ld,
+                COUNT(CASE WHEN LEAVE_DAY.leave_approve > '0' AND LEAVE_DAY.leave_type = 'ลากิจ' THEN 1 END) AS bld,
+                COUNT(CASE WHEN LEAVE_DAY.leave_approve > '0' AND LEAVE_DAY.leave_type = 'ลาพักร้อน' THEN 1 END) AS hld,
+                COUNT(CASE WHEN LEAVE_DAY.leave_approve > '0' AND LEAVE_DAY.leave_type = 'ลาป่วย' THEN 1 END) AS sld,
+              GROUP_CONCAT(
+                JSON_OBJECT(
+                  'emp_id', EMPLOYEE.emp_id,
+                  'name', CONCAT(EMPLOYEE.emp_name, ' ', EMPLOYEE.emp_surname),
+                  'time_in', TIME_FORMAT(TIME_ATTENDANCE.time_in, '%H:%i'),
+                  'time_out', TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i'),
+                  'time_state',
+                  CASE
+                    WHEN TIME_ATTENDANCE.time_in > '08:45:00' THEN 'สาย'
+                    WHEN LEAVE_DAY.leave_type = 'ลากิจ' THEN 'ลากิจ'
+                    WHEN LEAVE_DAY.leave_type = 'ลาพักร้อน' THEN 'ลาพักร้อน'
+                    WHEN LEAVE_DAY.leave_type = 'ลาป่วย' THEN 'ลาป่วย'
+                    ELSE 'ปกติ'
+                  END
+                ) SEPARATOR '-'
+              ) as employee
+              FROM
+              WORKDAY
+              LEFT JOIN TIME_ATTENDANCE ON WORKDAY.work_id = TIME_ATTENDANCE.work_id
+              LEFT JOIN LEAVE_DAY ON WORKDAY.work_date = LEAVE_DAY.leave_date
+              LEFT JOIN EMPLOYEE ON TIME_ATTENDANCE.emp_id = EMPLOYEE.emp_id OR LEAVE_DAY.emp_id = EMPLOYEE.emp_id
+              WHERE WORKDAY.work_status = '1'
+                AND WORKDAY.work_date <= CURDATE()
+                AND EMPLOYEE.emp_id > '1000'
+              GROUP BY WORKDAY.work_id`,
+  (err, result) => {
     response.send(result);
   });
 });

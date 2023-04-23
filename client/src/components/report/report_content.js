@@ -13,8 +13,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-import PropTypes from 'prop-types';
-import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -22,173 +20,90 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 
 function Content(props) {
 
     const ip = props.ip;
-
+    const [isOpen, setOpen] = useState(false);
     const [isReportyear, setReportyear] = useState(0);
     const [isReportmont, setReportmont] = useState(0);
     const [isReportdept, setReportdept] = useState(0);
     const [isReportview, setReportview] = useState('');
+    const [isReportdate, setReportdate] = useState();
+    const [isReportrows, setReportrows] = useState();
+    const [isReportdata, setReportdata] = useState();
 
-    const deptChange = (event) => {
-        setReportdept(event.target.value);
-    };
+    const deptChange = (event) => { setReportdept(event.target.value); };
+    const yearChange = (event) => { setReportyear(event.target.value); };
+    const montChange = (event) => { setReportmont(event.target.value); };
 
-    const yearChange = (event) => {
-        setReportyear(event.target.value);
-    };
+    useEffect(() => {
+        axios.get("http://"+ ip +":5000/report_date", {crossdomain: true})
+        .then(response => {
+            setReportdate(response.data);
+        });
+    }, [ip]);
 
-    const montChange = (event) => {
-        setReportmont(event.target.value);
+    // useEffect(() => {
+    //     const getEmp = async () => {
+    //       try {
+    //         const response = await axios.get("http://" + ip + ":5000/report", { crossdomain: true });
+    //         await new Promise(resolve => setTimeout(resolve, 2000));
+    //         setReportdata(response.data);
+    //       } catch (error) {
+    //         console.error(error);
+    //       }
+    //     };
+    //     getEmp();
+    //   }, [ip]);
+
+    // useEffect(() => {
+    //     if(isReportdata !== undefined){
+    //         const dataArray = isReportdata[0].employee.split('-');
+    //         const objectArray = dataArray.map(item => JSON.parse(item));
+    //         console.log(objectArray)
+    //         console.log(isReportdata[0])
+    //     }
+    // }, [isReportdata]);
+
+    // function employeeList(id, date) {
+    //     var arr = [];
+    //     axios.post("http://" + ip + ":5000/report_emp", { id: id, date: date }, { crossdomain: true })
+    //     .then(response => {
+    //         arr.push(response.data)
+    //     }).catch(error => {
+    //         console.log(error);
+    //     });
+    //     return arr
+    // }
+
+    function createData(date, ta, nta, lta, ld, bld, hld, sld, wid, wd) {
+        return {
+            date, ta, nta, lta, ld, bld, hld, sld
+        };
     };
 
     useEffect(() => {
-        
-    })
-
-    function setDefault() {
-        setReportyear('')
-        setReportmont('')
-        setReportdept('')
-        setReportview('')
-    }
-
-    const style = { 
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        height: 350,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
-
-    function createData(name, calories, fat, carbs, protein, price) {
-        return {
-            name,
-            calories,
-            fat,
-            carbs,
-            protein,
-            price,
-            history: [
-            {
-                id: '1001',
-                name: 'จักรพันธ์ ภูพาพุทธ',
-                customerId: '8.37 น.',
-                amount: '17.00 น.',
-            },
-            {
-                id: '1002',
-                name: 'สมชาย อัคเคอ',
-                customerId: '8.37 น.',
-                amount: '17.00 น.',
-            },
-            ],
+        setReportrows()
+        var rows = []
+        if (isReportdate !== undefined) {
+            isReportdate.map((item) => {
+                rows.push(createData(
+                    item.th_date,
+                    item.ta,
+                    item.nta,
+                    item.lta,
+                    item.ld,
+                    item.bld,
+                    item.hld,
+                    item.sld,
+                ))
+            })
+            setReportrows(rows)
         };
-    }
-
-    function Row(props) {
-        const { row } = props;
-        const [open, setOpen] = useState(false);
-      
-        return (
-            <Fragment>
-                <TableRow sx={{ '& > *': { borderBottom: 'unset' }}}>
-                    <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="center">{row.calories}</TableCell>
-                    <TableCell align="center">{row.fat}</TableCell>
-                    <TableCell align="center">{row.carbs}</TableCell>
-                    <TableCell align="center">{row.protein}</TableCell>
-                    <TableCell align="center">
-                        <IconButton
-                        aria-label="expand row"
-                        size="small"
-                        onClick={() => setOpen(!open)}
-                        >
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                        </IconButton>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                        <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box sx={{ margin: 'auto', width: 900 }}>
-                                <Table aria-label="collapsible table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell align="center">รหัส</TableCell>
-                                            <TableCell align="center">ชื่อ - นามสกุล</TableCell>
-                                            <TableCell align="center">เวลาเข้างาน</TableCell>
-                                            <TableCell align="center">เวลาออกงาน</TableCell>
-                                            <TableCell align="center">สถานะ</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {
-                                            row.history.map((historyRow) => (
-                                                <TableRow key={historyRow.id}>
-                                                    <TableCell align="center">{historyRow.id}</TableCell>
-                                                    <TableCell align="center">{historyRow.name}</TableCell>
-                                                    <TableCell align="center">{historyRow.customerId}</TableCell>
-                                                    <TableCell align="center">{historyRow.amount}</TableCell>
-                                                    <TableCell align="center">ปกติ</TableCell>
-                                                </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Box>
-                        </Collapse>
-                    </TableCell>
-                </TableRow>
-            </Fragment>
-        );
-    }
-
-    Row.propTypes = {
-        row: PropTypes.shape({
-          calories: PropTypes.number.isRequired,
-          carbs: PropTypes.number.isRequired,
-          fat: PropTypes.number.isRequired,
-          history: PropTypes.arrayOf(
-            PropTypes.shape({
-              amount: PropTypes.number.isRequired,
-              customerId: PropTypes.string.isRequired,
-              name: PropTypes.string.isRequired,
-              id: PropTypes.string.isRequired,
-            }),
-          ).isRequired,
-          name: PropTypes.string.isRequired,
-          price: PropTypes.number.isRequired,
-          protein: PropTypes.number.isRequired,
-        }).isRequired,
-    };
-      
-    const rows = [
-        createData('03-01-2566', 5, 5, 0, 0, 1),
-        createData('04-01-2566', 5, 3, 2, 0, 1),
-        createData('05-01-2566', 5, 5, 0, 0, 1),
-        createData('06-01-2566', 4, 4, 0, 1, 1),
-        createData('07-01-2566', 5, 4, 1, 0, 1),
-        createData('09-01-2566', 5, 5, 0, 0, 1),
-        createData('10-01-2566', 5, 3, 2, 0, 1),
-        createData('11-01-2566', 5, 5, 0, 0, 1),
-        createData('12-01-2566', 4, 4, 0, 1, 1),
-        createData('13-01-2566', 5, 4, 1, 0, 1),
-        createData('14-01-2566', 5, 5, 0, 0, 1),
-        createData('16-01-2566', 5, 3, 2, 0, 1),
-        createData('17-01-2566', 5, 5, 0, 0, 1),
-        createData('18-01-2566', 4, 4, 0, 1, 1),
-        createData('19-01-2566', 5, 4, 1, 0, 1),
-    ];
+    }, [isReportdate]);
 
     return(
         <>  
@@ -224,7 +139,7 @@ function Content(props) {
                                                 <MenuItem value={2566}>2566</MenuItem>
                                             </Select>
                                         </FormControl> */}
-                                        <FormControl sx={{ width: 140 }} size="small">
+                                        {/* <FormControl sx={{ width: 140 }} size="small">
                                             <InputLabel sx={{ background: 'white' }}>&nbsp;เดือน</InputLabel>
                                             <Select
                                             sx={{ mr: 1 }}
@@ -246,7 +161,7 @@ function Content(props) {
                                                 <MenuItem value={11}>พฤษจิกายน</MenuItem>
                                                 <MenuItem value={12}>ธันวาคม</MenuItem>
                                             </Select>
-                                        </FormControl>
+                                        </FormControl> */}
                                     </Typography>
                                 </Toolbar>
                             </AppBar>
@@ -271,21 +186,47 @@ function Content(props) {
                     >
                         <Paper elevation={1} sx={{ display: 'flex', flexDirection: 'column'}}>
                             <TableContainer>
-                                <Table aria-label="collapsible table">
+                                <Table aria-label="collapsible table" stickyHeader>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="center">วันที่</TableCell>
-                                            <TableCell align="center">ใบบันทึกเวลา</TableCell>
-                                            <TableCell align="center">เข้างานปกติ</TableCell>
-                                            <TableCell align="center">เข้างานสาย</TableCell>
-                                            <TableCell align="center">ใบลา</TableCell>
-                                            <TableCell />
+                                                <TableCell align="center">วันที่</TableCell>
+                                                <TableCell align="center" style={{ width: 100 }}>ใบบันทึกเวลา</TableCell>
+                                                <TableCell align="center" style={{ width: 100 }}>เข้างานปกติ</TableCell>
+                                                <TableCell align="center" style={{ width: 100 }}>เข้างานสาย</TableCell>
+                                                <TableCell align="center" style={{ width: 70 }}>ใบลา</TableCell>
+                                                <TableCell align="center" style={{ width: 70 }}>ลากิจ</TableCell>
+                                                <TableCell align="center" style={{ width: 70 }}>ลาพักร้อน</TableCell>
+                                                <TableCell align="center" style={{ width: 70 }}>ลาป่วย</TableCell>
+                                                <TableCell />
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                     {
-                                        rows.map((row) => (
-                                            <Row key={row.name} row={row} />
+                                        isReportrows === undefined ? ''
+                                        :
+                                        isReportrows.map((row) => (
+                                            <TableRow
+                                            key={row.name}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                <TableCell align="center">{row.date}</TableCell>
+                                                <TableCell align="center">{row.ta}</TableCell>
+                                                <TableCell align="center">{row.nta}</TableCell>
+                                                <TableCell align="center">{row.lta}</TableCell>
+                                                <TableCell align="center">{row.ld}</TableCell>
+                                                <TableCell align="center">{row.bld}</TableCell>
+                                                <TableCell align="center">{row.hld}</TableCell>
+                                                <TableCell align="center">{row.sld}</TableCell>
+                                                <TableCell align="center">
+                                                    <IconButton
+                                                    aria-label="expand row"
+                                                    size="small"
+                                                    onClick={() => setOpen(!isOpen)}
+                                                    >
+                                                        <MoreHorizIcon />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
                                         ))
                                     }
                                     </TableBody>

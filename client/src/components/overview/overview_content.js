@@ -240,9 +240,9 @@ function Content(props) {
                             }}
                             >
                                  <h4 className='overview_h4'>ปกติ</h4>
-                                <label style={{color: '#00C49F'}}>{isOverview.nta + ' วัน'}</label>
+                                <label style={{color: '#00C49F'}}>{isOverview.nta}</label>
                                 <h4 className='overview_h4'>สาย</h4>
-                                <label style={{color: '#FF8042'}}>{isOverview.lta + ' วัน'}</label>
+                                <label style={{color: '#FF8042'}}>{isOverview.lta}</label>
                             </Box>
                         </Paper>
                         <Paper elevation={1} sx={{ display: 'flex' }}>

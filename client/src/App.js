@@ -20,13 +20,13 @@ function App() {
     <BrowserRouter>
       <NavBar/>
       <Routes>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/" element={<Overview/>}/>
-        <Route path="/employee" element={<Employee/>}/>
-        <Route path="/timesheet" element={<TimeSheet/>}/>
-        <Route path="/calendar" element={<Calendar/>}/>
-        <Route path="/leave" element={<Leave/>}/>
-        <Route path="/report" element={<Report/>}/>
+        <Route key='1' path="/login" element={<Login/>}/>
+        <Route key='2' path="/" element={<Overview/>}/>
+        <Route key='3' path="/employee" element={<Employee/>}/>
+        <Route key='4' path="/timesheet" element={<TimeSheet/>}/>
+        <Route key='5' path="/calendar" element={<Calendar/>}/>
+        <Route key='6' path="/leave" element={<Leave/>}/>
+        <Route key='7' path="/report" element={<Report/>}/>
       </Routes>
     </BrowserRouter>
   );
