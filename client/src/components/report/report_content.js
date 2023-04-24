@@ -6,6 +6,11 @@ import Paper from '@mui/material/Paper';
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Stack from '@mui/material/Stack';
+
+import Modal from '@mui/material/Modal';
+
+import { DataGrid } from '@mui/x-data-grid';
 
 import Button from '@mui/material-next/Button';
 import InputLabel from '@mui/material/InputLabel';
@@ -27,17 +32,19 @@ function Content(props) {
 
     const ip = props.ip;
     const [isOpen, setOpen] = useState(false);
-    const [isReportyear, setReportyear] = useState(0);
-    const [isReportmont, setReportmont] = useState(0);
-    const [isReportdept, setReportdept] = useState(0);
-    const [isReportview, setReportview] = useState('');
+
     const [isReportdate, setReportdate] = useState();
     const [isReportrows, setReportrows] = useState();
-    const [isReportdata, setReportdata] = useState();
+    const [isReportsets, setReportsets] = useState();
 
-    const deptChange = (event) => { setReportdept(event.target.value); };
-    const yearChange = (event) => { setReportyear(event.target.value); };
-    const montChange = (event) => { setReportmont(event.target.value); };
+    // const [isReportyear, setReportyear] = useState(0);
+    // const [isReportmont, setReportmont] = useState(0);
+    // const [isReportdept, setReportdept] = useState(0);
+    // const [isReportview, setReportview] = useState();
+
+    // const deptChange = (event) => { setReportdept(event.target.value); };
+    // const yearChange = (event) => { setReportyear(event.target.value); };
+    // const montChange = (event) => { setReportmont(event.target.value); };
 
     useEffect(() => {
         axios.get("http://"+ ip +":5000/report_date", {crossdomain: true})
@@ -45,6 +52,15 @@ function Content(props) {
             setReportdate(response.data);
         });
     }, [ip]);
+
+    useEffect(() => {
+        if(isReportsets !== undefined){
+            axios.post("http://"+ ip +":5000/report_emp", { id: isReportsets[0], date: isReportsets[1] }, {crossdomain: true})
+            .then(response => {
+                setReportrows(response.data);
+            });
+        }
+    }, [ip, isReportsets]);
 
     // useEffect(() => {
     //     const getEmp = async () => {
@@ -79,34 +95,102 @@ function Content(props) {
     //     return arr
     // }
 
-    function createData(date, ta, nta, lta, ld, bld, hld, sld, wid, wd) {
-        return {
-            date, ta, nta, lta, ld, bld, hld, sld
-        };
+    // function createData(date, ta, nta, lta, ld, bld, hld, sld, wid, wd) {
+    //     return {
+    //         date, ta, nta, lta, ld, bld, hld, sld,  wid, wd
+    //     };
+    // };
+
+    // useEffect(() => {
+    //     setReportrows()
+    //     var rows = []
+    //     if (isReportdate !== undefined) {
+    //         isReportdate.map((item) => {
+    //             rows.push(createData(
+    //                 item.th_date,
+    //                 item.ta,
+    //                 item.nta,
+    //                 item.lta,
+    //                 item.ld,
+    //                 item.bld,
+    //                 item.hld,
+    //                 item.sld,
+    //                 item.work_id,
+    //                 item.work_date,
+    //             ))
+    //         })
+    //         setReportrows(rows)
+    //     };
+    // }, [isReportdate]);
+
+    console.log(isReportrows)
+
+    const columns = [
+        { field: 'id',  headerName: 'วันที่',  width: 135, headerAlign: 'center', align: 'center' },
+        { field: 'ta', headerName: 'ใบบันทึกเวลา', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'nta', headerName: 'เข้างานปกติ', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'lta', headerName: 'เข้างานสาย', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'ld', headerName: 'ใบลา', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'bld', headerName: 'ลากิจ', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'hld', headerName: 'ลาพักร้อน', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'sld', headerName: 'ลาป่วย', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        {
+            renderCell: (params) => {
+                const onClick = (e) => {
+                const currentRow = params.row;
+                setReportsets([params.row.work_id, params.row.work_date])
+                setOpen(true)
+                };
+
+                return (
+                <Stack direction="row" spacing={2}>
+                    <IconButton variant="outlined" size="small" onClick={onClick}><MoreHorizIcon/></IconButton>
+                </Stack>
+                );
+            },
+        }
+    ];
+
+    // const style = {
+    //     position: 'absolute',
+    //     top: '50%',
+    //     left: '50%',
+    //     transform: 'translate(-50%, -50%)',
+    //     width: 1000,
+    //     height: 500,
+    //     bgcolor: 'background.paper',
+    //     border: '2px solid #000',
+    //     boxShadow: 24,
+    //     p: 4,
+    //     overflow: 'hidden',
+    //     overflowY: 'auto',
+    // };
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 1000,
+        height: 600,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
     };
 
-    useEffect(() => {
-        setReportrows()
-        var rows = []
-        if (isReportdate !== undefined) {
-            isReportdate.map((item) => {
-                rows.push(createData(
-                    item.th_date,
-                    item.ta,
-                    item.nta,
-                    item.lta,
-                    item.ld,
-                    item.bld,
-                    item.hld,
-                    item.sld,
-                ))
-            })
-            setReportrows(rows)
-        };
-    }, [isReportdate]);
-
     return(
-        <>  
+        <> 
+            <Modal
+            open={isOpen}
+            onClose={() => [setOpen(false), setReportrows(), setReportsets()]}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    
+                </Box>
+            </Modal>
             <div className='report_container'>
                 <div className='report_article'>
                     <Box
@@ -184,54 +268,31 @@ function Content(props) {
                         },
                     }}
                     >
-                        <Paper elevation={1} sx={{ display: 'flex', flexDirection: 'column'}}>
-                            <TableContainer>
-                                <Table aria-label="collapsible table" stickyHeader>
-                                    <TableHead>
-                                        <TableRow>
-                                                <TableCell align="center">วันที่</TableCell>
-                                                <TableCell align="center" style={{ width: 100 }}>ใบบันทึกเวลา</TableCell>
-                                                <TableCell align="center" style={{ width: 100 }}>เข้างานปกติ</TableCell>
-                                                <TableCell align="center" style={{ width: 100 }}>เข้างานสาย</TableCell>
-                                                <TableCell align="center" style={{ width: 70 }}>ใบลา</TableCell>
-                                                <TableCell align="center" style={{ width: 70 }}>ลากิจ</TableCell>
-                                                <TableCell align="center" style={{ width: 70 }}>ลาพักร้อน</TableCell>
-                                                <TableCell align="center" style={{ width: 70 }}>ลาป่วย</TableCell>
-                                                <TableCell />
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                    {
-                                        isReportrows === undefined ? ''
-                                        :
-                                        isReportrows.map((row) => (
-                                            <TableRow
-                                            key={row.name}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell align="center">{row.date}</TableCell>
-                                                <TableCell align="center">{row.ta}</TableCell>
-                                                <TableCell align="center">{row.nta}</TableCell>
-                                                <TableCell align="center">{row.lta}</TableCell>
-                                                <TableCell align="center">{row.ld}</TableCell>
-                                                <TableCell align="center">{row.bld}</TableCell>
-                                                <TableCell align="center">{row.hld}</TableCell>
-                                                <TableCell align="center">{row.sld}</TableCell>
-                                                <TableCell align="center">
-                                                    <IconButton
-                                                    aria-label="expand row"
-                                                    size="small"
-                                                    onClick={() => setOpen(!isOpen)}
-                                                    >
-                                                        <MoreHorizIcon />
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    }
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                        <Paper elevation={1} sx={{ display: 'flex' }}>
+                            <Box sx={{ height: '100%', width: '100%', }}>
+                                {
+                                    isReportdate === undefined ? ''
+                                    :
+                                    <DataGrid
+                                    sx={{
+                                        "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                                            outline: "none !important",
+                                        },
+                                    }}
+                                    rows={isReportdate}
+                                    columns={columns}
+                                    columnHeaderHeight={80}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: {
+                                            pageSize: 30,
+                                            },
+                                        },
+                                    }}
+                                    pageSizeOptions={[30]}
+                                    />
+                                }
+                            </Box>
                         </Paper>
                     </Box>
                 </div>

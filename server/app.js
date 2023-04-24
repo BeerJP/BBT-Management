@@ -610,7 +610,7 @@ app.post('/timesheet_current', (request, response) => {
 
 // แสดงข้อมูล Report
 app.get('/report_date', (request, response) => {
-  conn.query(`SELECT work_id, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date, DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date,
+  conn.query(`SELECT work_id, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date, DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as id,
               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id ) AS ta,
               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id AND time_in <= '08:45:00' ) AS nta,
               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id AND time_in > '08:45:00' ) AS lta,
@@ -636,9 +636,9 @@ app.post('/report_emp', (request, response) => {
                   WHEN LEAVE_DAY.leave_type = 'ลากิจ' THEN 'ลากิจ' 
                   WHEN LEAVE_DAY.leave_type = 'ลาพักร้อน' THEN 'ลาพักร้อน' 
                   WHEN LEAVE_DAY.leave_type = 'ลาป่วย' THEN 'ลาป่วย' 
-                  ELSE 'ปกติ' 
-              END AS time_state 
-              FROM EMPLOYEE 
+                  ELSE 'ปกติ'
+              END AS time_state
+              FROM EMPLOYEE
               LEFT JOIN TIME_ATTENDANCE ON EMPLOYEE.emp_id = TIME_ATTENDANCE.emp_id AND TIME_ATTENDANCE.work_id = ?
               LEFT JOIN LEAVE_DAY ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND LEAVE_DAY.leave_date = ?
               WHERE (TIME_ATTENDANCE.work_id IS NULL OR TIME_ATTENDANCE.work_id = ?) AND (LEAVE_DAY.leave_date IS NULL OR LEAVE_DAY.leave_date = ?)
