@@ -29,7 +29,6 @@ app.use(cors({
 }));
 
 
-
 // -------------------- เข้าสู่ระบบ --------------------
 app.post('/login', function(request, response) {
   const username = request.body.username;
@@ -50,18 +49,22 @@ app.post('/login', function(request, response) {
               GROUP BY EMPLOYEE.emp_id`, [username], 
     function(error, results, fields) {
       if (error) { response.send(error) }
-      bcrypt.compare(password, results[0].user_password, function(err, result) {
-        if (result) {
-          var token = jwt.sign({ 
-            user_id: results[0].emp_id, 
-            type_id: results[0].type_id,
-            user_name: results[0].emp_name + ' ' + results[0].emp_surname,
-            user_type: results[0].type_name}, secret, { expiresIn: '2h' });
-          response.send([results, {token: token}])
-        } else {
-          response.send(['Incorrect Username and/or Password!'])
-        };
-      });
+      if (results[0] === undefined) {
+        response.send(['Incorrect Username and/or Password!'])
+      } else {
+        bcrypt.compare(password, results[0].user_password, function(err, result) {
+          if (result) {
+            var token = jwt.sign({
+              user_id: results[0].emp_id,
+              type_id: results[0].type_id,
+              user_name: results[0].emp_name + ' ' + results[0].emp_surname,
+              user_type: results[0].type_name}, secret, { expiresIn: '2h' });
+            response.send([results, {token: token}])
+          } else {
+            response.send(['Incorrect Username and/or Password!'])
+          };
+        });
+      }
     });
 });
 
@@ -178,7 +181,7 @@ app.post('/employee_info', (request, response) => {
                 ON EMPLOYEE.emp_id = USER.emp_id
               INNER JOIN TYPE
                 ON USER.type_id = TYPE.type_id
-              WHERE emp_status > '0' AND EMPLOYEE.emp_id = ?`, [id], 
+              WHERE emp_status > '0' AND EMPLOYEE.emp_id = ?`, [id],
   (err, result) => {
     response.send(result);
   });
@@ -493,8 +496,7 @@ app.get('/workday', (request, response) => {
               DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date
               FROM WORKDAY
               WHERE work_date > DATE_FORMAT(CURDATE(), '%Y-%m-%d')
-              AND work_status = '1'
-              LIMIT 60`, (err, result) => {
+              AND work_status = '1'`, (err, result) => {
     response.send(result);
   });
 });
@@ -530,7 +532,8 @@ app.get('/holiday', (request, response) => {
               DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as th_date
               FROM HOLIDAY
               INNER JOIN WORKDAY 
-              ON HOLIDAY.work_id = WORKDAY.work_id`, 
+              ON HOLIDAY.work_id = WORKDAY.work_id
+              ORDER BY WORKDAY.work_id`, 
   (err, result) => {
     response.send(result);
   });
@@ -609,8 +612,24 @@ app.post('/timesheet_current', (request, response) => {
 });
 
 // แสดงข้อมูล Report
+// app.get('/report_date', (request, response) => {
+//   conn.query(`SELECT work_id as id, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date, DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%Y-%m-%d') as th_date,
+//               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id ) AS ta,
+//               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id AND time_in <= '08:45:00' ) AS nta,
+//               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id AND time_in > '08:45:00' ) AS lta,
+//               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date ) AS ld,
+//               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลากิจ' ) AS bld,
+//               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาพักร้อน' ) AS hld,
+//               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาป่วย' ) AS sld
+//             FROM WORKDAY WHERE work_status = '1' AND work_date <= CURDATE()
+//             GROUP BY WORKDAY.work_id
+//             ORDER BY WORKDAY.work_id DESC`,
+//   (err, result) => {
+//     response.send(result);
+//   });
+// });
 app.get('/report_date', (request, response) => {
-  conn.query(`SELECT work_id, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date, DATE_FORMAT(DATE_ADD(work_date, INTERVAL 543 YEAR), '%d-%m-%Y') as id,
+  conn.query(`SELECT work_id as id, DATE_FORMAT(work_date, '%Y-%m-%d') as work_date,
               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id ) AS ta,
               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id AND time_in <= '08:45:00' ) AS nta,
               ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE TIME_ATTENDANCE.work_id = WORKDAY.work_id AND time_in > '08:45:00' ) AS lta,
@@ -619,7 +638,8 @@ app.get('/report_date', (request, response) => {
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาพักร้อน' ) AS hld,
               ( SELECT COUNT(*) FROM LEAVE_DAY WHERE LEAVE_DAY.leave_date = WORKDAY.work_date AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาป่วย' ) AS sld
             FROM WORKDAY WHERE work_status = '1' AND work_date <= CURDATE()
-            GROUP BY WORKDAY.work_id`,
+            GROUP BY WORKDAY.work_id
+            ORDER BY WORKDAY.work_id DESC`,
   (err, result) => {
     response.send(result);
   });
@@ -628,7 +648,7 @@ app.get('/report_date', (request, response) => {
 app.post('/report_emp', (request, response) => {
   const id = request.body.id;
   const date = request.body.date;
-  conn.query(`SELECT EMPLOYEE.emp_id, CONCAT(EMPLOYEE.emp_name, ' ', EMPLOYEE.emp_surname) as name, 
+  conn.query(`SELECT EMPLOYEE.emp_id as id, CONCAT(EMPLOYEE.emp_name, ' ', EMPLOYEE.emp_surname) as name, 
               TIME_FORMAT(TIME_ATTENDANCE.time_in, '%H:%i') as time_in, 
               TIME_FORMAT(TIME_ATTENDANCE.time_out, '%H:%i') as time_out, 
               CASE 
@@ -636,9 +656,9 @@ app.post('/report_emp', (request, response) => {
                   WHEN LEAVE_DAY.leave_type = 'ลากิจ' THEN 'ลากิจ' 
                   WHEN LEAVE_DAY.leave_type = 'ลาพักร้อน' THEN 'ลาพักร้อน' 
                   WHEN LEAVE_DAY.leave_type = 'ลาป่วย' THEN 'ลาป่วย' 
-                  ELSE 'ปกติ'
-              END AS time_state
-              FROM EMPLOYEE
+                  ELSE 'ปกติ' 
+              END AS time_state 
+              FROM EMPLOYEE 
               LEFT JOIN TIME_ATTENDANCE ON EMPLOYEE.emp_id = TIME_ATTENDANCE.emp_id AND TIME_ATTENDANCE.work_id = ?
               LEFT JOIN LEAVE_DAY ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND LEAVE_DAY.leave_date = ?
               WHERE (TIME_ATTENDANCE.work_id IS NULL OR TIME_ATTENDANCE.work_id = ?) AND (LEAVE_DAY.leave_date IS NULL OR LEAVE_DAY.leave_date = ?)
@@ -942,13 +962,13 @@ app.put("/update_time", (request, response) => {
 
 // แก้ไขข้อมูลใบลา
 app.put("/update_leave", (request, response) => {
-  const appove = request.body.state;
+  const approve = request.body.state;
   const date = request.body.date;
   const employee = request.body.id;
 
   conn.query(
-    "UPDATE LEAVE_DAY SET leave_appove = ? WHERE leave_date = ? AND emp_id = ?",
-    [appove, date, employee], 
+    "UPDATE LEAVE_DAY SET leave_approve = ? WHERE leave_date = ? AND emp_id = ?",
+    [approve, date, employee], 
     (err, result) => {
       if (err) {
         response.send(err);

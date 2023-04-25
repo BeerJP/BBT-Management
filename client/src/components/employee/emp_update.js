@@ -42,7 +42,7 @@ function EditCard(props) {
     const [isDept, setDept] = useState(isEmp.dept_id);
     const [isGender, setGender] = useState(isEmp.emp_gender);
     const [isBirth, setBirth] = useState(isEmp.emp_birthdate);
-    const [isStart, setStart] = useState(isEmp.emp_mac1);
+    const [isStart, setStart] = useState(isEmp.emp_startdate);
     const [isMac1, setMac1] = useState(isEmp.emp_mac1);
     const [isMac2, setMac2] = useState(isEmp.emp_mac2);
     const [isUsername, setUsername] = useState(isEmp.user_name);
@@ -68,19 +68,16 @@ function EditCard(props) {
             const emp = props.data[2];
             setEmp(emp[0])
         } 
-
         const getDepart = async() => {
             await axios.get("http://"+ ip +":5000/department", {crossdomain: true})
             .then(response => {
                 setDeptinfo(response.data);
         })};
-    
         const getType = async() => {
             await axios.get("http://"+ ip +":5000/type", {crossdomain: true})
             .then(response => {
                 setTypeinfo(response.data);
         })};
-
         getDepart();
         getType();
     }, [ip, props.data]);
@@ -95,7 +92,6 @@ function EditCard(props) {
             birth: isBirth,
             mac1: isMac1,
             mac2: isMac2,
-            start: isStart,
         }, {crossdomain: true})
         .then(axios.put("http://"+ ip +":5000/update_user", { 
             id: id,
@@ -152,8 +148,6 @@ function EditCard(props) {
             setPassvalid(true)
         }
 
-        console.log('work')
-
     }, [isPassword, isUsername]);
 
     useEffect(() => {
@@ -169,15 +163,16 @@ function EditCard(props) {
             setNotnull(true); 
         }
 
-        console.log(isName)
-        console.log(isSurname)
-        console.log(isBirth)
-        console.log(isMac1)
-        console.log(isUsername)
-        console.log(isPassword)
-        console.log(isType)
-        console.log(isUservalid)
-        console.log(isPassvalid)
+        // console.log(isName)
+        // console.log(isSurname)
+        // console.log(isBirth)
+        // console.log(isMac1)
+        // console.log(isUsername)
+        // console.log(isPassword)
+        // console.log(isType)
+        // console.log(isUservalid)
+        // console.log(isPassvalid)
+        // console.log(isNotnull)
 
     }, [isBirth, isMac1, isName, isPassvalid, isPassword, isSurname, isType, isUsername, isUservalid]);
 

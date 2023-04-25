@@ -40,7 +40,7 @@ function Overview() {
                 </div>
             </>
         )
-    } else if (isTypeid === 2) {
+    } else if (isTypeid === 2 || isTypeid === 3) {
         return (
             <>
                 <div className='container'>

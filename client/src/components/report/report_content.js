@@ -10,24 +10,7 @@ import Stack from '@mui/material/Stack';
 import Modal from '@mui/material/Modal';
 import Tooltip from '@mui/material/Tooltip';
 import { DataGrid } from '@mui/x-data-grid';
-
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
-import Button from '@mui/material-next/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
 import IconButton from '@mui/material/IconButton';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 
@@ -66,7 +49,19 @@ function Content(props) {
     }, [ip, isReportsets]);
 
     const columns = [
-        { field: 'id',  headerName: 'วันที่',  width: 135, headerAlign: 'center', align: 'center' },
+        {
+            field: 'work_date',
+            headerName: 'วันที่',
+            type: 'date',
+            width: 135,
+            headerAlign: 'center',
+            align: 'center',
+            valueGetter: (params) => {
+                const dateString = params.value;
+                const dateObj = new Date(dateString);
+                return dateObj;
+            },
+        },
         { field: 'ta', headerName: 'ใบบันทึกเวลา', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
         { field: 'nta', headerName: 'เข้างานปกติ', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
         { field: 'lta', headerName: 'เข้างานสาย', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
@@ -75,10 +70,17 @@ function Content(props) {
         { field: 'hld', headerName: 'ลาพักร้อน', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
         { field: 'sld', headerName: 'ลาป่วย', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
         {
+            field: 'info',
+            headerAlign: 'center',
+            align: 'center',
+            headerName: '',
+            width: 100,
+            sortable: false,
+            disableColumnMenu: true,
             renderCell: (params) => {
                 const onClick = (e) => {
                 const currentRow = params.row;
-                setReportsets([params.row.work_id, params.row.work_date])
+                setReportsets([params.row.id, params.row.work_date])
                 setOpen(true)
                 };
 
@@ -89,8 +91,8 @@ function Content(props) {
                     </Tooltip>
                 </Stack>
                 );
-            }, align: 'center', disableColumnMenu: true, sortable: false 
-        } 
+            },
+        },
     ];
 
     const columns_emp = [

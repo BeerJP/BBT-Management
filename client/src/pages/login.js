@@ -5,10 +5,19 @@ import lock from '../assets/icon/lock.png';
 import '../assets/style/login.css';
 import IpContext from '../ipContext';
 
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 function Login() {
 
     const ip = useContext(IpContext);
+
+    const [isAlert, setAlert] = useState(false)
+
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
 
@@ -22,8 +31,8 @@ function Login() {
             if(response.data[0][0].emp_id){
                 localStorage.setItem('token', response.data[1].token)
                 window.location = '/';
-            } else {
-                console.log('No data')
+            } else if(response.data[0] === 'Incorrect Username and/or Password!') {
+                setAlert(true);
             }
         });
     };
@@ -43,6 +52,28 @@ function Login() {
     return (
         <>
             <div className="login-container">
+                <Box sx={{width: '30%'}}>
+                    <Collapse in={isAlert}>
+                        <Alert
+                        severity="error"
+                        action={
+                            <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            size="small"
+                            onClick={() => {
+                                setAlert(false);
+                            }}
+                            >
+                            <CloseIcon fontSize="inherit" />
+                            </IconButton>
+                        }
+                        sx={{ mb: 2 }}
+                        >
+                        ชื่อผู้ใช้ หรือ รหัสผ่าน ไม่ถูกต้อง !
+                        </Alert>
+                    </Collapse>
+                </Box>
                 <div className="loginBx">
                     <div className="login-form">
                         <div className="login-titleBx">

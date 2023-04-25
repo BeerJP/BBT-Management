@@ -79,14 +79,15 @@ function Content(props) {
                                 rows={isEmployee}
                                 columns={columns}
                                 columnHeaderHeight={80}
+                                rowHeight={47}
                                 initialState={{
                                     pagination: {
                                         paginationModel: {
-                                        pageSize: 10,
+                                        pageSize: 15,
                                         },
                                     },
                                 }}
-                                pageSizeOptions={[10]}
+                                pageSizeOptions={[15]}
                                 />
                             </Box>
                         </Paper>
