@@ -1,4 +1,4 @@
-import { React, useState, useEffect, Fragment } from 'react';
+import { React, useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Box from '@mui/material/Box';
@@ -7,10 +7,13 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Stack from '@mui/material/Stack';
-
 import Modal from '@mui/material/Modal';
-
+import Tooltip from '@mui/material/Tooltip';
 import { DataGrid } from '@mui/x-data-grid';
+
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import Button from '@mui/material-next/Button';
 import InputLabel from '@mui/material/InputLabel';
@@ -62,69 +65,6 @@ function Content(props) {
         }
     }, [ip, isReportsets]);
 
-    // useEffect(() => {
-    //     const getEmp = async () => {
-    //       try {
-    //         const response = await axios.get("http://" + ip + ":5000/report", { crossdomain: true });
-    //         await new Promise(resolve => setTimeout(resolve, 2000));
-    //         setReportdata(response.data);
-    //       } catch (error) {
-    //         console.error(error);
-    //       }
-    //     };
-    //     getEmp();
-    //   }, [ip]);
-
-    // useEffect(() => {
-    //     if(isReportdata !== undefined){
-    //         const dataArray = isReportdata[0].employee.split('-');
-    //         const objectArray = dataArray.map(item => JSON.parse(item));
-    //         console.log(objectArray)
-    //         console.log(isReportdata[0])
-    //     }
-    // }, [isReportdata]);
-
-    // function employeeList(id, date) {
-    //     var arr = [];
-    //     axios.post("http://" + ip + ":5000/report_emp", { id: id, date: date }, { crossdomain: true })
-    //     .then(response => {
-    //         arr.push(response.data)
-    //     }).catch(error => {
-    //         console.log(error);
-    //     });
-    //     return arr
-    // }
-
-    // function createData(date, ta, nta, lta, ld, bld, hld, sld, wid, wd) {
-    //     return {
-    //         date, ta, nta, lta, ld, bld, hld, sld,  wid, wd
-    //     };
-    // };
-
-    // useEffect(() => {
-    //     setReportrows()
-    //     var rows = []
-    //     if (isReportdate !== undefined) {
-    //         isReportdate.map((item) => {
-    //             rows.push(createData(
-    //                 item.th_date,
-    //                 item.ta,
-    //                 item.nta,
-    //                 item.lta,
-    //                 item.ld,
-    //                 item.bld,
-    //                 item.hld,
-    //                 item.sld,
-    //                 item.work_id,
-    //                 item.work_date,
-    //             ))
-    //         })
-    //         setReportrows(rows)
-    //     };
-    // }, [isReportdate]);
-
-    console.log(isReportrows)
-
     const columns = [
         { field: 'id',  headerName: 'วันที่',  width: 135, headerAlign: 'center', align: 'center' },
         { field: 'ta', headerName: 'ใบบันทึกเวลา', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
@@ -144,40 +84,41 @@ function Content(props) {
 
                 return (
                 <Stack direction="row" spacing={2}>
-                    <IconButton variant="outlined" size="small" onClick={onClick}><MoreHorizIcon/></IconButton>
+                    <Tooltip title="ข้อมูลเพิ่มเติม"> 
+                        <IconButton variant="outlined" size="small" onClick={onClick}><MoreHorizIcon/></IconButton>
+                    </Tooltip>
                 </Stack>
                 );
-            },
-        }
+            }, align: 'center', disableColumnMenu: true, sortable: false 
+        } 
     ];
 
-    // const style = {
-    //     position: 'absolute',
-    //     top: '50%',
-    //     left: '50%',
-    //     transform: 'translate(-50%, -50%)',
-    //     width: 1000,
-    //     height: 500,
-    //     bgcolor: 'background.paper',
-    //     border: '2px solid #000',
-    //     boxShadow: 24,
-    //     p: 4,
-    //     overflow: 'hidden',
-    //     overflowY: 'auto',
-    // };
+    const columns_emp = [
+        { field: 'id',  headerName: 'รหัส',  width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'name', headerName: 'ชื่อ - นามสกุล', flex: 1, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'time_in', headerName: 'เวลาเข้างาน', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'time_out', headerName: 'เวลาออกงาน', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+        { field: 'time_state', headerName: 'สถานะ', width: 135, headerAlign: 'center', align: 'center', disableColumnMenu: true, sortable: false },
+    ];
 
     const style = {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 1000,
+        width: 800,
         height: 600,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
         p: 4,
     };
+
+    const minYear = 2020;
+    const maxYear = new Date().getFullYear() + 10;
+  
+    const minDate = new Date(minYear, 0, 1);
+    const maxDate = new Date(maxYear, 11, 31);
 
     return(
         <> 
@@ -188,7 +129,28 @@ function Content(props) {
             aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    
+                    {
+                        isReportrows === undefined ? ''
+                        :
+                        <DataGrid
+                        sx={{
+                            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                                outline: "none !important",
+                            },
+                        }}
+                        rows={isReportrows}
+                        columns={columns_emp}
+                        columnHeaderHeight={80}
+                        initialState={{
+                            pagination: {
+                                paginationModel: {
+                                pageSize: 30,
+                                },
+                            },
+                        }}
+                        pageSizeOptions={[30]}
+                        />
+                    }
                 </Box>
             </Modal>
             <div className='report_container'>
@@ -210,8 +172,8 @@ function Content(props) {
                                     <Typography variant='h7' component='div' sx={{ flexGrow: 1 }}>
                                         รายงานสรุปการทำงาน
                                     </Typography>
-                                    <Typography id='modal-modal-description' sx={{ textAlign: 'center', display: 'flex', alignItems: 'center' }}>
-                                        {/* <FormControl sx={{ width: 140 }} size="small">
+                                    {/* <Typography id='modal-modal-description' sx={{ textAlign: 'center', display: 'flex', alignItems: 'center' }}>
+                                        <FormControl sx={{ width: 140 }} size="small">
                                             <InputLabel sx={{ background: 'white' }}>&nbsp;&nbsp;&nbsp;ปี</InputLabel>
                                             <Select
                                             sx={{ mr: 1 }}
@@ -222,8 +184,8 @@ function Content(props) {
                                                 <MenuItem value={0}>ทั้งหมด</MenuItem>
                                                 <MenuItem value={2566}>2566</MenuItem>
                                             </Select>
-                                        </FormControl> */}
-                                        {/* <FormControl sx={{ width: 140 }} size="small">
+                                        </FormControl>
+                                        <FormControl sx={{ width: 140 }} size="small">
                                             <InputLabel sx={{ background: 'white' }}>&nbsp;เดือน</InputLabel>
                                             <Select
                                             sx={{ mr: 1 }}
@@ -245,8 +207,8 @@ function Content(props) {
                                                 <MenuItem value={11}>พฤษจิกายน</MenuItem>
                                                 <MenuItem value={12}>ธันวาคม</MenuItem>
                                             </Select>
-                                        </FormControl> */}
-                                    </Typography>
+                                        </FormControl>
+                                    </Typography> */}
                                 </Toolbar>
                             </AppBar>
                         </Paper>
