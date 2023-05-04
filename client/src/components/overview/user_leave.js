@@ -11,7 +11,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { DataGrid } from '@mui/x-data-grid';
-import CloseIcon from '@mui/icons-material/Close';
 
 
 function UserLeaveInfo(props) {
@@ -315,17 +314,6 @@ function UserLeaveInfo(props) {
                     {
                         isSelectleve === undefined ? '' :
                         <div>
-                            <IconButton
-                            aria-label="close"
-                            color="inherit"
-                            size="normal"
-                            sx={{ position: 'absolute', right: 0, top: 0 }}
-                            onClick={() => {
-                                setLeaveset(false);
-                            }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
                             <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center'}}>
                                 วันที่ {isSelectleve.th_date}
                             </Typography>
@@ -351,8 +339,8 @@ function UserLeaveInfo(props) {
                                 </div>
                             </div>
                             <Typography id="modal-modal-description" sx={{ mt: 2 , textAlign: 'center'}} >
-                                <Button variant="outlined" color="error" size="normal" sx={{width: 110}}
-                                onClick={() => deleteLeave(isSelectleve.emp_id, isSelectleve.leave_date)}>ยกเลิกใบลา</Button>
+                                <Button variant="outlined" color="error" size="normal" sx={{width: 90}}
+                                onClick={() => deleteLeave(isSelectleve.emp_id, isSelectleve.leave_date)}>ยกเลิก</Button>
                             </Typography>
                         </div>
                     }

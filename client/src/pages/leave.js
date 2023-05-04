@@ -11,6 +11,7 @@ function Leave() {
 
     const ip = useContext(IpContext);
     const [isTypeid, setTypeid] = useState('')
+    const [isDeptid, setDeptid] = useState('')
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -20,6 +21,7 @@ function Leave() {
         .then(response => {
             if (response.data.user_id) {
                 setTypeid(response.data.type_id)
+                setDeptid(response.data.department)
             } 
             else {
                 setTypeid(0)
@@ -29,15 +31,15 @@ function Leave() {
         });
     }, [ip]);
 
-    if (isTypeid === 1) {
+    if (isTypeid === 1 || isTypeid === 2) {
         return (
             <>
                 <div className='container'>
-                    <Content ip={ip}/>
+                    <Content ip={ip} isTypeid={isTypeid} isDeptid={isDeptid}/>
                 </div>
             </>
         )
-    } else if (isTypeid === 0) {
+    } else if (isTypeid === 3) {
         return (
             <>
                 {

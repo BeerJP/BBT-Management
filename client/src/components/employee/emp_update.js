@@ -14,6 +14,7 @@ function EditCard(props) {
     const [isNotnull, setNotnull] = useState(true);
     const [isUservalid, setUservalid] = useState(true);
     const [isPassvalid, setPassvalid] = useState(true);
+    const [isValid, setValid] = useState(true);
 
     const [isEmp, setEmp] = useState({
         emp_id: ' ',
@@ -22,7 +23,6 @@ function EditCard(props) {
         emp_gender: ' ',
         emp_birthdate: '',
         emp_status: ' ',
-        emp_startdate: '',
         emp_enddate: '',
         emp_mac1: ' ',
         emp_mac2: ' ',
@@ -42,7 +42,6 @@ function EditCard(props) {
     const [isDept, setDept] = useState(isEmp.dept_id);
     const [isGender, setGender] = useState(isEmp.emp_gender);
     const [isBirth, setBirth] = useState(isEmp.emp_birthdate);
-    const [isStart, setStart] = useState(isEmp.emp_startdate);
     const [isMac1, setMac1] = useState(isEmp.emp_mac1);
     const [isMac2, setMac2] = useState(isEmp.emp_mac2);
     const [isUsername, setUsername] = useState(isEmp.user_name);
@@ -55,7 +54,6 @@ function EditCard(props) {
         setDept(isEmp.dept_id)
         setGender(isEmp.emp_gender)
         setBirth(isEmp.emp_birthdate)
-        setStart(isEmp.emp_startdate)
         setMac1(isEmp.emp_mac1)
         setMac2(isEmp.emp_mac2)
         setUsername(isEmp.user_name)
@@ -68,16 +66,19 @@ function EditCard(props) {
             const emp = props.data[2];
             setEmp(emp[0])
         } 
+
         const getDepart = async() => {
             await axios.get("http://"+ ip +":5000/department", {crossdomain: true})
             .then(response => {
                 setDeptinfo(response.data);
         })};
+    
         const getType = async() => {
             await axios.get("http://"+ ip +":5000/type", {crossdomain: true})
             .then(response => {
                 setTypeinfo(response.data);
         })};
+
         getDepart();
         getType();
     }, [ip, props.data]);
@@ -93,7 +94,13 @@ function EditCard(props) {
             mac1: isMac1,
             mac2: isMac2,
         }, {crossdomain: true})
-        .then(axios.put("http://"+ ip +":5000/update_user", { 
+        .then(
+            setCardType('infomation'), props.data[4](true)
+        )
+    };
+
+    const updateUser = () => {
+        axios.put(axios.put("http://"+ ip +":5000/update_user", { 
             id: id,
             username: isUsername,
             password: isPassword,
@@ -152,29 +159,26 @@ function EditCard(props) {
 
     useEffect(() => {
 
-        if  (isName === null || isSurname === null || isBirth === null || isMac1 === null ||
-        isUsername === null || isPassword === null || isType === null || isUservalid  || isPassvalid) {
+        if  ( isName === null || isSurname === null || isBirth === null || isMac1 === null ) {
             setNotnull(false);
         }
-        else if (isName.length === 0 || isSurname.length === 0 || isBirth === '' || isMac1.length !== 17 ||
-            isUsername.length < 4 || isPassword.length < 4 || isType === '' || isUservalid  || isPassvalid) {
+        else if ( isName.length === 0 || isSurname.length === 0 || isBirth === '' || isMac1.length !== 17 ) {
             setNotnull(false);
         } else {
             setNotnull(true); 
         }
 
-        // console.log(isName)
-        // console.log(isSurname)
-        // console.log(isBirth)
-        // console.log(isMac1)
-        // console.log(isUsername)
-        // console.log(isPassword)
-        // console.log(isType)
-        // console.log(isUservalid)
-        // console.log(isPassvalid)
-        // console.log(isNotnull)
+    }, [isBirth, isMac1, isName, isSurname, isType ]);
 
-    }, [isBirth, isMac1, isName, isPassvalid, isPassword, isSurname, isType, isUsername, isUservalid]);
+    useEffect(() => {
+
+        if  ( isUservalid  || isPassvalid || isPassword.length < 4) {
+            setValid(false);
+        } else {
+            setValid(true); 
+        }
+
+    }, [isPassvalid, isUservalid, isPassword]);
 
     return (
         <>
@@ -228,13 +232,15 @@ function EditCard(props) {
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
-                            <label className='lb-header'>วันเริ่มงาน</label>
-                            <label className='text-box'>{isEmp.emp_startdate}</label>
-                        </div>
-                        <div>
                             <label className='lb-header'>MAC Address 2</label>
                             <input className='text-box' maxLength='12' key={isEmp.emp_mac2} onKeyUp={(e => Mac2Colon(e.target))} onChange={(event => {setMac2(event.target.value)})} 
                             id='mac' defaultValue={isEmp.emp_mac2}></input>
+                        </div>
+                        <div>
+                            <button onClick={updateEmployee}
+                                style={isNotnull ? {pointerEvents: 'auto', background: '#1D8348'} : {pointerEvents: 'none'}}>
+                                บันทึก
+                            </button>
                         </div>
                     </div>
                     <AppBar position="static">
@@ -273,8 +279,8 @@ function EditCard(props) {
                             onChange={(event => {setPassword(event.target.value)})}></input>
                         </div>
                         <div>
-                            <button onClick={updateEmployee}
-                                style={isNotnull ? {pointerEvents: 'auto', background: '#1D8348'} : {pointerEvents: 'none'}}>
+                            <button onClick={updateUser}
+                                style={isValid ? {pointerEvents: 'auto', background: '#1D8348'} : {pointerEvents: 'none'}}>
                                 บันทึก
                             </button>
                         </div>

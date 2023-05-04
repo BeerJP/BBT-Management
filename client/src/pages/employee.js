@@ -38,7 +38,7 @@ function Employee() {
                 </div>
             </>
         )
-    } else if (isTypeid === 0) {
+    } else if (isTypeid === 2 || isTypeid === 3) {
         return (
             <>
                 {

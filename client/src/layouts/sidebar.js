@@ -9,19 +9,14 @@ import ca from '../assets/icon/calendar.png';
 import dc from '../assets/icon/document.png';
 import sr from '../assets/icon/seo-report.png';
 
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 
 function SideBar(props) {
 
     const isTypeid = props.isTypeid;
-    const [isLogout, setLogout] = useState(false);
 
     const logout = () => {
-        localStorage.removeItem('token');
         window.location = '/login';
+        localStorage.removeItem('token');
     };
 
     const isOpen = () => {
@@ -33,42 +28,9 @@ function SideBar(props) {
         }
     }
 
-    const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        height: 180,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
-
     if (isTypeid === 1) {
         return (
             <>
-                <Modal
-                open={isLogout}
-                onClose={() => setLogout(false)}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h5" component="h2" sx={{textAlign: 'center'}}>
-                            ยืนยันการออกจากระบบ
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 8 , textAlign: 'center'}} >
-                        <Button sx={{mr: 2, ml: 2}} variant="outlined" color="success" size="large" onClick={logout}>
-                            ยืนยัน
-                        </Button>
-                        <Button sx={{mr: 2, ml: 2}} variant="outlined" color="error" size="large" onClick={() => setLogout(false)}>
-                            ยกเลิก
-                        </Button>
-                    </Typography>
-                    </Box>
-                </Modal>
                 <div className='side-menu'>
                     <div className='logo-box'>
                         <div className='menu' onClick={isOpen}>
@@ -108,39 +70,20 @@ function SideBar(props) {
                                 <img src={sr} alt=''/>
                                 <p className='menu-text'>รายงาน</p>
                             </NavLink>
-                            <NavLink to="" 
+                            <NavLink to="/login" 
                                 className='menu-icon'>
                                 <img src={so} alt=''/>
-                                <p className='menu-text' onClick={() => setLogout(true)}>ออกจากระบบ</p>
+                                <p className='menu-text'
+                                onClick={logout}>ออกจากระบบ</p>
                             </NavLink>
                         </div>
                     </div>
                 </div>
             </>
         )
-    } else if (isTypeid === 2 || isTypeid === 3) {
+    } else if (isTypeid === 2) {
         return (
             <>
-                <Modal
-                open={isLogout}
-                onClose={() => setLogout(false)}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h5" component="h2" sx={{textAlign: 'center'}}>
-                            ยืนยันการออกจากระบบ
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 8 , textAlign: 'center'}} >
-                        <Button sx={{mr: 2, ml: 2}} variant="outlined" color="success" size="large" onClick={logout}>
-                            ยืนยัน
-                        </Button>
-                        <Button sx={{mr: 2, ml: 2}} variant="outlined" color="error" size="large" onClick={() => setLogout(false)}>
-                            ยกเลิก
-                        </Button>
-                    </Typography>
-                    </Box>
-                </Modal>
                 <div className='side-menu'>
                     <div className='logo-box'>
                         <div className='menu'>
@@ -155,10 +98,49 @@ function SideBar(props) {
                                 <img src={hm} alt=''/>
                                 <p className='menu-text'>หน้าหลัก</p>
                             </NavLink>
-                            <NavLink to="" 
+                            <NavLink to="/timesheet" 
+                                className='menu-icon'>
+                                <img src={ut} alt=''/>
+                                <p className='menu-text'>ใบบันทึกเวลา</p>
+                            </NavLink>
+                            <NavLink to="/leave" 
+                                className='menu-icon'>
+                                <img src={dc} alt=''/>
+                                <p className='menu-text'>จัดการใบลา</p>
+                            </NavLink>
+                            <NavLink to="/login" 
                                 className='menu-icon'>
                                 <img src={so} alt=''/>
-                                <p className='menu-text' onClick={() => setLogout(true)}>ออกจากระบบ</p>
+                                <p className='menu-text'
+                                onClick={logout}>ออกจากระบบ</p>
+                            </NavLink>
+                        </div>
+                    </div>
+                </div>
+            </>
+        )
+    } else if (isTypeid === 3) {
+        return (
+            <>
+                <div className='side-menu'>
+                    <div className='logo-box'>
+                        <div className='menu'>
+                            <img src={menu} alt='' onClick={isOpen}></img>
+                        </div>
+                        <label className='home-menu'>BBTE Management</label>
+                    </div>
+                    <div className='menu-box' id='menubox'>
+                        <div>
+                            <NavLink to="/" 
+                                className='menu-icon'>
+                                <img src={hm} alt=''/>
+                                <p className='menu-text'>หน้าหลัก</p>
+                            </NavLink>
+                            <NavLink to="/login" 
+                                className='menu-icon'>
+                                <img src={so} alt=''/>
+                                <p className='menu-text'
+                                onClick={logout}>ออกจากระบบ</p>
                             </NavLink>
                         </div>
                     </div>

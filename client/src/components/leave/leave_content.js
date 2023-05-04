@@ -8,13 +8,12 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-
 
 function Content(props) {
 
     const ip = props.ip;
+    const type = props.isTypeid;
+    const dept = props.isDeptid;
 
     const [open, setOpen] = useState(false);
     const [isUpdate, setUpdate] = useState(false);
@@ -55,8 +54,42 @@ function Content(props) {
                 setEmployee(response.data)
             });
         }
-        getEmp();
-        getLeave();
+
+        const getLeave_dept = async() => {
+            await axios.post("http://"+ ip +":5000/leave_by_dept", {dept: dept}, {crossdomain: true})
+            .then(response => {
+                setLeaveday(response.data);
+                setLeaverow(response.data);
+            });
+
+            await axios.post("http://"+ ip +":5000/leavepending_by_dept", {dept: dept}, {crossdomain: true})
+            .then(response => {
+                setLeavepen(response.data);
+            });
+    
+            await axios.post("http://"+ ip +":5000/leaveapprove_by_dept", {dept: dept}, {crossdomain: true})
+            .then(response => {
+                setLeaveapp(response.data);
+            });
+        };
+
+        const getEmp_dept = async() => {
+
+            await axios.post("http://"+ ip +":5000/employee_table_by_dept", {dept: dept}, {crossdomain: true})
+            .then(response => {
+                setEmployee(response.data)
+            });
+        }
+
+        if (type > 1) {
+            getEmp();
+            getLeave();
+        } else {
+            getEmp_dept();
+            getLeave_dept();
+        }
+
+ 
     }, [ip, isUpdate]);
 
     useEffect(() => {
@@ -82,19 +115,7 @@ function Content(props) {
     }, [isSelectleve]);
 
     const leave_columns = [
-        { 
-            field: 'leave_date', 
-            headerName: 'วันที่', 
-            type: 'date',
-            width: 110, 
-            headerAlign: 'center', 
-            align: 'center',
-            valueGetter: (params) => {
-                const dateString = params.value;
-                const dateObj = new Date(dateString);
-                return dateObj;
-            }, 
-        },
+        { field: 'th_date', headerName: 'วันที่', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: false },
         { field: 'emp_id', headerName: 'รหัสพนักงาน', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         { field: 'leave_approve', headerName: 'สถานะ', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         { field: 'leave_type', headerName: 'ประเภท', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },
@@ -184,10 +205,10 @@ function Content(props) {
         getLeave()
     };
 
-    function getApprove(id, date, approve) {
-        setOpen(false);
-        setSelectleve();
-        axios.put("http://" + ip + ":5000/update_leave",
+    async function getApprove(id, date, approve) {
+        await setOpen(false);
+        await setSelectleve();
+        await axios.put("http://" + ip + ":5000/update_leave",
             {
                 id: id,
                 date: date,
@@ -222,18 +243,6 @@ function Content(props) {
                     {
                         isSelectleve === undefined || isEmpleave === undefined ? '' :
                         <div>
-                            <IconButton
-                            aria-label="close"
-                            color="inherit"
-                            size="normal"
-                            sx={{ position: 'absolute', right: 0, top: 0 }}
-                            onClick={() => {
-                                setOpen(false);
-                                setSelectleve();
-                            }}
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
                             <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center'}}>
                                 รหัสพนักงาน {isSelectleve.emp_id} วันที่ {isSelectleve.th_date}
                             </Typography>
@@ -283,8 +292,8 @@ function Content(props) {
                                 </Typography>
                                 :
                                 <Typography id="modal-modal-description" sx={{ mt: 2 , textAlign: 'center'}} >
-                                    <Button variant="outlined" color="error" size="normal" sx={{width: 140}}
-                                    onClick={() => getApprove(isSelectleve.emp_id, isSelectleve.leave_date, 0)}>ยกเลิกการอนุมัติ</Button>
+                                    <Button variant="outlined" color="error" size="normal" sx={{width: 90}}
+                                    onClick={() => getApprove(isSelectleve.emp_id, isSelectleve.leave_date, 0)}>ยกเลิก</Button>
                                 </Typography>
                             }
                         </div>
@@ -320,15 +329,14 @@ function Content(props) {
                                 rows={isLeaverow}
                                 columns={leave_columns}
                                 columnHeaderHeight={80}
-                                rowHeight={47}
                                 initialState={{
                                     pagination: {
                                         paginationModel: {
-                                        pageSize: 15,
+                                        pageSize: 10,
                                         },
                                     },
                                 }}
-                                pageSizeOptions={[15]}
+                                pageSizeOptions={[10]}
                                 disableRowSelectionOnClick
                                 />
                             </Box>
@@ -345,15 +353,14 @@ function Content(props) {
                                 rows={isEmployee}
                                 columns={employee_columns}
                                 columnHeaderHeight={80}
-                                rowHeight={47}
                                 initialState={{
                                     pagination: {
                                         paginationModel: {
-                                        pageSize: 15,
+                                        pageSize: 10,
                                         },
                                     },
                                 }}
-                                pageSizeOptions={[15]}
+                                pageSizeOptions={[10]}
                                 disableRowSelectionOnClick
                                 />
                             </Box>

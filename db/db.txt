@@ -235,13 +235,14 @@ INSERT INTO `time_attendance` (`time_in`, `time_out`, `work_id`, `emp_id`) VALUE
 
 INSERT INTO `type` (`type_id`, `type_name`) VALUES
 (1, 'ผู้ดูแล'),
-(2, 'ผู้ใช้งาน');
+(2, 'ผู้ตรวจสอบ'),
+(3, 'ผู้ใช้งาน');
 
 
 INSERT INTO `user` (`user_name`, `user_password`, `type_id`, `emp_id`) VALUES
 ('admin', '$2b$10$VlyE8kAq0gLYWhDfEYRZN.vO/4YmhqMuX6oq6s8NmAa2sCMFuzk26', 1, 1000),
 ('jakk', '$2b$10$XHZS0gQj.qw7H8TjoDFsgOKmJMISyKKG8gIyQ0lQnvCDK4i7JCZnm', 2, 1001),
-('toto', '000', 1, 1002),
+('toto', '000', 2, 1002),
 ('dech', '000', 2, 1003);
 
 

@@ -30,18 +30,18 @@ function AddCard(props) {
     const [password, setPassword] = useState('');
     const [type, setType] = useState('');
 
-    // console.log(isId)
-    // console.log(name)
-    // console.log(surname)
-    // console.log(dept)
-    // console.log(gender)
-    // console.log(birth)
-    // console.log(mac1)
-    // console.log(mac2)
-    // console.log(start)
-    // console.log(username)
-    // console.log(password)
-    // console.log(type)
+    console.log(isId)
+    console.log(name)
+    console.log(surname)
+    console.log(dept)
+    console.log(gender)
+    console.log(birth)
+    console.log(mac1)
+    console.log(mac2)
+    console.log(start)
+    console.log(username)
+    console.log(password)
+    console.log(type)
 
     const insertEmployee = () => {
         axios.post("http://"+ ip +":5000/add_employee", { 

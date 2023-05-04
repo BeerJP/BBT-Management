@@ -13,14 +13,19 @@ function Content(props) {
     const [isEmpid, setEmpid] = useState('');
 
     useEffect(() => {
+
         const getEmp = async() => {
+
             await axios.get("http://"+ ip +":5000/employee_table", {crossdomain: true})
             .then(response => {
                 setEmployee(response.data)
             });
         }
+
         getEmp();
+
     }, [ip, isEmpid]);
+
 
     const columns = [
         { field: 'id',  headerName: 'รหัส',  width: 120, headerAlign: 'center', align: 'center', disableColumnMenu: true },
@@ -72,15 +77,14 @@ function Content(props) {
                                 rows={isEmployee}
                                 columns={columns}
                                 columnHeaderHeight={80}
-                                rowHeight={47}
                                 initialState={{
                                     pagination: {
                                         paginationModel: {
-                                        pageSize: 15,
+                                        pageSize: 10,
                                         },
                                     },
                                 }}
-                                pageSizeOptions={[15]}
+                                pageSizeOptions={[10]}
                                 />
                             </Box>
                         </Paper>

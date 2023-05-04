@@ -11,12 +11,14 @@ import { DataGrid } from '@mui/x-data-grid';
 function Content(props) {
 
     const ip = props.ip;
+    const type = props.isTypeid;
+    const dept = props.isDeptid;
     const [isEmployee, setEmployee] = useState([{ id: '' }]);
     const [isEmpid, setEmpid] = useState('');
 
     useEffect(() => {
 
-        const getEmp = async() => {
+        const getAllEmp = async() => {
 
             await axios.get("http://"+ ip +":5000/employee_table", {crossdomain: true})
             .then(response => {
@@ -24,7 +26,19 @@ function Content(props) {
             });
         }
 
-        getEmp();
+        const getDeptEmp = async() => {
+
+            await axios.post("http://"+ ip +":5000/employee_table_by_dept", {dept: dept}, {crossdomain: true})
+            .then(response => {
+                setEmployee(response.data)
+            });
+        }
+
+        if (type > 1) {
+            getDeptEmp();
+        } else {
+            getAllEmp();
+        }
 
     }, [ip, isEmpid]);
 
@@ -65,7 +79,7 @@ function Content(props) {
                         }}
                         >
                         <Paper elevation={1} sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <TimeSheetInfo ip={ip} select={isEmpid} />
+                            <TimeSheetInfo ip={ip} select={isEmpid} type={type} />
                         </Paper>
                         <Paper elevation={1} sx={{ display: 'flex' }}>
                             <Box sx={{ height: '100%', width: '100%', }}>
@@ -79,15 +93,14 @@ function Content(props) {
                                 rows={isEmployee}
                                 columns={columns}
                                 columnHeaderHeight={80}
-                                rowHeight={47}
                                 initialState={{
                                     pagination: {
                                         paginationModel: {
-                                        pageSize: 15,
+                                        pageSize: 10,
                                         },
                                     },
                                 }}
-                                pageSizeOptions={[15]}
+                                pageSizeOptions={[10]}
                                 />
                             </Box>
                         </Paper>

@@ -17,6 +17,7 @@ import Modal from '@mui/material/Modal';
 function TimeSheetInfo(props) {
 
     const ip = props.ip;
+    const type = props.type;
     const selectEmp = props.select;
 
     const [open, setOpen] = useState(false);
@@ -48,7 +49,6 @@ function TimeSheetInfo(props) {
                 setTimesheet(response.data);
             });
         };
-        setTimesort(1)
         getAll();
         getCur();
     }, [ip, selectEmp, isUpdate]);
@@ -62,19 +62,7 @@ function TimeSheetInfo(props) {
     }, [isTimesort])
 
     const columns = [
-        { 
-            field: 'work_date', 
-            headerName: 'วันที่',  
-            type: 'date',
-            width: 150, 
-            headerAlign: 'center', 
-            align: 'center', 
-            valueGetter: (params) => {
-                const dateString = params.value;
-                const dateObj = new Date(dateString);
-                return dateObj;
-            },
-        },
+        { field: 'th_date', headerName: 'วันที่',  width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
         { field: 'time_in', headerName: 'เวลาเข้างาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         { field: 'time_out', headerName: 'เวลาออกงาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         {
@@ -89,8 +77,7 @@ function TimeSheetInfo(props) {
 
             renderHeader: (params) => (
                 <Stack direction="row" spacing={2}>
-                    <select className='ov-text-box ov-select-box' value={isTimesort} name="type" id="combotype" 
-                    onChange={(event => {setTimesort(event.target.value)})}>
+                    <select className='ov-text-box ov-select-box' name="type" id="combotype" onChange={(event => {setTimesort(event.target.value)})}>
                         <option value="1">ปัจจุบัน</option>
                         <option value="2">ทั้งหมด</option>
                     </select>
@@ -113,6 +100,31 @@ function TimeSheetInfo(props) {
                   </Stack>
                 );
             },
+        }
+    ];
+
+    const columns_dept = [
+        { field: 'th_date', headerName: 'วันที่',  width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
+        { field: 'time_in', headerName: 'เวลาเข้างาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        { field: 'time_out', headerName: 'เวลาออกงาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
+        {
+            field: 'edit',
+            headerAlign: 'center',
+            align: 'center',
+            headerName: '',
+            width: 150,
+            sortable: false,
+            disableClickEventBubbling: true,
+            disableColumnMenu: true,
+
+            renderHeader: (params) => (
+                <Stack direction="row" spacing={2}>
+                    <select className='ov-text-box ov-select-box' name="type" id="combotype" onChange={(event => {setTimesort(event.target.value)})}>
+                        <option value="1">ปัจจุบัน</option>
+                        <option value="2">ทั้งหมด</option>
+                    </select>
+                </Stack>
+            ),
         }
     ];
 
@@ -172,26 +184,49 @@ function TimeSheetInfo(props) {
             </Modal>
             <Paper elevation={0} sx={{ display: 'flex' }}>
                 <Box sx={{ height: 840, width: '100%', }}>
-                    <DataGrid
-                    sx={{
-                        "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
-                            outline: "none !important",
-                        },
-                    }}
-                    rows={isTimesheet}
-                    columns={columns}
-                    columnHeaderHeight={80}
-                    rowHeight={47}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                            pageSize: 50,
+                    {
+                        type === 1 ? 
+                        <DataGrid
+                        sx={{
+                            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                                outline: "none !important",
                             },
-                        },
-                    }}
-                    pageSizeOptions={[50]}
-                    disableRowSelectionOnClick
-                    />
+                        }}
+                        rows={isTimesheet}
+                        columns={columns}
+                        columnHeaderHeight={80}
+                        initialState={{
+                            pagination: {
+                                paginationModel: {
+                                pageSize: 50,
+                                },
+                            },
+                        }}
+                        pageSizeOptions={[50]}
+                        disableRowSelectionOnClick
+                        />
+                        :
+                        <DataGrid
+                        sx={{
+                            "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
+                                outline: "none !important",
+                            },
+                        }}
+                        rows={isTimesheet}
+                        columns={columns_dept}
+                        columnHeaderHeight={80}
+                        initialState={{
+                            pagination: {
+                                paginationModel: {
+                                pageSize: 50,
+                                },
+                            },
+                        }}
+                        pageSizeOptions={[50]}
+                        disableRowSelectionOnClick
+                        />
+                    }
+
                 </Box>
             </Paper>
         </>
