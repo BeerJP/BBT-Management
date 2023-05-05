@@ -1,8 +1,6 @@
 import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../assets/style/calendar.css';
-// import CalendarInfo from '../components/calendar/ca_date';
-// import CalendarTable from '../components/calendar/ca_table';
 import Content from '../components/calendar/calendar_content';
 import IpContext from '../ipContext';
 

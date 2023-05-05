@@ -1,8 +1,6 @@
 import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../assets/style/employee.css';
-// import EmployeeCard from '../components/employee/emp_card';
-// import EmployeeTable from '../components/employee/emp_table';
 import Content from '../components/employee/employee_content';
 import IpContext from '../ipContext';
 

@@ -1,9 +1,6 @@
 import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../assets/style/timesheet.css';
-// import TimeSheetInfo from '../components/sheet/ta_info';
-// import TimeSheetTable from '../components/sheet/ta_table';
-// import UserTimeSheet from '../components/sheet/us_timesheet';
 import Content from '../components/sheet/timesheet_content';
 import IpContext from '../ipContext';
 

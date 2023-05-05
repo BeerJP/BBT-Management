@@ -99,7 +99,7 @@
 
 .em-info div .lb-header {
     font-size: 0.8rem;
-    /* font-weight: bold; */
+    font-weight: bold;
     position: absolute;
     left: 10px;
     top: -10px;
@@ -339,45 +339,4 @@
 
 .em-content-emp:active {
     background: #5DADE2;
-}
-
-
-.em-img-bx {
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-}
-  
-.em-img-bx .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-  
-.em-img-bx .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-}
-  
-.em-img-bx:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
 }

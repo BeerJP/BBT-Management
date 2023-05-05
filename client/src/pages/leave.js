@@ -1,8 +1,6 @@
 import { React, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import '../assets/style/leave.css';
-import LeaveTable from '../components/leave/leave_table';
-import LeaveSetting from '../components/leave/leave_setting';
 import Content from '../components/leave/leave_content';
 import IpContext from '../ipContext';
 
