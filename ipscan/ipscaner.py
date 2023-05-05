@@ -2,7 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from time import sleep, localtime, strftime
+from time import sleep, localtime, strftime, time
+import mysql.connector
 
 
 class Router:
@@ -39,22 +40,34 @@ class Router:
 
 
 def check_mac(address):
-    mac = [
-        ['66:9B:53:06:2C:5A', 'เบียร์'],
-        ['58:D6:97:62:52:A1', 'เต้'],
-        ['D0:1B:49:40:19:26', 'เจ๋ง'],
-        ['E8:6D:CB:6C:BB:5A', 'โต้'],
-        ['46:3E:02:89:9B:26', 'เอ้'],
-        ['98:C8:B8:D9:8A:29', 'เบล'],
-        ['9C:82:81:4B:78:B3', 'เกต'],
-        ['32:A7:96:1D:C4:27', 'วัช'],
-        ['32:04:73:91:04:9E', 'ทา']
-    ]
+    db = mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",
+        password="",
+        database="rsw_management"
+    )
 
-    for m in mac:
-        timer = strftime("%a %d %b %Y %H:%M:%S", localtime())
-        if m[0] in address:
-            print(timer, m[1])
+    year = str(localtime().tm_year + 543)
+    date = strftime("%m%d", localtime())
+
+    cursor = db.cursor()
+    cursor.execute(" SELECT emp_id, emp_mac1, emp_mac2 FROM EMPLOYEE WHERE emp_status > '0' ")
+    emp = cursor.fetchall()
+
+    cursor.execute(" SELECT emp_id FROM TIME_ATTENDANCE WHERE work_id = %s ", (year + date,))
+    timeAttendance = cursor.fetchall()
+    timeAttendance_list = list(row[0] for row in timeAttendance)
+
+    for m in emp:
+        timer = strftime("%H:%M:00", localtime())
+        if m[1] in address or m[2] in address:
+            if m[0] not in timeAttendance_list:
+                sql = "INSERT INTO TIME_ATTENDANCE (time_in, time_out, work_id, emp_id) VALUES (%s, %s, %s, %s)"
+                val = (timer, "00:00:00", year + date, m[0])
+                cursor.execute(sql, val)
+                db.commit()
+            else:
+                print(m[0], "Already Insert")
         else:
             pass
 
