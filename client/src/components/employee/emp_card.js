@@ -23,6 +23,9 @@ function EmployeeCard(props) {
 
     const ip = props.ip;
     const selectEmp = props.select[0];
+    const isUpdate = props.isUpdate[0]
+    const setUpdate = props.isUpdate[1]
+
     const [isOpen, setOpen] = useState(false);
     const [isCard, setCard] =useState('infomation')
     const [employee, setEmployee] = useState();
@@ -41,7 +44,7 @@ function EmployeeCard(props) {
             });
         }
         infoEmp()
-    }, [ip, selectEmp]);
+    }, [ip, selectEmp, isUpdate]);
 
     return (
         <>
@@ -79,7 +82,8 @@ function EmployeeCard(props) {
             </Collapse>
             {
                 isCard === 'infomation' ? <InfoCard key='1' data={employee} /> : 
-                isCard === 'add' ? <AddCard key='2' data={[ip, setCard, setOpen, props.select[1]]} /> : <EditCard key='3'  data={[ip, selectEmp, employee, setCard, setOpen]} />
+                isCard === 'add' ? <AddCard key='2' data={[ip, setCard, setOpen, props.select[1]]} isUpdate={[isUpdate, setUpdate]} /> : 
+                <EditCard key='3'  data={[ip, selectEmp, employee, setCard, setOpen]} isUpdate={[isUpdate, setUpdate]} />
             }
         </>
     );

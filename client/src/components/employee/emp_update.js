@@ -11,6 +11,9 @@ function EditCard(props) {
     const id = props.data[1];
     const setCardType = props.data[3];
 
+    const isUpdate = props.isUpdate[0]
+    const setUpdate = props.isUpdate[1]
+
     const [isNotnull, setNotnull] = useState(true);
     const [isUservalid, setUservalid] = useState(true);
     const [isPassvalid, setPassvalid] = useState(true);
@@ -95,6 +98,9 @@ function EditCard(props) {
             mac2: isMac2,
         }, {crossdomain: true})
         .then(
+            setUpdate(!isUpdate)
+        )
+        .then(
             setCardType('infomation'), props.data[4](true)
         )
     };
@@ -106,6 +112,9 @@ function EditCard(props) {
             password: isPassword,
             type: isType 
         }, {crossdomain: true}))
+        .then(
+            setUpdate(!isUpdate)
+        )
         .then(
             setCardType('infomation'), props.data[4](true)
         )

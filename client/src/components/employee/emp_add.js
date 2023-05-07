@@ -11,6 +11,9 @@ function AddCard(props) {
     const setCardType = props.data[1];
     const selectEmp = props.data[3];
 
+    const isUpdate = props.isUpdate[0]
+    const setUpdate = props.isUpdate[1]
+
     const [isNotnull, setNotnull] = useState(true);
     const [isUservalid, setUservalid] = useState(true);
     const [isPassvalid, setPassvalid] = useState(true);
@@ -29,19 +32,6 @@ function AddCard(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [type, setType] = useState('');
-
-    console.log(isId)
-    console.log(name)
-    console.log(surname)
-    console.log(dept)
-    console.log(gender)
-    console.log(birth)
-    console.log(mac1)
-    console.log(mac2)
-    console.log(start)
-    console.log(username)
-    console.log(password)
-    console.log(type)
 
     const insertEmployee = () => {
         axios.post("http://"+ ip +":5000/add_employee", { 
@@ -63,6 +53,8 @@ function AddCard(props) {
         }, {crossdomain: true}))
         .then(
             setCardType('infomation'), props.data[2](true), selectEmp(isId)
+        ).then(
+            setUpdate(!isUpdate)
         );
     };
 

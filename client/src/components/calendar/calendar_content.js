@@ -62,7 +62,19 @@ function Content(props) {
     }, [isSelect, workDay])
 
     const columns = [
-        { field: 'th_date', headerName: 'วันที่', width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
+        { 
+            field: 'work_date', 
+            headerName: 'วันที่',  
+            type: 'date',
+            width: 150, 
+            headerAlign: 'center', 
+            align: 'center', 
+            valueGetter: (params) => {
+                const dateString = params.value;
+                const dateObj = new Date(dateString);
+                return dateObj;
+            },
+        },
         { field: 'holi_name', headerName: 'วันหยุด', width: 300, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         {
             field: 'edit',

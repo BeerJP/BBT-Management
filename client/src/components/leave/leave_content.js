@@ -82,11 +82,11 @@ function Content(props) {
         }
 
         if (type > 1) {
-            getEmp();
-            getLeave();
-        } else {
             getEmp_dept();
             getLeave_dept();
+        } else {
+            getEmp();
+            getLeave();
         }
 
  
@@ -115,7 +115,19 @@ function Content(props) {
     }, [isSelectleve]);
 
     const leave_columns = [
-        { field: 'th_date', headerName: 'วันที่', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: false },
+        { 
+            field: 'leave_date', 
+            headerName: 'วันที่', 
+            type: 'date',
+            width: 110, 
+            headerAlign: 'center', 
+            align: 'center',
+            valueGetter: (params) => {
+                const dateString = params.value;
+                const dateObj = new Date(dateString);
+                return dateObj;
+            }, 
+        },
         { field: 'emp_id', headerName: 'รหัสพนักงาน', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         { field: 'leave_approve', headerName: 'สถานะ', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         { field: 'leave_type', headerName: 'ประเภท', width: 110, headerAlign: 'center', align: 'center', disableColumnMenu: true },

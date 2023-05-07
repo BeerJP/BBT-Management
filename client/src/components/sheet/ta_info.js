@@ -1,9 +1,5 @@
 import { React, useEffect, useState } from 'react';
 import axios from 'axios';
-// import et from '../../assets/icon/edit-ta.png';
-// import al from '../../assets/icon/angle-left.png';
-// import ar from '../../assets/icon/angle-right.png';
-import tc from '../../assets/icon/check.png';
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -30,12 +26,13 @@ function TimeSheetInfo(props) {
     const [isTimesheet, setTimesheet] = useState([]);
     const [isAlltime, setAlltime] = useState([]);
     const [isCurrent, setCurrent] = useState([]);
-    const [isTimesort, setTimesort] = useState(1);
+    const [isTimesort, setTimesort] = useState('1');
 
     useEffect(() => {
         setTimesheet([])
         setAlltime([])
         setCurrent([])
+        setTimesort('1')
        const getAll = () => {
             axios.post("http://"+ ip +":5000/timesheet", { id: selectEmp }, {crossdomain: true})
             .then(response => {
@@ -59,10 +56,22 @@ function TimeSheetInfo(props) {
         } else {
             setTimesheet(isAlltime)
         }
-    }, [isTimesort])
+    }, [isAlltime, isCurrent, isTimesort])
 
     const columns = [
-        { field: 'th_date', headerName: 'วันที่',  width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
+        { 
+            field: 'work_date', 
+            headerName: 'วันที่',  
+            type: 'date',
+            width: 150, 
+            headerAlign: 'center', 
+            align: 'center', 
+            valueGetter: (params) => {
+                const dateString = params.value;
+                const dateObj = new Date(dateString);
+                return dateObj;
+            },
+        },
         { field: 'time_in', headerName: 'เวลาเข้างาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         { field: 'time_out', headerName: 'เวลาออกงาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         {
@@ -77,7 +86,8 @@ function TimeSheetInfo(props) {
 
             renderHeader: (params) => (
                 <Stack direction="row" spacing={2}>
-                    <select className='ov-text-box ov-select-box' name="type" id="combotype" onChange={(event => {setTimesort(event.target.value)})}>
+                    <select className='ov-text-box ov-select-box' value={isTimesort} name="type" id="combotype" 
+                    onChange={(event => {setTimesort(event.target.value)})}>
                         <option value="1">ปัจจุบัน</option>
                         <option value="2">ทั้งหมด</option>
                     </select>
@@ -104,7 +114,19 @@ function TimeSheetInfo(props) {
     ];
 
     const columns_dept = [
-        { field: 'th_date', headerName: 'วันที่',  width: 150, headerAlign: 'center', align: 'center', disableColumnMenu: false },
+        { 
+            field: 'work_date', 
+            headerName: 'วันที่',  
+            type: 'date',
+            width: 150, 
+            headerAlign: 'center', 
+            align: 'center', 
+            valueGetter: (params) => {
+                const dateString = params.value;
+                const dateObj = new Date(dateString);
+                return dateObj;
+            },
+        },
         { field: 'time_in', headerName: 'เวลาเข้างาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         { field: 'time_out', headerName: 'เวลาออกงาน', width: 130, headerAlign: 'center', align: 'center', disableColumnMenu: true },
         {
@@ -119,7 +141,8 @@ function TimeSheetInfo(props) {
 
             renderHeader: (params) => (
                 <Stack direction="row" spacing={2}>
-                    <select className='ov-text-box ov-select-box' name="type" id="combotype" onChange={(event => {setTimesort(event.target.value)})}>
+                    <select className='ov-text-box ov-select-box' value={isTimesort} name="type" id="combotype" 
+                    onChange={(event => {setTimesort(event.target.value)})}>
                         <option value="1">ปัจจุบัน</option>
                         <option value="2">ทั้งหมด</option>
                     </select>

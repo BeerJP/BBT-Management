@@ -11,6 +11,7 @@ function Content(props) {
     const ip = props.ip;
     const [isEmployee, setEmployee] = useState([]);
     const [isEmpid, setEmpid] = useState('');
+    const [isUpdate, setUpdate] = useState(true);
 
     useEffect(() => {
 
@@ -24,7 +25,7 @@ function Content(props) {
 
         getEmp();
 
-    }, [ip, isEmpid]);
+    }, [ip, isEmpid, isUpdate]);
 
 
     const columns = [
@@ -63,7 +64,7 @@ function Content(props) {
                     }}
                     >
                         <Paper elevation={1} sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <EmployeeCard ip={ip} select={[isEmpid, setEmpid]} />
+                            <EmployeeCard ip={ip} select={[isEmpid, setEmpid]} isUpdate={[isUpdate, setUpdate]} />
                         </Paper>
                         <Paper elevation={1} sx={{ display: 'flex' }}>
                             <Box sx={{ height: '100%', width: '100%', }}>
