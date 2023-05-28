@@ -27,8 +27,7 @@ function EditCard(props) {
         emp_birthdate: '',
         emp_status: ' ',
         emp_enddate: '',
-        emp_mac1: ' ',
-        emp_mac2: ' ',
+        emp_mac: ' ',
         dept_id: ' ',
         dept_name: ' ',
         user_name: ' ',
@@ -45,8 +44,7 @@ function EditCard(props) {
     const [isDept, setDept] = useState(isEmp.dept_id);
     const [isGender, setGender] = useState(isEmp.emp_gender);
     const [isBirth, setBirth] = useState(isEmp.emp_birthdate);
-    const [isMac1, setMac1] = useState(isEmp.emp_mac1);
-    const [isMac2, setMac2] = useState(isEmp.emp_mac2);
+    const [isMac, setMac] = useState(isEmp.emp_mac);
     const [isUsername, setUsername] = useState(isEmp.user_name);
     const [isPassword, setPassword] = useState(isEmp.user_password);
     const [isType, setType] = useState(isEmp.type_id);
@@ -57,8 +55,7 @@ function EditCard(props) {
         setDept(isEmp.dept_id)
         setGender(isEmp.emp_gender)
         setBirth(isEmp.emp_birthdate)
-        setMac1(isEmp.emp_mac1)
-        setMac2(isEmp.emp_mac2)
+        setMac(isEmp.emp_mac)
         setUsername(isEmp.user_name)
         setPassword(isEmp.user_password)
         setType(isEmp.type_id)
@@ -94,8 +91,7 @@ function EditCard(props) {
             dept: isDept,
             gender: isGender,
             birth: isBirth,
-            mac1: isMac1,
-            mac2: isMac2,
+            mac: isMac,
         }, {crossdomain: true})
         .then(
             setUpdate(!isUpdate)
@@ -120,7 +116,7 @@ function EditCard(props) {
         )
     };
 
-    function Mac1Colon(input) {
+    function MacColon(input) {
 
         var value = input.value
         if (value.length === 12) {
@@ -131,22 +127,7 @@ function EditCard(props) {
                     value.slice(8,  10) + ":" + 
                     value.slice(10, 12)
         };
-        setMac1(value)
-        input.value = value;
-    };
-
-    function Mac2Colon(input) {
-
-        var value = input.value
-        if (value.length === 12) {
-            value = value.slice(0,   2) + ":" + 
-                    value.slice(2,   4) + ":" + 
-                    value.slice(4,   6) + ":" + 
-                    value.slice(6,   8) + ":" + 
-                    value.slice(8,  10) + ":" + 
-                    value.slice(10, 12)
-        };
-        setMac2(value)
+        setMac(value)
         input.value = value;
     };
 
@@ -168,16 +149,16 @@ function EditCard(props) {
 
     useEffect(() => {
 
-        if  ( isName === null || isSurname === null || isBirth === null || isMac1 === null ) {
+        if  ( isName === null || isSurname === null || isBirth === null || isMac === null ) {
             setNotnull(false);
         }
-        else if ( isName.length === 0 || isSurname.length === 0 || isBirth === '' || isMac1.length !== 17 ) {
+        else if ( isName.length === 0 || isSurname.length === 0 || isBirth === '' || isMac.length !== 17 ) {
             setNotnull(false);
         } else {
             setNotnull(true); 
         }
 
-    }, [isBirth, isMac1, isName, isSurname, isType ]);
+    }, [isBirth, isMac, isName, isSurname, isType ]);
 
     useEffect(() => {
 
@@ -234,17 +215,12 @@ function EditCard(props) {
                             id='date' defaultValue={isEmp.emp_birthdate}></input>
                         </div>
                         <div>
-                            <label className='lb-header'>MAC Address 1</label>
-                            <input className='text-box' maxLength='12' key={isEmp.emp_mac1} onKeyUp={(e => Mac1Colon(e.target))} onChange={(event => {setMac1(event.target.value)})} 
-                            id='mac' defaultValue={isEmp.emp_mac1}></input>
+                            <label className='lb-header'>MAC Address </label>
+                            <input className='text-box' maxLength='12' key={isEmp.emp_mac1} onKeyUp={(e => MacColon(e.target))} onChange={(event => {setMac(event.target.value)})} 
+                            id='mac' defaultValue={isEmp.emp_mac}></input>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
-                        <div>
-                            <label className='lb-header'>MAC Address 2</label>
-                            <input className='text-box' maxLength='12' key={isEmp.emp_mac2} onKeyUp={(e => Mac2Colon(e.target))} onChange={(event => {setMac2(event.target.value)})} 
-                            id='mac' defaultValue={isEmp.emp_mac2}></input>
-                        </div>
                         <div>
                             <button onClick={updateEmployee}
                                 style={isNotnull ? {pointerEvents: 'auto', background: '#1D8348'} : {pointerEvents: 'none'}}>

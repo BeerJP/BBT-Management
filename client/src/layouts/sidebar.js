@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import menu from '../assets/icon/menu-burger.png';
 import hm from '../assets/icon/home.png';
@@ -13,13 +13,9 @@ import sr from '../assets/icon/seo-report.png';
 function SideBar(props) {
 
     const isTypeid = props.isTypeid;
+    const setOpen = props.open;
 
-    const logout = () => {
-        window.location = '/login';
-        localStorage.removeItem('token');
-    };
-
-    const isOpen = () => {
+    const isOpenmenu = () => {
         const display = document.getElementById('menubox');
         if (display.style.display === '' || display.style.display === 'none') {
             display.style.display = 'block';
@@ -33,7 +29,7 @@ function SideBar(props) {
             <>
                 <div className='side-menu'>
                     <div className='logo-box'>
-                        <div className='menu' onClick={isOpen}>
+                        <div className='menu' onClick={isOpenmenu}>
                             <img src={menu} alt=''></img>
                         </div>
                         <label className='home-menu'>BBTE Management</label>
@@ -70,11 +66,11 @@ function SideBar(props) {
                                 <img src={sr} alt=''/>
                                 <p className='menu-text'>รายงาน</p>
                             </NavLink>
-                            <NavLink to="/login" 
+                            <NavLink
                                 className='menu-icon'>
                                 <img src={so} alt=''/>
                                 <p className='menu-text'
-                                onClick={logout}>ออกจากระบบ</p>
+                                onClick={() => setOpen(true)}>ออกจากระบบ</p>
                             </NavLink>
                         </div>
                     </div>
@@ -87,7 +83,7 @@ function SideBar(props) {
                 <div className='side-menu'>
                     <div className='logo-box'>
                         <div className='menu'>
-                            <img src={menu} alt='' onClick={isOpen}></img>
+                            <img src={menu} alt='' onClick={isOpenmenu}></img>
                         </div>
                         <label className='home-menu'>BBTE Management</label>
                     </div>
@@ -108,11 +104,11 @@ function SideBar(props) {
                                 <img src={dc} alt=''/>
                                 <p className='menu-text'>จัดการใบลา</p>
                             </NavLink>
-                            <NavLink to="/login" 
+                            <NavLink 
                                 className='menu-icon'>
                                 <img src={so} alt=''/>
                                 <p className='menu-text'
-                                onClick={logout}>ออกจากระบบ</p>
+                                onClick={() => setOpen(true)}>ออกจากระบบ</p>
                             </NavLink>
                         </div>
                     </div>
@@ -125,7 +121,7 @@ function SideBar(props) {
                 <div className='side-menu'>
                     <div className='logo-box'>
                         <div className='menu'>
-                            <img src={menu} alt='' onClick={isOpen}></img>
+                            <img src={menu} alt='' onClick={isOpenmenu}></img>
                         </div>
                         <label className='home-menu'>BBTE Management</label>
                     </div>
@@ -136,11 +132,11 @@ function SideBar(props) {
                                 <img src={hm} alt=''/>
                                 <p className='menu-text'>หน้าหลัก</p>
                             </NavLink>
-                            <NavLink to="/login" 
+                            <NavLink
                                 className='menu-icon'>
                                 <img src={so} alt=''/>
                                 <p className='menu-text'
-                                onClick={logout}>ออกจากระบบ</p>
+                                onClick={() => setOpen(true)}>ออกจากระบบ</p>
                             </NavLink>
                         </div>
                     </div>

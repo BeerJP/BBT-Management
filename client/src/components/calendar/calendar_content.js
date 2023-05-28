@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Content(props) {
 
@@ -154,6 +155,7 @@ function Content(props) {
             aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <CloseIcon onClick={() => setOpen(false)} sx={{position: 'absolute', top: 0.5, right: 0.5}}/>
                     <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center'}}>
                         เพิ่มข้อมูลวันหยุด
                     </Typography>

@@ -15,8 +15,7 @@ function InfoCard(props) {
         emp_status: ' ',
         emp_startdate: ' ',
         emp_enddate: ' ',
-        emp_mac1: ' ',
-        emp_mac2: ' ',
+        emp_mac: ' ',
         dept_id: ' ',
         dept_name: ' ',
         user_name: ' ',
@@ -32,7 +31,6 @@ function InfoCard(props) {
             setEmp(emp[0])
         } 
     }, [props.data])
-
 
     return (
         <>
@@ -54,18 +52,14 @@ function InfoCard(props) {
                             <label className='text-box'>{isEmp.emp_gender}</label>
                         </div>
                         <div>
-                            <label className='lb-header'>MAC Address 1</label>
-                            <label className='text-box'>{isEmp.emp_mac1}</label>
+                            <label className='lb-header'>MAC Address</label>
+                            <label className='text-box'>{isEmp.emp_mac}</label>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>อายุ</label>
                             <label className='text-box'>{isEmp.emp_age}</label>
-                        </div>
-                        <div>
-                            <label className='lb-header'>MAC Address 2</label>
-                            <label className='text-box'>{isEmp.emp_mac2}</label>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>

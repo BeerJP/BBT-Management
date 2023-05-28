@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { DataGrid } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 function Content(props) {
@@ -122,6 +123,7 @@ function Content(props) {
             aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <CloseIcon onClick={() => setOpen(false)} sx={{position: 'absolute', top: 0.5, right: 0.5}}/>
                     {
                         isReportrows === undefined ? ''
                         :

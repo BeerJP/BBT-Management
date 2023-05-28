@@ -11,6 +11,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { DataGrid } from '@mui/x-data-grid';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 function UserLeaveInfo(props) {
@@ -232,6 +233,7 @@ function UserLeaveInfo(props) {
             aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <CloseIcon onClick={() => setLeaveadd(false)} sx={{position: 'absolute', top: 0.5, right: 0.5}}/>
                     <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center'}}>
                         เพิ่มข้อมูลใบลา
                     </Typography>
@@ -311,6 +313,7 @@ function UserLeaveInfo(props) {
             aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <CloseIcon onClick={() => setLeaveset(false)} sx={{position: 'absolute', top: 0.5, right: 0.5}}/>
                     {
                         isSelectleve === undefined ? '' :
                         <div>

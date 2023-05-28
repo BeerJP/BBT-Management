@@ -724,15 +724,14 @@ app.post("/add_employee", (request, response) => {
   const surname = request.body.surname;
   const gender = request.body.gender;
   const birthdate = request.body.birth;
-  const mac1 = request.body.mac1;
-  const mac2 = request.body.mac2;
+  const mac = request.body.mac;
   const startdate = request.body.start;
   const department = request.body.dept;
 
   conn.query(
-    `INSERT INTO EMPLOYEE (emp_id, emp_name, emp_surname, emp_gender, emp_birthdate, emp_startdate, emp_mac1, emp_mac2, dept_id) 
+    `INSERT INTO EMPLOYEE (emp_id, emp_name, emp_surname, emp_gender, emp_birthdate, emp_startdate, emp_mac, dept_id) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [id, name, surname, gender, birthdate, startdate, mac1, mac2, department], 
+    [id, name, surname, gender, birthdate, startdate, mac, department], 
     (err, result) => {
       if (err) {
         response.send(err);
@@ -883,8 +882,7 @@ app.put("/update_employee", (request, response) => {
   const surname = request.body.surname;
   const gender = request.body.gender;
   const birthdate = request.body.birth;
-  const mac1 = request.body.mac1;
-  const mac2 = request.body.mac2;
+  const mac = request.body.mac;
   const dept = request.body.dept;
 
   conn.query(`UPDATE EMPLOYEE SET
@@ -892,11 +890,10 @@ app.put("/update_employee", (request, response) => {
                 emp_surname = ?, 
                 emp_gender = ?,
                 emp_birthdate = ?, 
-                emp_mac1 = ?, 
-                emp_mac2 = ?,
+                emp_mac = ?, 
                 dept_id = ?
               WHERE emp_id = ?`,
-    [name, surname, gender, birthdate, mac1, mac2, dept, id], 
+    [name, surname, gender, birthdate, mac, dept, id], 
     (err, result) => {
       if (err) {
         response.send(err);

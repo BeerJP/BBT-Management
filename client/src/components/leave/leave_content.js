@@ -8,6 +8,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 function Content(props) {
 
@@ -252,6 +254,7 @@ function Content(props) {
             aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <CloseIcon onClick={() => setOpen(false)} sx={{position: 'absolute', top: 0.5, right: 0.5}}/>
                     {
                         isSelectleve === undefined || isEmpleave === undefined ? '' :
                         <div>

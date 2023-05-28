@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 function TimeSheetInfo(props) {
@@ -187,6 +188,7 @@ function TimeSheetInfo(props) {
             aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <CloseIcon onClick={() => setOpen(false)} sx={{position: 'absolute', top: 0.5, right: 0.5}}/>
                     <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: 'center'}}>
                         รหัสพนักงาน {selectEmp} วันที่ {isDate}
                     </Typography>

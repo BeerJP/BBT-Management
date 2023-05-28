@@ -26,8 +26,7 @@ function AddCard(props) {
     const [dept, setDept] = useState(1);
     const [gender, setGender] = useState('ชาย');
     const [birth, setBirth] = useState('');
-    const [mac1, setMac1] = useState('');
-    const [mac2, setMac2] = useState('');
+    const [mac, setMac] = useState('');
     const [start, setStart] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -40,8 +39,7 @@ function AddCard(props) {
             surname: surname,
             gender: gender,
             birth: birth,
-            mac1: mac1,
-            mac2: mac2,
+            mac: mac,
             start: start,
             dept: dept,
         }, {crossdomain: true})
@@ -85,7 +83,7 @@ function AddCard(props) {
     }, [ip]);
 
 
-    function Mac1Colon(input) {
+    function MacColon(input) {
 
         var value = input.value
         if (value.length === 12) {
@@ -96,36 +94,21 @@ function AddCard(props) {
                     value.slice(8,  10) + ":" + 
                     value.slice(10, 12)
         };
-        setMac1(value)
-        input.value = value;
-    };
-
-    function Mac2Colon(input) {
-
-        var value = input.value
-        if (value.length === 12) {
-            value = value.slice(0,   2) + ":" + 
-                    value.slice(2,   4) + ":" + 
-                    value.slice(4,   6) + ":" + 
-                    value.slice(6,   8) + ":" + 
-                    value.slice(8,  10) + ":" + 
-                    value.slice(10, 12)
-        };
-        setMac2(value)
+        setMac(value)
         input.value = value;
     };
 
 
     useEffect(() => {
 
-        if (name.length === 0 || surname.length === 0 || birth === '' || start === '' || mac1.length !== 17 ||
+        if (name.length === 0 || surname.length === 0 || birth === '' || start === '' || mac.length !== 17 ||
             username.length < 4 || password.length < 4 || type === '' || isUservalid  || isPassvalid) {
             setNotnull(false);
         } else {
             setNotnull(true); 
         }
 
-    }, [birth, isPassvalid, isUservalid, mac1, name, password, start, surname, type, username]);
+    }, [birth, isPassvalid, isUservalid, mac, name, password, start, surname, type, username]);
 
     useEffect(() => {
 
@@ -184,18 +167,14 @@ function AddCard(props) {
                             <input className='text-box' type='date' max='2004-12-31' onChange={(event => {setBirth(event.target.value)})}></input>
                         </div>
                         <div>
-                            <label className='lb-header'>MAC Address 1<a>*</a></label>
-                            <input className='text-box' maxLength='12' onKeyUp={(e => Mac1Colon(e.target))} onChange={(event => {setMac1(event.target.value)})}></input>
+                            <label className='lb-header'>MAC Address<a>*</a></label>
+                            <input className='text-box' maxLength='12' onKeyUp={(e => MacColon(e.target))} onChange={(event => {setMac(event.target.value)})}></input>
                         </div>
                     </div>
                     <div className='lb-box-long em-info'>
                         <div>
                             <label className='lb-header'>วันเริ่มงาน<a>*</a></label>
                             <input className='text-box' type='date' onChange={(event => {setStart(event.target.value)})}/>
-                        </div>
-                        <div>
-                            <label className='lb-header'>MAC Address 2</label>
-                            <input className='text-box' maxLength='12' onKeyUp={(e => Mac2Colon(e.target))} onChange={(event => {setMac2(event.target.value)})}></input>
                         </div>
                     </div>
                     <AppBar position="static">
