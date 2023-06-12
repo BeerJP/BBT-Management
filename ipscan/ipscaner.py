@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.common.exceptions import WebDriverException
-from time import sleep, localtime, strftime, time
+from time import sleep, localtime, strftime
 import mysql.connector
 
 
@@ -105,10 +105,14 @@ def check_mac(address, io):
             if "00:00:00" not in timeAttendance_out:
                 break
             elif m[0] in timeAttendance_emp and m[1] not in address:
-                sql = "UPDATE TIME_ATTENDANCE SET time_out = %s WHERE emp_id = %s AND work_id = %s"
-                val = (timer, m[0], year + date)
-                cursor.execute(sql, val)
-                db.commit()
+                for t in timeAttendance:
+                    if t[0] == m[0] and str(t[1]) != "00:00:00":
+                        sql = "UPDATE TIME_ATTENDANCE SET time_out = %s WHERE work_id = %s AND emp_id = %s"
+                        val = (timer, m[0], year + date)
+                        cursor.execute(sql, val)
+                        db.commit()
+                    else:
+                        pass
             else:
                 pass
 
@@ -161,4 +165,3 @@ def main():
 
 
 # main()
-
