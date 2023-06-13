@@ -74,6 +74,9 @@ def check_mac(address, io):
     year = str(localtime().tm_year + 543)
     date = strftime("%m%d", localtime())
 
+    current = localtime().tm_hour
+    timer = strftime("%H:%M:00", localtime())
+
     cursor = db.cursor()
     cursor.execute(" SELECT emp_id, emp_mac FROM EMPLOYEE WHERE emp_status > '0' ")
     emp = cursor.fetchall()
@@ -85,7 +88,6 @@ def check_mac(address, io):
 
     if io == 'in':
         for m in emp:
-            timer = strftime("%H:%M:00", localtime())
             if m[1] in address:
                 if len(timeAttendance_emp) == len(emp):
                     break
@@ -101,14 +103,22 @@ def check_mac(address, io):
 
     elif io == 'out':
         for m in emp:
-            timer = strftime("%H:%M:00", localtime())
             if "00:00:00" not in timeAttendance_out:
                 break
             elif m[0] in timeAttendance_emp and m[1] not in address:
                 for t in timeAttendance:
-                    if t[0] == m[0] and str(t[1]) != "00:00:00":
+                    if t[0] == m[0] and str(t[1]) == "00:00:00":
                         sql = "UPDATE TIME_ATTENDANCE SET time_out = %s WHERE work_id = %s AND emp_id = %s"
                         val = (timer, m[0], year + date)
+                        cursor.execute(sql, val)
+                        db.commit()
+                    else:
+                        pass
+            elif current >= 17 and m[0] in timeAttendance_emp:
+                for t in timeAttendance:
+                    if t[0] == m[0] and str(t[1]) == "00:00:00":
+                        sql = "UPDATE TIME_ATTENDANCE SET time_out = %s WHERE work_id = %s AND emp_id = %s"
+                        val = ("17:00:00", m[0], year + date)
                         cursor.execute(sql, val)
                         db.commit()
                     else:
@@ -144,7 +154,7 @@ def main():
             sleep(43200)
 
         elif current > 10:
-            sleep(23400)
+            sleep(18000)
 
         elif 7 < current < 10 and session.current_url == 'http://192.168.10.1/#/home':
             print('Time In')
@@ -152,7 +162,7 @@ def main():
             session.refresh()
             sleep(60)
 
-        elif 16 < current < 18 and session.current_url == 'http://192.168.10.1/#/home':
+        elif 15 < current < 18 and session.current_url == 'http://192.168.10.1/#/home':
             print('Time Out')
             get_data(session, 'out')
             session.refresh()
@@ -164,4 +174,4 @@ def main():
             count_login += 1
 
 
-# main()
+main()
