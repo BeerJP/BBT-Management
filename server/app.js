@@ -673,6 +673,45 @@ app.post('/report_emp', (request, response) => {
   });
 });
 
+app.get('/report_year', (request, response) => {
+  conn.query(`SELECT SUBSTRING(WORKDAY.work_id, 1, 4) AS id, DATE_FORMAT(work_date, '%Y') AS cid,
+                ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE SUBSTRING(TIME_ATTENDANCE.work_id, 1, 4) = SUBSTRING(WORKDAY.work_id, 1, 4) ) AS ta,
+                ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE SUBSTRING(TIME_ATTENDANCE.work_id, 1, 4) = SUBSTRING(WORKDAY.work_id, 1, 4) AND time_in <= '08:45:00' ) AS nta,
+                ( SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE SUBSTRING(TIME_ATTENDANCE.work_id, 1, 4) = SUBSTRING(WORKDAY.work_id, 1, 4) AND time_in > '08:45:00' ) AS lta,
+                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE DATE_FORMAT(LEAVE_DAY.leave_date, '%Y') = DATE_FORMAT(WORKDAY.work_date, '%Y') ) AS ld,
+                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE DATE_FORMAT(LEAVE_DAY.leave_date, '%Y') = DATE_FORMAT(WORKDAY.work_date, '%Y') AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลากิจ' ) AS bld,
+                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE DATE_FORMAT(LEAVE_DAY.leave_date, '%Y') = DATE_FORMAT(WORKDAY.work_date, '%Y') AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาพักร้อน' ) AS hld,
+                ( SELECT COUNT(*) FROM LEAVE_DAY WHERE DATE_FORMAT(LEAVE_DAY.leave_date, '%Y') = DATE_FORMAT(WORKDAY.work_date, '%Y') AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาป่วย' ) AS sld
+              FROM WORKDAY WHERE work_status = '1' AND work_date <= CURDATE()
+              GROUP BY id
+              ORDER BY id DESC`,
+  (err, result) => {
+    response.send(result);
+  });
+});
+
+app.post('/report_year_emp', (request, response) => {
+  const id = request.body.id;
+  const cid = request.body.cid;
+  
+  conn.query(`SELECT EMPLOYEE.emp_id AS id, CONCAT(EMPLOYEE.emp_name, ' ', EMPLOYEE.emp_surname) AS name, 
+                (SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE SUBSTRING(TIME_ATTENDANCE.work_id, 1, 4) = ? AND time_in <= '08:45:00' AND id = TIME_ATTENDANCE.emp_id ) AS nta,
+                (SELECT COUNT(*) FROM TIME_ATTENDANCE WHERE SUBSTRING(TIME_ATTENDANCE.work_id, 1, 4) = ? AND time_in > '08:45:00' AND id = TIME_ATTENDANCE.emp_id ) AS lta,
+                (SELECT COUNT(*) FROM LEAVE_DAY WHERE DATE_FORMAT(LEAVE_DAY.leave_date, '%Y') = ? AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลากิจ' AND id = LEAVE_DAY.emp_id ) AS bld,
+                (SELECT COUNT(*) FROM LEAVE_DAY WHERE DATE_FORMAT(LEAVE_DAY.leave_date, '%Y') = ? AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาพักร้อน' AND id = LEAVE_DAY.emp_id ) AS hld,
+                (SELECT COUNT(*) FROM LEAVE_DAY WHERE DATE_FORMAT(LEAVE_DAY.leave_date, '%Y') = ? AND LEAVE_DAY.leave_approve > '0' AND leave_type = 'ลาป่วย' AND id = LEAVE_DAY.emp_id ) AS sld
+              FROM EMPLOYEE
+              LEFT JOIN TIME_ATTENDANCE ON EMPLOYEE.emp_id = TIME_ATTENDANCE.emp_id AND SUBSTRING(TIME_ATTENDANCE.work_id, 1, 4) = ?
+              LEFT JOIN LEAVE_DAY ON EMPLOYEE.emp_id = LEAVE_DAY.emp_id AND DATE_FORMAT(LEAVE_DAY.leave_date, '%Y') = ?
+              WHERE (TIME_ATTENDANCE.work_id IS NULL OR SUBSTRING(TIME_ATTENDANCE.work_id, 1, 4) = ?)
+                AND (LEAVE_DAY.leave_date IS NULL OR DATE_FORMAT(LEAVE_DAY.leave_date, '%Y') = ?)
+                AND EMPLOYEE.emp_id > '1000'
+              GROUP BY id`, 
+    [id, id, cid, cid, cid, id, cid, id, cid], (err, result) => {
+    response.send(result);
+  });
+});
+
 app.get('/report', (request, response) => {
   conn.query(`SELECT WORKDAY.work_id,
                 DATE_FORMAT(WORKDAY.work_date, '%Y-%m-%d') as work_date,
