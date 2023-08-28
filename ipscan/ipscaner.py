@@ -65,10 +65,10 @@ class Router:
 
 def check_mac(address, io):
     db = mysql.connector.connect(
-        host="127.0.0.1",
-        user="root",
+        host="",
+        user="",
         password="",
-        database="rsw_management"
+        database=""
     )
 
     year = str(localtime().tm_year + 543)
