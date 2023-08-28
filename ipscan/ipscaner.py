@@ -9,10 +9,10 @@ import mysql.connector
 
 class Router:
     def __init__(self):
-        self.router_ip = "192.168.10.1"
-        self.url_path = "/#/"
-        self.username = 'admin'
-        self.password = 'aisadmin'
+        self.router_ip = ""
+        self.url_path = ""
+        self.username = ''
+        self.password = ''
 
     def router_Login(self):
         op = webdriver.ChromeOptions()
