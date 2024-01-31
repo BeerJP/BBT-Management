@@ -7,7 +7,7 @@ const createDepartment = async (departmentData) => {
         return "Department was created";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to create department.');
+        throw new Error("Unable to create department.");
     }
 };
 
@@ -17,7 +17,7 @@ const getAllDepartment = async () => {
         return departments;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch departments.');
+        throw new Error("Unable to fetch departments.");
     }
 };
 
@@ -27,7 +27,7 @@ const getDepartmentById = async (departmentId) => {
         return department;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch department.');
+        throw new Error("Unable to fetch department.");
     }
 };
 

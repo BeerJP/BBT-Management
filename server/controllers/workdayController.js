@@ -7,7 +7,7 @@ const createWork = async (workData) => {
         return "work was created";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to create work.');
+        throw new Error("Unable to create work.");
     }
 };
 
@@ -17,7 +17,7 @@ const getAllWork= async () => {
         return works;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch works.');
+        throw new Error("Unable to fetch works.");
     }
 };
 
@@ -27,7 +27,7 @@ const getWorkById = async (workId) => {
         return work;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch work.');
+        throw new Error("Unable to fetch work.");
     }
 };
 

@@ -7,7 +7,7 @@ const createAttendance = async (attendanceData) => {
         return "Attendance was created";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to create attendance.');
+        throw new Error("Unable to create attendance.");
     }
 };
 
@@ -25,7 +25,7 @@ const updateAttendance = async (attendanceData) => {
         return "Attendance was updated";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to update attendance.');
+        throw new Error("Unable to update attendance.");
     }
 };
 
@@ -35,7 +35,7 @@ const getAllAttendance = async () => {
         return attendances;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch attendances.');
+        throw new Error("Unable to fetch attendances.");
     }
 };
 
@@ -49,7 +49,7 @@ const getAttendanceByEmp = async (empId) => {
         return attendances;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch attendance.');
+        throw new Error("Unable to fetch attendance.");
     }
 };
 

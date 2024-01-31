@@ -7,7 +7,7 @@ const createHoliday = async (holidayData) => {
         return "Holiday was created";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to create holiday.');
+        throw new Error("Unable to create holiday.");
     }
 };
 
@@ -23,7 +23,7 @@ const updateHoliday = async (holidayData) => {
         return "Holiday was updated";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to update holiday.');
+        throw new Error("Unable to update holiday.");
     }
 };
 
@@ -33,7 +33,7 @@ const getAllHoliday = async () => {
         return holidays;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch holidays.');
+        throw new Error("Unable to fetch holidays.");
     }
 };
 
@@ -47,7 +47,7 @@ const getHolidayByWork = async (workId) => {
         return holidays;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch holiday.');
+        throw new Error("Unable to fetch holiday.");
     }
 };
 

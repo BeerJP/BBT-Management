@@ -7,7 +7,7 @@ const createType = async (typeData) => {
         return "Type was created";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to create type.');
+        throw new Error("Unable to create type.");
     }
 };
 
@@ -17,7 +17,7 @@ const getAllType= async () => {
         return types;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch types.');
+        throw new Error("Unable to fetch types.");
     }
 };
 
@@ -27,7 +27,7 @@ const getTypeById = async (typeId) => {
         return type;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch type.');
+        throw new Error("Unable to fetch type.");
     }
 };
 

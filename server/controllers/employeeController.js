@@ -7,7 +7,7 @@ const createEmployee = async (employeeData) => {
         return "Employee was created";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to create employee.');
+        throw new Error("Unable to create employee.");
     }
 };
 
@@ -21,7 +21,7 @@ const updateEmployee = async (employeeData) => {
         return "Employee was updated";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to update employee.');
+        throw new Error("Unable to update employee.");
     }
 };
 
@@ -31,7 +31,7 @@ const getAllEmployee = async () => {
         return employee;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch employee.');
+        throw new Error("Unable to fetch employee.");
     }
 };
 
@@ -45,7 +45,7 @@ const getEmployeeById = async (empId) => {
         return employee;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch employee.');
+        throw new Error("Unable to fetch employee.");
     }
 };
 

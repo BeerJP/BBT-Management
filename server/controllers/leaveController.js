@@ -8,7 +8,7 @@ const createLeave = async (leaveData) => {
         return "Leave was created";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to create leave.');
+        throw new Error("Unable to create leave.");
     }
 };
 
@@ -23,7 +23,7 @@ const updateLeave = async (leaveData) => {
         return "Leave was updated";
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to update leave.');
+        throw new Error("Unable to update leave.");
     }
 };
 
@@ -33,7 +33,7 @@ const getAllLeave = async () => {
         return leave;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch leave.');
+        throw new Error("Unable to fetch leave.");
     }
 };
 
@@ -48,7 +48,7 @@ const getLeaveByWork = async (workId) => {
         return leave;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch leave.');
+        throw new Error("Unable to fetch leave.");
     }
 };
 
@@ -63,7 +63,7 @@ const getLeaveByEmp = async (empId) => {
         return leave;
     } catch (error) {
         console.error(error);
-        throw new Error('Unable to fetch leave.');
+        throw new Error("Unable to fetch leave.");
     }
 };
 
